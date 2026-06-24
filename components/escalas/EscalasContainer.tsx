@@ -4,6 +4,16 @@ import { useState, useEffect, Fragment } from "react"
 import { Upload, Trash2, RefreshCw, Printer, AlertCircle, Shield, Plus, Copy, Save, Settings, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { saveScaleConfigAction } from "@/app/actions/configuracoes"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 
 interface Policial {
   nome: string
@@ -210,6 +220,7 @@ export default function EscalasContainer({
   const [newPostName, setNewPostName] = useState("")
   const [newPostLimit, setNewPostLimit] = useState(1)
   const [isSavingConfig, setIsSavingConfig] = useState(false)
+  const [showClearConfirm, setShowClearConfirm] = useState(false)
 
 
   // Automatically load team based on logged user
@@ -544,7 +555,10 @@ export default function EscalasContainer({
 
   // Clear all
   const handleClear = () => {
-    if (!confirm("Deseja realmente limpar toda a escala?")) return
+    setShowClearConfirm(true)
+  }
+
+  const confirmClear = () => {
     localStorage.removeItem(LS_KEY)
     setBasePoliciais([])
     setEstado({})
@@ -552,6 +566,7 @@ export default function EscalasContainer({
     setIndependentHorarios(DEFAULT_INDEPENDENT_HORARIOS)
     setPresenceMap({})
     toast.success("Escala limpa.")
+    setShowClearConfirm(false)
   }
 
   const handleDeletePost = (posto: string) => {
@@ -1181,7 +1196,7 @@ export default function EscalasContainer({
 
         {/* Collapsible config settings panel */}
         {showConfig && (
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
+          <div className="relative bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
             <div className="flex items-center justify-between border-b border-slate-200 pb-3">
               <h2 className="text-base font-extrabold text-slate-800 flex items-center gap-2">
                 <Settings size={18} className="text-slate-600" />
@@ -1386,7 +1401,7 @@ export default function EscalasContainer({
             </div>
 
             {/* Bottom save button */}
-            <div className="flex justify-end gap-2 border-t border-slate-200 pt-4">
+            <div className="sticky bottom-0 -mx-6 -mb-6 bg-slate-50/95 backdrop-blur-md border-t border-slate-200/80 px-6 py-4 rounded-b-2xl z-10 flex justify-end gap-2 shadow-[0_-4px_12px_rgba(0,0,0,0.03)]">
               <button
                 type="button"
                 onClick={() => setShowConfig(false)}
@@ -2287,6 +2302,23 @@ export default function EscalasContainer({
                 </div>
               </div>
             </div>
+
+            <AlertDialog open={showClearConfirm} onOpenChange={setShowClearConfirm}>
+              <AlertDialogContent className="bg-white border border-slate-200 shadow-2xl p-6 rounded-2xl max-w-md">
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-lg font-bold text-slate-900">Limpar toda a escala?</AlertDialogTitle>
+                  <AlertDialogDescription className="text-sm text-slate-500">
+                    Esta ação removerá todos os policiais e postos alocados na escala atual. Você não poderá desfazer esta ação.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter className="mt-4 gap-2">
+                  <AlertDialogCancel className="rounded-xl font-semibold">Cancelar</AlertDialogCancel>
+                  <AlertDialogAction onClick={confirmClear} variant="destructive" className="rounded-xl font-semibold text-white">
+                    Sim, Limpar
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         )
       }

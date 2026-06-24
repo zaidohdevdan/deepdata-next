@@ -121,3 +121,55 @@ export function ClearDataModal({ isOpen, onClose, onConfirm, isPending }: ClearD
     </Dialog>
   )
 }
+
+interface DeleteAlaModalProps {
+  isOpen: boolean
+  onClose: () => void
+  onConfirm: () => void
+  isPending: boolean
+  alaName: string
+}
+
+export function DeleteAlaModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  isPending,
+  alaName,
+}: DeleteAlaModalProps) {
+  return (
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-md bg-white rounded-2xl border border-slate-200 shadow-2xl">
+        <DialogHeader>
+          <DialogTitle className="text-lg font-bold text-slate-900">
+            Remover Ala / Galpão
+          </DialogTitle>
+          <DialogDescription className="text-sm text-slate-500">
+            Tem certeza que deseja remover a ala <strong>{alaName}</strong>? Esta ação é irreversível e desativará os lançamentos relacionados.
+          </DialogDescription>
+        </DialogHeader>
+
+        <DialogFooter className="gap-2 pt-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onClose}
+            className="rounded-xl font-semibold"
+          >
+            Cancelar
+          </Button>
+          <Button
+            onClick={onConfirm}
+            disabled={isPending}
+            variant="destructive"
+            className="rounded-xl font-semibold text-white flex items-center gap-1.5"
+          >
+            {isPending && <Loader2 size={14} className="animate-spin" />}
+            Confirmar Remoção
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
