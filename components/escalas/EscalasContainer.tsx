@@ -877,7 +877,7 @@ export default function EscalasContainer({
     const parsed = parseToken(token)
     if (!parsed) return
 
-    const isDestIndependent = INDEPENDENT_POSTS.includes(destPosto)
+    const isDestIndependent = tipo === "noturna" && INDEPENDENT_POSTS.includes(destPosto)
     const destToken = (token.includes("_F" + destSlot) && !token.startsWith("GLOBAL_PP_"))
       ? token 
       : `PP_${parsed.matricula}_F${destSlot}_MOVE_${Math.random().toString(36).substr(2, 5)}`
@@ -938,7 +938,8 @@ export default function EscalasContainer({
 
       if (isDestIndependent) {
         if (!next[destPosto]) next[destPosto] = {}
-        next[destPosto][destSlot] = [destToken]
+        const currentList = next[destPosto][destSlot] || []
+        next[destPosto][destSlot] = [...currentList, destToken]
       }
       return next
     })
