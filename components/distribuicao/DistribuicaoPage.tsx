@@ -11,7 +11,7 @@ import { RefreshCw } from "lucide-react"
 import { DistribuicaoHeader } from "./DistribuicaoHeader"
 import { DistribuicaoTable } from "./DistribuicaoTable"
 import { DistribuicaoSummary } from "./DistribuicaoSummary"
-import { AddAlaModal, ClearDataModal } from "./Modals"
+import { AddAlaModal, ClearDataModal, DeleteAlaModal } from "./Modals"
 
 const configMap = {
   ALIMENTACAO: alimentacaoConfig,
@@ -33,6 +33,7 @@ export function DistribuicaoPage({ modulo, initialData, globalConfig }: Distribu
   const [showAddModal, setShowAddModal] = useState(false)
   const [showClearModal, setShowClearModal] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [alaToDelete, setAlaToDelete] = useState<{ id: string; name: string } | null>(null)
 
   // Track the previous initialData to detect server-side changes
   const lastInitialDataRef = useRef<AlaDistribData[]>(initialData)
@@ -148,12 +149,18 @@ export function DistribuicaoPage({ modulo, initialData, globalConfig }: Distribu
 
   // Delete/Deactivate Ala
   const handleDeleteAla = (id: string, name: string) => {
-    if (!confirm(`Deseja realmente remover a ala ${name}?`)) return
+    setAlaToDelete({ id, name })
+  }
+
+  const confirmDeleteAla = () => {
+    if (!alaToDelete) return
+    const { id, name } = alaToDelete
+    setAlaToDelete(null)
 
     startTransition(async () => {
       const res = await deleteAlaAction(id)
       if (res.success) {
-        toast.success(`Ala "${name}" remetida com sucesso.`)
+        toast.success(`Ala "${name}" removida com sucesso.`)
         setData((prev) => prev.filter((item) => item.id !== id))
         router.refresh()
       } else {
@@ -441,6 +448,14 @@ export function DistribuicaoPage({ modulo, initialData, globalConfig }: Distribu
         onClose={() => setShowClearModal(false)}
         onConfirm={handleClear}
         isPending={isPending}
+      />
+
+      <DeleteAlaModal
+        isOpen={!!alaToDelete}
+        onClose={() => setAlaToDelete(null)}
+        onConfirm={confirmDeleteAla}
+        isPending={isPending}
+        alaName={alaToDelete?.name || ""}
       />
     </div>
   )
