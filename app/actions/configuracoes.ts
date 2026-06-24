@@ -137,3 +137,46 @@ export async function saveGlobalConfigAction(formData: unknown) {
     return { success: false, error: "Erro interno ao salvar configurações." }
   }
 }
+
+export async function saveScaleConfigAction(
+  tipo: "diurna" | "almoco" | "janta" | "noturna" | "alvorada",
+  policiaisFixos: string,
+  postosConfig: string,
+  horaInicio?: string,
+  horaFim?: string,
+  numFaixas?: string
+) {
+  await ensureAuthenticated()
+
+  try {
+    const updates = [
+      { chave: `escalaPoliciaisFixos_${tipo}`, valor: policiaisFixos, descricao: `JSON de policiais fixos da escala ${tipo}` },
+      { chave: `escalaPostosConfig_${tipo}`, valor: postosConfig, descricao: `JSON de postos e limites da escala ${tipo}` },
+    ]
+
+    if (horaInicio) {
+      updates.push({ chave: `escalaHoraInicio_${tipo}`, valor: horaInicio, descricao: `Horário de início padrão da escala ${tipo}` })
+    }
+    if (horaFim) {
+      updates.push({ chave: `escalaHoraFim_${tipo}`, valor: horaFim, descricao: `Horário de fim padrão da escala ${tipo}` })
+    }
+    if (numFaixas) {
+      updates.push({ chave: `escalaNumFaixas_${tipo}`, valor: numFaixas, descricao: `Quantidade padrão de turnos/faixas da escala ${tipo}` })
+    }
+
+    const operations = updates.map((up) =>
+      prisma.configuracaoGlobal.upsert({
+        where: { chave: up.chave },
+        update: { valor: up.valor },
+        create: up,
+      })
+    )
+
+    await prisma.$transaction(operations)
+    revalidatePath("/", "layout")
+    return { success: true }
+  } catch (error) {
+    console.error(`Error saving scale config for ${tipo}:`, error)
+    return { success: false, error: `Erro ao salvar configurações da escala ${tipo}.` }
+  }
+}

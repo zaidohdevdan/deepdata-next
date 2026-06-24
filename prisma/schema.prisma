@@ -1,13 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   output   = "./generated-client"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -22,8 +19,8 @@ model User {
   updatedAt    DateTime @updatedAt
 
   // NextAuth relations
-  accounts     Account[]
-  sessions     Session[]
+  accounts Account[]
+  sessions Session[]
 }
 
 enum Role {
@@ -78,11 +75,11 @@ model ConfiguracaoGlobal {
 
 // Dados de distribuição por módulo (persistência no banco)
 model Ala {
-  id        String        @id @default(cuid())
-  nome      String        @unique
-  ordem     Int           @default(0)
-  ativa     Boolean       @default(true)
-  createdAt DateTime      @default(now())
+  id        String       @id @default(cuid())
+  nome      String       @unique
+  ordem     Int          @default(0)
+  ativa     Boolean      @default(true)
+  createdAt DateTime     @default(now())
   distribs  DistribAla[]
 }
 
@@ -120,4 +117,3 @@ model OcorrenciaCategoria {
   nome      String   @unique
   createdAt DateTime @default(now())
 }
-

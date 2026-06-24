@@ -37,7 +37,7 @@ export async function createOcorrenciaAction(formData: unknown) {
   const { titulo, categoria, icone, texto, servidor } = parsed.data
 
   try {
-    await prisma.ocorrencia.create({
+    const ocorrencia = await prisma.ocorrencia.create({
       data: {
         titulo,
         categoria,
@@ -48,7 +48,7 @@ export async function createOcorrenciaAction(formData: unknown) {
     })
 
     revalidatePath("/ocorrencias")
-    return { success: true }
+    return { success: true, data: ocorrencia }
   } catch (error) {
     console.error("Error creating ocorrencia:", error)
     return { success: false, error: "Erro interno ao registrar ocorrência." }
@@ -67,7 +67,7 @@ export async function updateOcorrenciaAction(id: string, formData: unknown) {
   const { titulo, categoria, icone, texto, servidor } = parsed.data
 
   try {
-    await prisma.ocorrencia.update({
+    const ocorrencia = await prisma.ocorrencia.update({
       where: { id },
       data: {
         titulo,
@@ -79,7 +79,7 @@ export async function updateOcorrenciaAction(id: string, formData: unknown) {
     })
 
     revalidatePath("/ocorrencias")
-    return { success: true }
+    return { success: true, data: ocorrencia }
   } catch (error) {
     console.error("Error updating ocorrencia:", error)
     return { success: false, error: "Erro ao atualizar a ocorrência." }

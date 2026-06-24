@@ -37,19 +37,19 @@ async function main() {
   const users = [
     {
       username: "admin",
-      name: "Administrador UPI-4",
+      name: "Administrador",
       password: "admin#216216",
       role: "ADMIN",
     },
     {
       username: "upi4",
-      name: "Segurança UPI-4",
+      name: "Segurança",
       password: "seguranca#216216",
       role: "USER",
     },
     {
       username: "almeida",
-      name: "Almeida UPI-4",
+      name: "Almeida",
       password: "almeida#216216",
       role: "USER",
     },

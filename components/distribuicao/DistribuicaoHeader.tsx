@@ -31,7 +31,7 @@ export function DistribuicaoHeader({ config, globalConfig, onImport, onExport, o
           onClick={() => fileInputRef.current?.click()}
           className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-white/10 hover:bg-white/20 text-white rounded-lg border border-white/20 backdrop-blur transition"
         >
-          <Upload size={14} /> Importar Excel
+          <Upload size={14} /> Importar Planilha
         </button>
         <input
           type="file"
@@ -45,7 +45,7 @@ export function DistribuicaoHeader({ config, globalConfig, onImport, onExport, o
           onClick={onExport}
           className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold bg-white hover:bg-slate-50 text-slate-900 rounded-lg shadow-md border border-transparent transition"
         >
-          <Download size={14} /> Exportar Excel
+          <Download size={14} /> Exportar Planilha
         </button>
 
         <button
