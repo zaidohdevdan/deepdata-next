@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
-import { Modulo } from "@prisma/client"
+import { Modulo } from "@/prisma/generated-client"
 
 export interface AlaDistribData {
   id: string // alaId
