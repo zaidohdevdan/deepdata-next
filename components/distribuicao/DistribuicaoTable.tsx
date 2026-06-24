@@ -1,6 +1,6 @@
 import { Plus, Trash2, Loader2, Save } from "lucide-react"
 import { AlaDistribData } from "@/app/actions/distribuicao"
-import { DistribuicaoConfig, ConfigValues } from "@/lib/calculation"
+import { DistribuicaoConfig, ConfigValues, getDynamicHeader } from "@/lib/calculation"
 
 interface DistribuicaoTableProps {
   data: AlaDistribData[]
@@ -44,7 +44,7 @@ export function DistribuicaoTable({
               <th className="py-3.5 px-4 w-1/3">Ala</th>
               {config.colunas.slice(1).map((col) => (
                 <th key={col.key} className="py-3.5 px-4">
-                  {col.header}
+                  {getDynamicHeader(col.key, col.header, globalConfig, config.modulo)}
                 </th>
               ))}
               <th className="py-3.5 px-4 text-right print:hidden w-16">Ações</th>

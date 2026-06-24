@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { useRouter } from "next/navigation"
-import { Save, Info, Landmark, Utensils, Coffee, Cookie, Loader2, Shield, Plus, Trash2 } from "lucide-react"
+import { Save, Info, Landmark, Utensils, Coffee, Cookie, Loader2, Shield, Plus, Trash2, Edit2, Check, X } from "lucide-react"
 import { toast } from "sonner"
 import { saveGlobalConfigAction } from "@/app/actions/configuracoes"
 import { ConfigValues } from "@/lib/calculation"
@@ -42,23 +42,99 @@ export function ConfigForm({ initialConfig, currentUserRole }: ConfigFormProps) 
   const [newPosto, setNewPosto] = useState("P2")
   const [newFaixa, setNewFaixa] = useState("Faixa 1")
 
+interface PolicialEquipe {
+  nome: string
+  qra: string
+  matricula: string
+}
+
   // Policiais das Equipes states
-  const [equipeAlfa, setEquipeAlfa] = useState<{ nome: string; matricula: string }[]>(() => {
-    try { return JSON.parse(initialConfig.equipeAlfa || "[]") } catch { return [] }
+  const [equipeAlfa, setEquipeAlfa] = useState<PolicialEquipe[]>(() => {
+    try {
+      const parsed = JSON.parse(initialConfig.equipeAlfa || "[]")
+      return parsed.map((p: any) => ({
+        nome: p.nome,
+        qra: p.qra || p.nome,
+        matricula: p.matricula
+      }))
+    } catch { return [] }
   })
-  const [equipeBravo, setEquipeBravo] = useState<{ nome: string; matricula: string }[]>(() => {
-    try { return JSON.parse(initialConfig.equipeBravo || "[]") } catch { return [] }
+  const [equipeBravo, setEquipeBravo] = useState<PolicialEquipe[]>(() => {
+    try {
+      const parsed = JSON.parse(initialConfig.equipeBravo || "[]")
+      return parsed.map((p: any) => ({
+        nome: p.nome,
+        qra: p.qra || p.nome,
+        matricula: p.matricula
+      }))
+    } catch { return [] }
   })
-  const [equipeEcho, setEquipeEcho] = useState<{ nome: string; matricula: string }[]>(() => {
-    try { return JSON.parse(initialConfig.equipeEcho || "[]") } catch { return [] }
+  const [equipeEcho, setEquipeEcho] = useState<PolicialEquipe[]>(() => {
+    try {
+      const parsed = JSON.parse(initialConfig.equipeEcho || "[]")
+      return parsed.map((p: any) => ({
+        nome: p.nome,
+        qra: p.qra || p.nome,
+        matricula: p.matricula
+      }))
+    } catch { return [] }
   })
-  const [equipeFox, setEquipeFox] = useState<{ nome: string; matricula: string }[]>(() => {
-    try { return JSON.parse(initialConfig.equipeFox || "[]") } catch { return [] }
+  const [equipeFox, setEquipeFox] = useState<PolicialEquipe[]>(() => {
+    try {
+      const parsed = JSON.parse(initialConfig.equipeFox || "[]")
+      return parsed.map((p: any) => ({
+        nome: p.nome,
+        qra: p.qra || p.nome,
+        matricula: p.matricula
+      }))
+    } catch { return [] }
   })
 
   const [selectedEquipeToEdit, setSelectedEquipeToEdit] = useState<"Alfa" | "Bravo" | "Echo" | "Fox">("Alfa")
   const [newEquipeNome, setNewEquipeNome] = useState("")
+  const [newEquipeQRA, setNewEquipeQRA] = useState("")
   const [newEquipeMatricula, setNewEquipeMatricula] = useState("")
+
+  // Inline editing states for team rosters
+  const [editingMatricula, setEditingMatricula] = useState<string | null>(null)
+  const [editingNome, setEditingNome] = useState("")
+  const [editingQRA, setEditingQRA] = useState("")
+
+  const handleStartEdit = (matricula: string, nome: string, qra: string) => {
+    setEditingMatricula(matricula)
+    setEditingNome(nome)
+    setEditingQRA(qra)
+  }
+
+  const handleCancelEdit = () => {
+    setEditingMatricula(null)
+    setEditingNome("")
+    setEditingQRA("")
+  }
+
+  const handleSaveEdit = () => {
+    const trimmedNome = editingNome.trim().toUpperCase()
+    const trimmedQRA = editingQRA.trim().toUpperCase()
+    if (!trimmedNome) {
+      toast.error("O nome completo não pode ser vazio.")
+      return
+    }
+
+    const finalQRA = trimmedQRA || trimmedNome
+
+    const updater = (prev: PolicialEquipe[]) =>
+      prev.map((p) => (p.matricula === editingMatricula ? { ...p, nome: trimmedNome, qra: finalQRA } : p))
+
+    if (selectedEquipeToEdit === "Alfa") setEquipeAlfa(updater)
+    else if (selectedEquipeToEdit === "Bravo") setEquipeBravo(updater)
+    else if (selectedEquipeToEdit === "Echo") setEquipeEcho(updater)
+    else setEquipeFox(updater)
+
+    setEditingMatricula(null)
+    setEditingNome("")
+    setEditingQRA("")
+    toast.success("Dados do policial atualizados temporariamente. Grave as configurações para salvar definitivamente.")
+  }
 
   const getActiveEquipeList = () => {
     if (selectedEquipeToEdit === "Alfa") return equipeAlfa
@@ -80,24 +156,26 @@ export function ConfigForm({ initialConfig, currentUserRole }: ConfigFormProps) 
       return
     }
 
-    const item = {
+    const item: PolicialEquipe = {
       nome: newEquipeNome.trim().toUpperCase(),
+      qra: (newEquipeQRA.trim() || newEquipeNome.trim()).toUpperCase(),
       matricula: newEquipeMatricula.trim()
     }
 
-    const updater = (prev: typeof item[]) => [...prev, item]
+    const updater = (prev: PolicialEquipe[]) => [...prev, item]
     if (selectedEquipeToEdit === "Alfa") setEquipeAlfa(updater)
     else if (selectedEquipeToEdit === "Bravo") setEquipeBravo(updater)
     else if (selectedEquipeToEdit === "Echo") setEquipeEcho(updater)
     else setEquipeFox(updater)
 
     setNewEquipeNome("")
+    setNewEquipeQRA("")
     setNewEquipeMatricula("")
     toast.success(`Policial adicionado à Equipe ${selectedEquipeToEdit} temporariamente. Grave as configurações.`)
   }
 
   const handleRemoveEquipePolicial = (matricula: string) => {
-    const filter = (prev: { nome: string; matricula: string }[]) => prev.filter(p => p.matricula !== matricula)
+    const filter = (prev: PolicialEquipe[]) => prev.filter(p => p.matricula !== matricula)
     if (selectedEquipeToEdit === "Alfa") setEquipeAlfa(filter)
     else if (selectedEquipeToEdit === "Bravo") setEquipeBravo(filter)
     else if (selectedEquipeToEdit === "Echo") setEquipeEcho(filter)
@@ -338,7 +416,11 @@ export function ConfigForm({ initialConfig, currentUserRole }: ConfigFormProps) 
                 onClick={() => {
                   setSelectedEquipeToEdit(eq)
                   setNewEquipeNome("")
+                  setNewEquipeQRA("")
                   setNewEquipeMatricula("")
+                  setEditingMatricula(null)
+                  setEditingNome("")
+                  setEditingQRA("")
                 }}
                 className={`px-4 py-1.5 text-xs font-bold rounded-lg border transition ${
                   selectedEquipeToEdit === eq
@@ -357,14 +439,25 @@ export function ConfigForm({ initialConfig, currentUserRole }: ConfigFormProps) 
           </div>
 
           {/* Form add policial da equipe */}
-          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200/60 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 items-end">
+          <div className="bg-slate-50 p-4 rounded-xl border border-slate-200/60 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 items-end">
             <div className="space-y-1.5 sm:col-span-1 md:col-span-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Nome do Policial da Equipe {selectedEquipeToEdit}</label>
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Nome Completo</label>
               <input
                 type="text"
-                placeholder="Ex: PP RAIMUNDO SILVA"
+                placeholder="Ex: RAIMUNDO NONATO DA SILVA"
                 value={newEquipeNome}
                 onChange={(e) => setNewEquipeNome(e.target.value)}
+                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 bg-white"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">QRA / Nome de Guerra</label>
+              <input
+                type="text"
+                placeholder="Ex: R. SILVA"
+                value={newEquipeQRA}
+                onChange={(e) => setNewEquipeQRA(e.target.value)}
                 className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 bg-white"
               />
             </div>
@@ -394,35 +487,115 @@ export function ConfigForm({ initialConfig, currentUserRole }: ConfigFormProps) 
             <table className="w-full border-collapse text-left text-xs">
               <thead>
                 <tr className="bg-slate-55 border-b border-slate-200 font-bold text-slate-450 uppercase tracking-wider">
-                  <th className="p-3">Policial Penal</th>
+                  <th className="p-3">Policial Penal (Nome Completo)</th>
+                  <th className="p-3">QRA (Nome de Guerra)</th>
                   <th className="p-3">Matrícula</th>
-                  <th className="p-3 text-right">Remover da Equipe {selectedEquipeToEdit}</th>
+                  <th className="p-3 text-right">Ações</th>
                 </tr>
               </thead>
               <tbody>
                 {getActiveEquipeList().length === 0 ? (
                   <tr>
-                    <td colSpan={3} className="p-4 text-center text-slate-400 italic">
+                    <td colSpan={4} className="p-4 text-center text-slate-400 italic">
                       Nenhum policial cadastrado para a Equipe {selectedEquipeToEdit}.
                     </td>
                   </tr>
                 ) : (
-                  getActiveEquipeList().map((p, idx) => (
-                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 transition font-semibold text-slate-700">
-                      <td className="p-3">{p.nome}</td>
-                      <td className="p-3 font-mono">{p.matricula}</td>
-                      <td className="p-3 text-right">
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveEquipePolicial(p.matricula)}
-                          className="p-1 text-rose-600 hover:bg-rose-50 hover:text-rose-700 rounded-lg transition cursor-pointer"
-                          title="Remover"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                  getActiveEquipeList().map((p, idx) => {
+                    const isEditing = editingMatricula === p.matricula
+                    return (
+                      <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 transition font-semibold text-slate-700">
+                        <td className="p-3">
+                          {isEditing ? (
+                            <input
+                              type="text"
+                              value={editingNome}
+                              onChange={(e) => setEditingNome(e.target.value)}
+                              className="px-2 py-1 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 bg-white w-full max-w-xs"
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault()
+                                  handleSaveEdit()
+                                } else if (e.key === "Escape") {
+                                  handleCancelEdit()
+                                }
+                              }}
+                              autoFocus
+                            />
+                          ) : (
+                            p.nome
+                          )}
+                        </td>
+                        <td className="p-3">
+                          {isEditing ? (
+                            <input
+                              type="text"
+                              value={editingQRA}
+                              onChange={(e) => setEditingQRA(e.target.value)}
+                              placeholder="Ex: J. SILVA"
+                              className="px-2 py-1 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 bg-white w-full max-w-xs"
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault()
+                                  handleSaveEdit()
+                                } else if (e.key === "Escape") {
+                                  handleCancelEdit()
+                                }
+                              }}
+                            />
+                          ) : (
+                            <span className={p.qra ? "text-slate-800" : "text-slate-400 italic font-normal"}>
+                              {p.qra || p.nome}
+                            </span>
+                          )}
+                        </td>
+                        <td className="p-3 font-mono">{p.matricula}</td>
+                        <td className="p-3 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            {isEditing ? (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={handleSaveEdit}
+                                  className="p-1 text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition cursor-pointer"
+                                  title="Salvar"
+                                >
+                                  <Check size={14} />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={handleCancelEdit}
+                                  className="p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 rounded-lg transition cursor-pointer"
+                                  title="Cancelar"
+                                >
+                                  <X size={14} />
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={() => handleStartEdit(p.matricula, p.nome, p.qra || p.nome)}
+                                  className="p-1 text-blue-600 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition cursor-pointer"
+                                  title="Editar Nome / QRA"
+                                >
+                                  <Edit2 size={14} />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveEquipePolicial(p.matricula)}
+                                  className="p-1 text-rose-600 hover:bg-rose-50 hover:text-rose-700 rounded-lg transition cursor-pointer"
+                                  title="Remover"
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              </>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  })
                 )}
               </tbody>
             </table>
@@ -430,124 +603,7 @@ export function ConfigForm({ initialConfig, currentUserRole }: ConfigFormProps) 
         </div>
       )}
 
-      {/* 6. Policiais Fixos em Postos */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm space-y-4">
-        <h2 className="text-sm font-bold text-slate-800 flex items-center gap-1.5 border-b border-slate-100 pb-2">
-          <Shield size={18} className="text-blue-600" /> Policiais Fixos por Posto e Faixa
-        </h2>
-        <p className="text-xs text-slate-500">
-          Configure policiais que devem ocupar postos fixos de forma obrigatória. Quando o CSV for importado ou a equipe for populada na escala, a atribuição do posto será feita automaticamente de acordo com as regras definidas abaixo.
-        </p>
 
-        {/* Form para adicionar novo */}
-        <div className="bg-slate-50 p-4 rounded-xl border border-slate-200/60 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 items-end">
-          <div className="space-y-1.5">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Nome do Policial</label>
-            <input
-              type="text"
-              placeholder="Ex: J. SILVA"
-              value={newNome}
-              onChange={(e) => setNewNome(e.target.value)}
-              className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Matrícula</label>
-            <input
-              type="text"
-              placeholder="Ex: 123456"
-              value={newMatricula}
-              onChange={(e) => setNewMatricula(e.target.value)}
-              className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Posto Fixo</label>
-            <select
-              value={newPosto}
-              onChange={(e) => setNewPosto(e.target.value)}
-              className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-            >
-              <option value="P2">P2</option>
-              <option value="VISOR">VISOR</option>
-              <option value="CONTROLE">CONTROLE</option>
-              <option value="SUP ABC">SUP ABC</option>
-              <option value="SUP DEF">SUP DEF</option>
-            </select>
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Faixa Horária</label>
-            <select
-              value={newFaixa}
-              onChange={(e) => setNewFaixa(e.target.value)}
-              className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-            >
-              <option value="Faixa 1">Faixa 1 (1ª metade/turno)</option>
-              <option value="Faixa 2">Faixa 2 (2ª metade/turno)</option>
-              <option value="Faixa 3">Faixa 3</option>
-              <option value="Faixa 4">Faixa 4</option>
-            </select>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleAddPolicialFixo}
-            className="w-full inline-flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 hover:bg-blue-750 text-white rounded-lg text-xs font-semibold shadow-sm transition h-[34px] cursor-pointer"
-          >
-            <Plus size={14} /> Adicionar
-          </button>
-        </div>
-
-        {/* Lista de Policiais Fixos */}
-        <div className="border border-slate-200 rounded-xl overflow-hidden mt-3">
-          <table className="w-full border-collapse text-left text-xs">
-            <thead>
-              <tr className="bg-slate-55 border-b border-slate-200 font-bold text-slate-450 uppercase tracking-wider">
-                <th className="p-3">Nome</th>
-                <th className="p-3">Matrícula</th>
-                <th className="p-3">Posto</th>
-                <th className="p-3">Faixa Horária</th>
-                <th className="p-3 text-right">Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {policiaisFixos.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="p-4 text-center text-slate-400 italic">
-                    Nenhum policial fixo configurado.
-                  </td>
-                </tr>
-              ) : (
-                policiaisFixos.map((p, idx) => (
-                  <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 transition font-semibold text-slate-700">
-                    <td className="p-3">{p.nome}</td>
-                    <td className="p-3 font-mono">{p.matricula}</td>
-                    <td className="p-3">
-                      <span className="px-2 py-0.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-md text-[10px] font-bold">
-                        {p.posto}
-                      </span>
-                    </td>
-                    <td className="p-3">{p.faixa}</td>
-                    <td className="p-3 text-right">
-                      <button
-                        type="button"
-                        onClick={() => handleRemovePolicialFixo(idx)}
-                        className="p-1 text-rose-600 hover:bg-rose-50 hover:text-rose-700 rounded-lg transition cursor-pointer"
-                        title="Remover regra"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
 
       <div className="flex items-center gap-2 text-[11px] text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-200/50">
         <Info size={16} className="text-slate-400 shrink-0" />

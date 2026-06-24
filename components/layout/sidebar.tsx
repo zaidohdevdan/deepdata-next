@@ -47,7 +47,17 @@ const modules: MenuItem[] = [
   },
   { href: "/ocorrencias", label: "Ocorrências", icon: ClipboardList },
   { href: "/sistema", label: "Visita Comum", icon: Users },
-  { href: "/escalas", label: "Escalas", icon: Calendar },
+  {
+    label: "Escalas",
+    icon: Calendar,
+    subItems: [
+      { href: "/escalas/diurna", label: "Diurna", icon: Calendar },
+      { href: "/escalas/almoco", label: "Revezamento Almoço", icon: Calendar },
+      { href: "/escalas/janta", label: "Revezamento Janta", icon: Calendar },
+      { href: "/escalas/noturna", label: "Noturna", icon: Calendar },
+      { href: "/escalas/alvorada", label: "Alvorada", icon: Calendar },
+    ]
+  },
   { href: "/configuracoes", label: "Configurações", icon: Settings },
 ]
 
@@ -64,6 +74,7 @@ interface SidebarProps {
 export function Sidebar({ role, userName }: SidebarProps) {
   const pathname = usePathname()
   const [isAlimHovered, setIsAlimHovered] = useState(false)
+  const [isEscalasHovered, setIsEscalasHovered] = useState(false)
 
   function isActive(href: string, exact?: boolean) {
     if (exact) return pathname === href
@@ -72,6 +83,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
 
   // Check if any sub-item is active
   const isAlimActive = pathname.startsWith("/alimentacao") || pathname.startsWith("/cafe") || pathname.startsWith("/biscoito")
+  const isEscalasActive = pathname.startsWith("/escalas")
 
   async function handleLogout() {
     await signOut({ callbackUrl: "/login" })
@@ -97,18 +109,25 @@ export function Sidebar({ role, userName }: SidebarProps) {
         
         {modules.map((mod) => {
           if (mod.subItems) {
-            // RENDER ALIMENTAÇÃO NODE WITH HOVER GRAPH
+            const isHovered = mod.label === "Alimentação" ? isAlimHovered : isEscalasHovered
+            const setIsHovered = mod.label === "Alimentação" ? setIsAlimHovered : setIsEscalasHovered
+            const isActiveNode = mod.label === "Alimentação" ? isAlimActive : isEscalasActive
+            const groupClass = mod.label === "Alimentação" ? "relative group/alim" : "relative group/escalas"
+            const hoverDotClass = mod.label === "Alimentação" ? "after:bg-slate-700 group-hover/alim:after:bg-blue-500/40" : "after:bg-slate-700 group-hover/escalas:after:bg-blue-500/40"
+            const collapsedGroupHoverClass = mod.label === "Alimentação" ? "group-hover/alim:pointer-events-auto group-hover/alim:opacity-100 group-hover/alim:translate-x-0" : "group-hover/escalas:pointer-events-auto group-hover/escalas:opacity-100 group-hover/escalas:translate-x-0"
+            const topAlignClass = mod.label === "Alimentação" ? "top-24" : "top-52"
+
             return (
               <div
                 key={mod.label}
-                onMouseEnter={() => setIsAlimHovered(true)}
-                onMouseLeave={() => setIsAlimHovered(false)}
-                className="relative group/alim"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className={groupClass}
               >
                 <button
                   className={clsx(
                     "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 outline-none",
-                    isAlimActive
+                    isActiveNode
                       ? "bg-blue-600/10 text-blue-400 border border-blue-500/20"
                       : "text-slate-400 hover:text-white hover:bg-white/5"
                   )}
@@ -119,7 +138,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                   </div>
                   <ChevronDown className={clsx(
                     "w-4 h-4 hidden lg:block text-slate-500 transition-transform duration-200",
-                    (isAlimHovered || isAlimActive) && "rotate-180 text-blue-400"
+                    (isHovered || isActiveNode) && "rotate-180 text-blue-400"
                   )} />
                 </button>
 
@@ -127,8 +146,8 @@ export function Sidebar({ role, userName }: SidebarProps) {
                 <div
                   className={clsx(
                     "hidden lg:block transition-all duration-300 overflow-hidden ml-6 pl-4 border-l border-blue-500/20 space-y-1 relative mt-1",
-                    isAlimHovered || isAlimActive
-                      ? "max-h-40 opacity-100 py-1"
+                    isHovered || isActiveNode
+                      ? "max-h-60 opacity-100 py-1"
                       : "max-h-0 opacity-0 pointer-events-none"
                   )}
                 >
@@ -151,7 +170,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
 
                           // Custom graph node circle dot
                           "after:absolute after:left-[-20px] after:top-1/2 after:-translate-y-1/2 after:w-1.5 after:h-1.5 after:rounded-full after:transition-all after:duration-150",
-                          active ? "after:bg-blue-500 after:scale-125 shadow-sm shadow-blue-500" : "after:bg-slate-700 group-hover/alim:after:bg-blue-500/40"
+                          active ? "after:bg-blue-500 after:scale-125 shadow-sm shadow-blue-500" : hoverDotClass
                         )}
                       >
                         <sub.icon className="w-3.5 h-3.5 shrink-0" />
@@ -164,13 +183,13 @@ export function Sidebar({ role, userName }: SidebarProps) {
                 {/* GRAPH SUBMENU FOR COLLAPSED SCREEN (Horizontal popover) */}
                 <div
                   className={clsx(
-                    "lg:hidden fixed left-16 bg-slate-950 border border-slate-800 rounded-xl p-2.5 shadow-2xl transition-all duration-200 z-50 flex flex-col gap-1 w-44 pointer-events-none opacity-0 translate-x-2 group-hover/alim:pointer-events-auto group-hover/alim:opacity-100 group-hover/alim:translate-x-0",
-                    // Align vertically with the Alimentação button
-                    "top-24"
+                    "lg:hidden fixed left-16 bg-slate-950 border border-slate-800 rounded-xl p-2.5 shadow-2xl transition-all duration-200 z-50 flex flex-col gap-1 w-44 pointer-events-none opacity-0 translate-x-2",
+                    collapsedGroupHoverClass,
+                    topAlignClass
                   )}
                 >
                   <div className="text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-1 px-1.5">
-                    Alimentação
+                    {mod.label}
                   </div>
                   {mod.subItems.map((sub) => (
                     <Link

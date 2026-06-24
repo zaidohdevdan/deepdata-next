@@ -1,87 +1,96 @@
-import { RefreshCw } from "lucide-react"
+import { User, UserCheck } from "lucide-react"
 import { ExtractedVisitor, ALAS_VALIDAS_UPI4 } from "@/lib/pdf-parser"
 
-interface VisitasSidebarProps {
-  data: ExtractedVisitor[]
-  sortOption: "senha" | "custodiado" | "localizacao"
-  onSortOptionChange: (val: "senha" | "custodiado" | "localizacao") => void
-  selectedAla: string
-  onSelectedAlaChange: (val: string) => void
-  onReset: () => void
+// Cor distinta por Ala
+const ALA_COLOR_MAP: Record<string, string> = {
+  A: "#7c3aed",
+  B: "#ec4899",
+  C: "#f59e0b",
+  D: "#14b8a6",
+  E: "#84cc16",
+  F: "#06b6d4",
+  "SEGURANÇA A": "#f97316",
+  "SEGURANÇA B": "#ef4444",
 }
 
-export function VisitasSidebar({
-  data,
-  sortOption,
-  onSortOptionChange,
-  selectedAla,
-  onSelectedAlaChange,
-  onReset,
-}: VisitasSidebarProps) {
+interface VisitasSidebarProps {
+  data: ExtractedVisitor[]      // todos os dados (não filtrados, para stats gerais)
+  totalVisits: number           // contagem real de linhas do arquivo
+}
+
+export function VisitasSidebar({ data, totalVisits }: VisitasSidebarProps) {
   return (
-    <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-5">
-      <h3 className="text-sm font-bold text-slate-900 border-b border-slate-100 pb-2">Filtros e Controles</h3>
+    <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm">
+      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
+        Estatísticas por Ala
+      </h3>
 
-      {/* Reset database data trigger */}
-      <button
-        onClick={onReset}
-        className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition"
-      >
-        <RefreshCw size={14} /> Importar Outro Arquivo
-      </button>
-
-      {/* Sort selector */}
-      <div className="space-y-1.5">
-        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-          Ordenar por
-        </label>
-        <select
-          value={sortOption}
-          onChange={(e) => onSortOptionChange(e.target.value as "senha" | "custodiado" | "localizacao")}
-          className="w-full px-3 py-2 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-        >
-          <option value="senha">Senha</option>
-          <option value="custodiado">Nome do Custodiado</option>
-          <option value="localizacao">Localização</option>
-        </select>
-      </div>
-
-      {/* Filter by Ala */}
-      <div className="space-y-1.5">
-        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-          Filtrar por Ala
-        </label>
-        <select
-          value={selectedAla}
-          onChange={(e) => onSelectedAlaChange(e.target.value)}
-          className="w-full px-3 py-2 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-        >
-          <option value="Todos">Todos</option>
-          {ALAS_VALIDAS_UPI4.map((ala) => (
-            <option key={ala} value={ala}>
-              {ala}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Statistics Card */}
-      <div className="bg-purple-50/40 border border-purple-100 rounded-2xl p-4 space-y-3">
-        <h4 className="text-[11px] font-bold text-purple-700 uppercase tracking-wide">
-          Estatísticas Extraídas
-        </h4>
-        <div className="grid grid-cols-2 gap-2 text-center">
-          <div className="bg-white p-2.5 rounded-lg border border-purple-100/50">
-            <span className="block text-lg font-black text-purple-900 font-mono">
-              {data.length}
-            </span>
-            <span className="text-[9px] font-medium text-slate-500">Total Visitas</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {/* Visitas por Ala */}
+        <div className="bg-purple-50/40 border border-purple-200 rounded-xl p-3">
+          <div className="flex items-center gap-1.5 mb-2">
+            <User size={12} className="text-purple-600" />
+            <h5 className="text-[10px] font-bold text-purple-800 uppercase tracking-wide">Visitas por Ala</h5>
           </div>
-          <div className="bg-white p-2.5 rounded-lg border border-purple-100/50">
-            <span className="block text-lg font-black text-purple-900 font-mono">
-              {data.filter((d) => d.localizacao.includes("Enfermaria")).length}
-            </span>
-            <span className="text-[9px] font-medium text-slate-500">Enfermaria</span>
+          <div className="grid grid-cols-4 gap-1">
+            {ALAS_VALIDAS_UPI4.map((ala) => {
+              const count = data.filter(
+                (d) => d.ala && d.ala.toUpperCase() === ala.toUpperCase()
+              ).length
+              const color = ALA_COLOR_MAP[ala] || "#7c3aed"
+              return (
+                <div 
+                  key={ala} 
+                  className="bg-white rounded-lg border border-slate-100 p-1.5 text-center border-b-2 shadow-sm transition hover:shadow"
+                  style={{ borderBottomColor: color }}
+                >
+                  <span className="block text-[9px] font-bold text-slate-500 truncate mb-0.5">
+                    {ala.replace("SEGURANÇA", "SEG")}
+                  </span>
+                  <span className="block text-sm font-black" style={{ color }}>{count}</span>
+                </div>
+              )
+            })}
+            <div className="bg-white rounded-lg border border-purple-200 border-b-2 border-b-purple-500 p-1.5 text-center shadow-sm">
+              <span className="block text-[9px] font-bold text-slate-500 mb-0.5">Total</span>
+              <span className="block text-sm font-black text-purple-700">{totalVisits}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Internos únicos por Ala */}
+        <div className="bg-indigo-50/40 border border-indigo-200 rounded-xl p-3">
+          <div className="flex items-center gap-1.5 mb-2">
+            <UserCheck size={12} className="text-indigo-600" />
+            <h5 className="text-[10px] font-bold text-indigo-800 uppercase tracking-wide">Internos por Ala</h5>
+          </div>
+          <div className="grid grid-cols-4 gap-1">
+            {ALAS_VALIDAS_UPI4.map((ala) => {
+              const uniqueInternos = new Set(
+                data
+                  .filter((d) => d.ala && d.ala.toUpperCase() === ala.toUpperCase() && d.prontuario > 0)
+                  .map((d) => d.prontuario)
+              ).size
+              const color = ALA_COLOR_MAP[ala] || "#6366f1"
+              return (
+                <div 
+                  key={ala} 
+                  className="bg-white rounded-lg border border-slate-100 p-1.5 text-center border-b-2 shadow-sm transition hover:shadow"
+                  style={{ borderBottomColor: color }}
+                >
+                  <span className="block text-[9px] font-bold text-slate-500 truncate mb-0.5">
+                    {ala.replace("SEGURANÇA", "SEG")}
+                  </span>
+                  <span className="block text-sm font-black" style={{ color }}>{uniqueInternos}</span>
+                </div>
+              )
+            })}
+            <div className="bg-white rounded-lg border border-indigo-200 border-b-2 border-b-indigo-500 p-1.5 text-center shadow-sm">
+              <span className="block text-[9px] font-bold text-slate-500 mb-0.5">Total</span>
+              <span className="block text-sm font-black text-indigo-700">
+                {new Set(data.filter(d => d.prontuario > 0).map((d) => d.prontuario)).size}
+              </span>
+            </div>
           </div>
         </div>
       </div>

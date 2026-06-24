@@ -264,15 +264,7 @@ export default function OcorrenciasContainer({
 }: OcorrenciasContainerProps) {
   const [ocorrencias, setOcorrencias] = useState<DBInstance[]>(initialOcorrencias)
   const [categorias, setCategorias] = useState<string[]>(initialCategorias)
-  const [activeTab, setActiveTab] = useState<string>("gerador")
-
-  // OLD GENERATOR STATES
-  const [search, setSearch] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState<string>("Todos")
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(TEMPLATES[0])
   const [copiedId, setCopiedId] = useState<string | null>(null)
-
-  // NEW GRID STATES
   const [historySearch, setHistorySearch] = useState("")
 
   // FORM / DIALOG STATES
@@ -354,9 +346,9 @@ export default function OcorrenciasContainer({
       if (editingId) {
         // UPDATE
         const res = await updateOcorrenciaAction(editingId, data)
-        if (res.success) {
+        if (res.success && res.data) {
           toast.success("Ocorrência atualizada com sucesso!")
-          setOcorrencias(prev => prev.map(o => o.id === editingId ? { ...o, ...data, updatedAt: new Date() } : o))
+          setOcorrencias(prev => prev.map(o => o.id === editingId ? res.data! : o))
           setIsFormOpen(false)
         } else {
           toast.error(res.error || "Erro ao atualizar ocorrência")
@@ -364,18 +356,10 @@ export default function OcorrenciasContainer({
       } else {
         // CREATE
         const res = await createOcorrenciaAction(data)
-        if (res.success) {
+        if (res.success && res.data) {
           toast.success("Ocorrência registrada no Livro de Ocorrências!")
-          const newOcorrencia: DBInstance = {
-            id: Math.random().toString(),
-            ...data,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            icone: ""
-          }
-          setOcorrencias(prev => [newOcorrencia, ...prev])
+          setOcorrencias(prev => [res.data!, ...prev])
           setIsFormOpen(false)
-          setActiveTab("historico")
         } else {
           toast.error(res.error || "Erro ao registrar ocorrência")
         }

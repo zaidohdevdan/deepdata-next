@@ -46,6 +46,37 @@ export interface ConfigValues {
   equipeBravo: string
   equipeEcho: string
   equipeFox: string
+
+  // Specific scale configs
+  escalaPoliciaisFixos_diurna?: string
+  escalaPoliciaisFixos_almoco?: string
+  escalaPoliciaisFixos_janta?: string
+  escalaPoliciaisFixos_noturna?: string
+  escalaPoliciaisFixos_alvorada?: string
+
+  escalaPostosConfig_diurna?: string
+  escalaPostosConfig_almoco?: string
+  escalaPostosConfig_janta?: string
+  escalaPostosConfig_noturna?: string
+  escalaPostosConfig_alvorada?: string
+
+  escalaHoraInicio_diurna?: string
+  escalaHoraInicio_almoco?: string
+  escalaHoraInicio_janta?: string
+  escalaHoraInicio_noturna?: string
+  escalaHoraInicio_alvorada?: string
+
+  escalaHoraFim_diurna?: string
+  escalaHoraFim_almoco?: string
+  escalaHoraFim_janta?: string
+  escalaHoraFim_noturna?: string
+  escalaHoraFim_alvorada?: string
+
+  escalaNumFaixas_diurna?: string
+  escalaNumFaixas_almoco?: string
+  escalaNumFaixas_janta?: string
+  escalaNumFaixas_noturna?: string
+  escalaNumFaixas_alvorada?: string
 }
 
 export const DEFAULT_CONFIG: ConfigValues = {
@@ -62,6 +93,36 @@ export const DEFAULT_CONFIG: ConfigValues = {
   equipeBravo: "[]",
   equipeEcho: "[]",
   equipeFox: "[]",
+
+  escalaPoliciaisFixos_diurna: "[]",
+  escalaPoliciaisFixos_almoco: "[]",
+  escalaPoliciaisFixos_janta: "[]",
+  escalaPoliciaisFixos_noturna: "[]",
+  escalaPoliciaisFixos_alvorada: "[]",
+
+  escalaPostosConfig_diurna: "",
+  escalaPostosConfig_almoco: "",
+  escalaPostosConfig_janta: "",
+  escalaPostosConfig_noturna: "",
+  escalaPostosConfig_alvorada: "",
+
+  escalaHoraInicio_diurna: "06:00",
+  escalaHoraInicio_almoco: "11:00",
+  escalaHoraInicio_janta: "17:00",
+  escalaHoraInicio_noturna: "18:00",
+  escalaHoraInicio_alvorada: "06:00",
+
+  escalaHoraFim_diurna: "18:00",
+  escalaHoraFim_almoco: "13:30",
+  escalaHoraFim_janta: "19:30",
+  escalaHoraFim_noturna: "06:00",
+  escalaHoraFim_alvorada: "08:00",
+
+  escalaNumFaixas_diurna: "2",
+  escalaNumFaixas_almoco: "2",
+  escalaNumFaixas_janta: "2",
+  escalaNumFaixas_noturna: "2",
+  escalaNumFaixas_alvorada: "1",
 }
 
 // ============================================
@@ -233,8 +294,58 @@ export async function getConfigValues(): Promise<ConfigValues> {
       equipeBravo: (map.equipeBravo as string) ?? DEFAULT_CONFIG.equipeBravo,
       equipeEcho: (map.equipeEcho as string) ?? DEFAULT_CONFIG.equipeEcho,
       equipeFox: (map.equipeFox as string) ?? DEFAULT_CONFIG.equipeFox,
+
+      // Specific scale configs
+      escalaPoliciaisFixos_diurna: (map.escalaPoliciaisFixos_diurna as string) ?? DEFAULT_CONFIG.escalaPoliciaisFixos_diurna,
+      escalaPoliciaisFixos_almoco: (map.escalaPoliciaisFixos_almoco as string) ?? DEFAULT_CONFIG.escalaPoliciaisFixos_almoco,
+      escalaPoliciaisFixos_janta: (map.escalaPoliciaisFixos_janta as string) ?? DEFAULT_CONFIG.escalaPoliciaisFixos_janta,
+      escalaPoliciaisFixos_noturna: (map.escalaPoliciaisFixos_noturna as string) ?? map.escalaPoliciaisFixos ?? DEFAULT_CONFIG.escalaPoliciaisFixos_noturna, // fallback to legacy key
+      escalaPoliciaisFixos_alvorada: (map.escalaPoliciaisFixos_alvorada as string) ?? DEFAULT_CONFIG.escalaPoliciaisFixos_alvorada,
+
+      escalaPostosConfig_diurna: (map.escalaPostosConfig_diurna as string) ?? DEFAULT_CONFIG.escalaPostosConfig_diurna,
+      escalaPostosConfig_almoco: (map.escalaPostosConfig_almoco as string) ?? DEFAULT_CONFIG.escalaPostosConfig_almoco,
+      escalaPostosConfig_janta: (map.escalaPostosConfig_janta as string) ?? DEFAULT_CONFIG.escalaPostosConfig_janta,
+      escalaPostosConfig_noturna: (map.escalaPostosConfig_noturna as string) ?? DEFAULT_CONFIG.escalaPostosConfig_noturna,
+      escalaPostosConfig_alvorada: (map.escalaPostosConfig_alvorada as string) ?? DEFAULT_CONFIG.escalaPostosConfig_alvorada,
+
+      escalaHoraInicio_diurna: (map.escalaHoraInicio_diurna as string) ?? DEFAULT_CONFIG.escalaHoraInicio_diurna,
+      escalaHoraInicio_almoco: (map.escalaHoraInicio_almoco as string) ?? DEFAULT_CONFIG.escalaHoraInicio_almoco,
+      escalaHoraInicio_janta: (map.escalaHoraInicio_janta as string) ?? DEFAULT_CONFIG.escalaHoraInicio_janta,
+      escalaHoraInicio_noturna: (map.escalaHoraInicio_noturna as string) ?? DEFAULT_CONFIG.escalaHoraInicio_noturna,
+      escalaHoraInicio_alvorada: (map.escalaHoraInicio_alvorada as string) ?? DEFAULT_CONFIG.escalaHoraInicio_alvorada,
+
+      escalaHoraFim_diurna: (map.escalaHoraFim_diurna as string) ?? DEFAULT_CONFIG.escalaHoraFim_diurna,
+      escalaHoraFim_almoco: (map.escalaHoraFim_almoco as string) ?? DEFAULT_CONFIG.escalaHoraFim_almoco,
+      escalaHoraFim_janta: (map.escalaHoraFim_janta as string) ?? DEFAULT_CONFIG.escalaHoraFim_janta,
+      escalaHoraFim_noturna: (map.escalaHoraFim_noturna as string) ?? DEFAULT_CONFIG.escalaHoraFim_noturna,
+      escalaHoraFim_alvorada: (map.escalaHoraFim_alvorada as string) ?? DEFAULT_CONFIG.escalaHoraFim_alvorada,
+
+      escalaNumFaixas_diurna: (map.escalaNumFaixas_diurna as string) ?? DEFAULT_CONFIG.escalaNumFaixas_diurna,
+      escalaNumFaixas_almoco: (map.escalaNumFaixas_almoco as string) ?? DEFAULT_CONFIG.escalaNumFaixas_almoco,
+      escalaNumFaixas_janta: (map.escalaNumFaixas_janta as string) ?? DEFAULT_CONFIG.escalaNumFaixas_janta,
+      escalaNumFaixas_noturna: (map.escalaNumFaixas_noturna as string) ?? DEFAULT_CONFIG.escalaNumFaixas_noturna,
+      escalaNumFaixas_alvorada: (map.escalaNumFaixas_alvorada as string) ?? DEFAULT_CONFIG.escalaNumFaixas_alvorada,
     }
   } catch {
     return DEFAULT_CONFIG
   }
 }
+
+// Helper to get dynamic header names based on globalConfig settings
+export function getDynamicHeader(
+  colKey: string,
+  defaultHeader: string,
+  globalConfig: ConfigValues,
+  modulo: string
+): string {
+  if (modulo === "ALIMENTACAO") {
+    if (colKey === "caixas") return `Caixas (${globalConfig.alimentacaoCaixaCapacidade}un)`
+  } else if (modulo === "CAFE") {
+    if (colKey === "pacotes") return `Pacotes (${globalConfig.cafeCapacitePacote}un)`
+    if (colKey === "garrafas") return `Garrafas (${globalConfig.cafeLitrosPorGarrafa}L)`
+  } else if (modulo === "BISCOITO") {
+    if (colKey === "pacotes") return `Pacotes (${globalConfig.biscoitoCapacidadePacote}un)`
+  }
+  return defaultHeader
+}
+

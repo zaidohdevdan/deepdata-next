@@ -88,6 +88,9 @@ Prisma.NullTypes = {
  * Enums
  */
 exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
+  ReadUncommitted: 'ReadUncommitted',
+  ReadCommitted: 'ReadCommitted',
+  RepeatableRead: 'RepeatableRead',
   Serializable: 'Serializable'
 });
 
@@ -177,6 +180,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.QueryMode = {
+  default: 'default',
+  insensitive: 'insensitive'
+};
+
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
@@ -241,7 +249,8 @@ const config = {
   "datasourceNames": [
     "db"
   ],
-  "activeProvider": "sqlite",
+  "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -250,8 +259,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated-client\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id           String   @id @default(cuid())\n  username     String   @unique\n  passwordHash String\n  name         String\n  role         Role     @default(USER)\n  active       Boolean  @default(true)\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n\n  // NextAuth relations\n  accounts Account[]\n  sessions Session[]\n}\n\nenum Role {\n  ADMIN\n  USER\n}\n\n// NextAuth required models\nmodel Account {\n  id                String  @id @default(cuid())\n  userId            String\n  type              String\n  provider          String\n  providerAccountId String\n  refresh_token     String?\n  access_token      String?\n  expires_at        Int?\n  token_type        String?\n  scope             String?\n  id_token          String?\n  session_state     String?\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String   @unique\n  expires    DateTime\n\n  @@unique([identifier, token])\n}\n\n// Parâmetros globais do sistema (configuráveis pelo Admin)\nmodel ConfiguracaoGlobal {\n  id        String   @id @default(cuid())\n  chave     String   @unique\n  valor     String\n  descricao String?\n  updatedAt DateTime @updatedAt\n}\n\n// Dados de distribuição por módulo (persistência no banco)\nmodel Ala {\n  id        String       @id @default(cuid())\n  nome      String       @unique\n  ordem     Int          @default(0)\n  ativa     Boolean      @default(true)\n  createdAt DateTime     @default(now())\n  distribs  DistribAla[]\n}\n\nmodel DistribAla {\n  id        String   @id @default(cuid())\n  modulo    Modulo\n  alaId     String\n  ala       Ala      @relation(fields: [alaId], references: [id], onDelete: Cascade)\n  internos  Int      @default(0)\n  dietas    Int      @default(0)\n  updatedAt DateTime @updatedAt\n\n  @@unique([modulo, alaId])\n}\n\nenum Modulo {\n  ALIMENTACAO\n  CAFE\n  BISCOITO\n}\n\nmodel Ocorrencia {\n  id        String   @id @default(cuid())\n  titulo    String\n  categoria String\n  icone     String   @default(\"📋\")\n  texto     String\n  servidor  String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel OcorrenciaCategoria {\n  id        String   @id @default(cuid())\n  nome      String   @unique\n  createdAt DateTime @default(now())\n}\n",
-  "inlineSchemaHash": "23961922d4fac4494b254abeee1f7cbb8df1194e39bbc8bb81e0bb2401d585ba",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated-client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id           String   @id @default(cuid())\n  username     String   @unique\n  passwordHash String\n  name         String\n  role         Role     @default(USER)\n  active       Boolean  @default(true)\n  createdAt    DateTime @default(now())\n  updatedAt    DateTime @updatedAt\n\n  // NextAuth relations\n  accounts Account[]\n  sessions Session[]\n}\n\nenum Role {\n  ADMIN\n  USER\n}\n\n// NextAuth required models\nmodel Account {\n  id                String  @id @default(cuid())\n  userId            String\n  type              String\n  provider          String\n  providerAccountId String\n  refresh_token     String?\n  access_token      String?\n  expires_at        Int?\n  token_type        String?\n  scope             String?\n  id_token          String?\n  session_state     String?\n\n  user User @relation(fields: [userId], references: [id], onDelete: Cascade)\n\n  @@unique([provider, providerAccountId])\n}\n\nmodel Session {\n  id           String   @id @default(cuid())\n  sessionToken String   @unique\n  userId       String\n  expires      DateTime\n  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)\n}\n\nmodel VerificationToken {\n  identifier String\n  token      String   @unique\n  expires    DateTime\n\n  @@unique([identifier, token])\n}\n\n// Parâmetros globais do sistema (configuráveis pelo Admin)\nmodel ConfiguracaoGlobal {\n  id        String   @id @default(cuid())\n  chave     String   @unique\n  valor     String\n  descricao String?\n  updatedAt DateTime @updatedAt\n}\n\n// Dados de distribuição por módulo (persistência no banco)\nmodel Ala {\n  id        String       @id @default(cuid())\n  nome      String       @unique\n  ordem     Int          @default(0)\n  ativa     Boolean      @default(true)\n  createdAt DateTime     @default(now())\n  distribs  DistribAla[]\n}\n\nmodel DistribAla {\n  id        String   @id @default(cuid())\n  modulo    Modulo\n  alaId     String\n  ala       Ala      @relation(fields: [alaId], references: [id], onDelete: Cascade)\n  internos  Int      @default(0)\n  dietas    Int      @default(0)\n  updatedAt DateTime @updatedAt\n\n  @@unique([modulo, alaId])\n}\n\nenum Modulo {\n  ALIMENTACAO\n  CAFE\n  BISCOITO\n}\n\nmodel Ocorrencia {\n  id        String   @id @default(cuid())\n  titulo    String\n  categoria String\n  icone     String   @default(\"📋\")\n  texto     String\n  servidor  String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel OcorrenciaCategoria {\n  id        String   @id @default(cuid())\n  nome      String   @unique\n  createdAt DateTime @default(now())\n}\n",
+  "inlineSchemaHash": "14d49e74c0b77a848d89a04081f2d845db2a4c2c2b7527028733054ccbaba4ec",
   "copyEngine": true
 }
 
