@@ -559,13 +559,20 @@ export default function EscalasContainer({
   }
 
   const confirmClear = () => {
-    localStorage.removeItem(LS_KEY)
-    setBasePoliciais([])
     setEstado({})
     setIndependentEstado(DEFAULT_INDEPENDENT_ESTADO)
-    setIndependentHorarios(DEFAULT_INDEPENDENT_HORARIOS)
-    setPresenceMap({})
-    toast.success("Escala limpa.")
+    
+    try {
+      const raw = localStorage.getItem(LS_KEY)
+      if (raw) {
+        const parsed = JSON.parse(raw)
+        parsed.estado = {}
+        parsed.independentEstado = DEFAULT_INDEPENDENT_ESTADO
+        localStorage.setItem(LS_KEY, JSON.stringify(parsed))
+      }
+    } catch {}
+
+    toast.success("Postos da escala limpos.")
     setShowClearConfirm(false)
   }
 
