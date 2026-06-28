@@ -612,17 +612,17 @@ interface PolicialEquipe {
         </span>
       </div>
 
-      {/* Action Submit */}
-      <div className="flex justify-end pt-2">
+      {/* Action Submit (Floating FAB) */}
+      <div className="fixed bottom-6 right-6 z-50 print:hidden">
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center gap-1.5 px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow-md transition disabled:opacity-60"
+          className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl shadow-2xl hover:shadow-slate-900/30 transition-all duration-200 disabled:opacity-60 cursor-pointer font-bold text-sm border border-slate-700/50 hover:scale-105 active:scale-95"
         >
           {isPending ? (
-            <Loader2 size={16} className="animate-spin" />
+            <Loader2 size={18} className="animate-spin" />
           ) : (
-            <Save size={16} />
+            <Save size={18} />
           )}
           Gravar Configurações
         </button>
