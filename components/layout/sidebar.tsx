@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
@@ -78,6 +78,11 @@ export function Sidebar({ role, userName }: SidebarProps) {
   const toggleMenu = (label: string) => {
     setOpenMenu(prev => prev === label ? null : label)
   }
+
+  // Reset menu on pathname change (fires once navigation has successfully completed)
+  useEffect(() => {
+    setOpenMenu(null)
+  }, [pathname])
 
   function isActive(href: string, exact?: boolean) {
     if (exact) return pathname === href
@@ -163,7 +168,6 @@ export function Sidebar({ role, userName }: SidebarProps) {
                       <Link
                         key={sub.href}
                         href={sub.href}
-                        onClick={() => setOpenMenu(null)}
                         className={clsx(
                           "relative flex items-center gap-3 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 pl-6",
                           active
@@ -202,7 +206,6 @@ export function Sidebar({ role, userName }: SidebarProps) {
                     <Link
                       key={sub.href}
                       href={sub.href}
-                      onClick={() => setOpenMenu(null)}
                       className={clsx(
                         "flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150",
                         isActive(sub.href)
