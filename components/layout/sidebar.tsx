@@ -193,10 +193,12 @@ export function Sidebar({ role, userName }: SidebarProps) {
                 {/* GRAPH SUBMENU FOR COLLAPSED SCREEN (Horizontal popover) */}
                 <div
                   className={clsx(
-                    "lg:hidden fixed left-16 bg-slate-950 border border-slate-800 rounded-xl p-2.5 shadow-2xl transition-all duration-200 z-50 flex flex-col gap-1 w-44 pointer-events-none opacity-0 translate-x-2",
+                    "lg:hidden fixed left-16 bg-slate-950 border border-slate-800 rounded-xl p-2.5 shadow-2xl transition-all duration-200 z-50 flex flex-col gap-1 w-44",
                     collapsedGroupHoverClass,
                     topAlignClass,
-                    openMenu === mod.label && "pointer-events-auto opacity-100 translate-x-0"
+                    openMenu === mod.label
+                      ? "pointer-events-auto opacity-100 translate-x-0"
+                      : "pointer-events-none opacity-0 translate-x-2"
                   )}
                 >
                   <div className="text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-1 px-1.5">
