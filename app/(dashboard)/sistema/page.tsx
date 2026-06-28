@@ -37,6 +37,7 @@ export default function VisitasPage() {
   const [pdfjsLoaded, setPdfjsLoaded] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [showStats, setShowStats] = useState(false)
 
   // Carregar dados salvos no localStorage ao montar a página
   useEffect(() => {
@@ -641,8 +642,115 @@ export default function VisitasPage() {
             </div>
           </div>
 
-          {/* Estatísticas por Ala */}
-          <VisitasSidebar data={data} totalVisits={totalVisits} />
+          {/* Estatísticas e Relatório por Ala (Card Colapsável) */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
+            <button
+              type="button"
+              onClick={() => setShowStats(!showStats)}
+              className="w-full flex items-center justify-between font-extrabold text-slate-800 text-sm focus:outline-none select-none cursor-pointer"
+            >
+              <span className="flex items-center gap-2">
+                📊 Estatísticas e Relatório por Ala {showStats ? "(Clique para recolher)" : "(Clique para expandir)"}
+              </span>
+              <span className="text-lg transition-transform duration-200">
+                {showStats ? "▲" : "▼"}
+              </span>
+            </button>
+
+            {showStats && (
+              <div className="pt-4 border-t border-slate-100 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Painel visual de estatísticas */}
+                <div className="lg:col-span-2">
+                  <VisitasSidebar data={data} totalVisits={totalVisits} />
+                </div>
+
+                {/* Relatório de controle textual */}
+                <div className="space-y-3 bg-slate-50 border border-slate-200/60 rounded-xl p-4 flex flex-col">
+                  <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                    <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">
+                      📄 Relatório de Controle
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const report = (() => {
+                          const wings = Array.from(new Set(data.map(d => d.ala.toUpperCase()))).sort()
+                          let reportText = "RELATÓRIO DE CONTROLE DE VISITAS - UPI-4\n"
+                          reportText += "========================================\n\n"
+
+                          let totalGeralVisitantes = 0
+                          let totalGeralInternosSet = new Set<number>()
+
+                          wings.forEach(wingName => {
+                            const wingData = data.filter(d => d.ala.toUpperCase() === wingName)
+                            const comPrioridade = wingData.filter(d => d.prioridade === "sim").length
+                            const semPrioridade = wingData.filter(d => d.prioridade === "não").length
+                            const totalVisitantes = wingData.length
+                            const internos = new Set(wingData.map(d => d.prontuario))
+
+                            totalGeralVisitantes += totalVisitantes
+                            wingData.forEach(d => totalGeralInternosSet.add(d.prontuario))
+
+                            reportText += `${wingName}:\n`
+                            reportText += `  - COM PRIORIDADE: ${comPrioridade}\n`
+                            reportText += `  - SEM PRIORIDADE: ${semPrioridade}\n`
+                            reportText += `  - QUANTIDADE DE INTERNOS: ${internos.size}\n`
+                            reportText += `  - TOTAL DE VISITANTES: ${totalVisitantes}\n`
+                            reportText += `  - SÍNTESE: ${wingName}: COM PRIORIDADE: ${comPrioridade}, SEM PRIORIDADE: ${semPrioridade}, TOTAL: ${totalVisitantes}\n\n`
+                          })
+
+                          reportText += "========================================\n"
+                          reportText += `TOTAL GERAL DE VISITANTES: ${totalGeralVisitantes}\n`
+                          reportText += `TOTAL GERAL DE INTERNOS VISITADOS: ${totalGeralInternosSet.size}\n`
+                          return reportText
+                        })()
+                        navigator.clipboard.writeText(report)
+                        toast.success("Relatório copiado para a área de transferência!")
+                      }}
+                      className="px-2.5 py-1 text-[10px] font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-lg transition cursor-pointer flex items-center gap-1"
+                    >
+                      Copiar Relatório
+                    </button>
+                  </div>
+                  <textarea
+                    readOnly
+                    className="flex-1 w-full min-h-[300px] bg-slate-100/50 border border-slate-200 rounded-lg p-2.5 text-[10.5px] font-mono text-slate-750 outline-none"
+                    value={(() => {
+                      const wings = Array.from(new Set(data.map(d => d.ala.toUpperCase()))).sort()
+                      let reportText = "RELATÓRIO DE CONTROLE DE VISITAS - UPI-4\n"
+                      reportText += "========================================\n\n"
+
+                      let totalGeralVisitantes = 0
+                      let totalGeralInternosSet = new Set<number>()
+
+                      wings.forEach(wingName => {
+                        const wingData = data.filter(d => d.ala.toUpperCase() === wingName)
+                        const comPrioridade = wingData.filter(d => d.prioridade === "sim").length
+                        const semPrioridade = wingData.filter(d => d.prioridade === "não").length
+                        const totalVisitantes = wingData.length
+                        const internos = new Set(wingData.map(d => d.prontuario))
+
+                        totalGeralVisitantes += totalVisitantes
+                        wingData.forEach(d => totalGeralInternosSet.add(d.prontuario))
+
+                        reportText += `${wingName}:\n`
+                        reportText += `  - COM PRIORIDADE: ${comPrioridade}\n`
+                        reportText += `  - SEM PRIORIDADE: ${semPrioridade}\n`
+                        reportText += `  - QUANTIDADE DE INTERNOS: ${internos.size}\n`
+                        reportText += `  - TOTAL DE VISITANTES: ${totalVisitantes}\n`
+                        reportText += `  - SÍNTESE: ${wingName}: COM PRIORIDADE: ${comPrioridade}, SEM PRIORIDADE: ${semPrioridade}, TOTAL: ${totalVisitantes}\n\n`
+                      })
+
+                      reportText += "========================================\n"
+                      reportText += `TOTAL GERAL DE VISITANTES: ${totalGeralVisitantes}\n`
+                      reportText += `TOTAL GERAL DE INTERNOS VISITADOS: ${totalGeralInternosSet.size}\n`
+                      return reportText
+                    })()}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Tabela — largura total */}
           <VisitasTable

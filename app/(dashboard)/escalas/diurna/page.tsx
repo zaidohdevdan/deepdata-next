@@ -1,6 +1,6 @@
 import { getConfigValues } from "@/lib/calculation"
-import EscalasContainer from "@/components/escalas/EscalasContainer"
 import { auth } from "@/lib/auth"
+import DiurnaClient from "./DiurnaClient"
 
 export const dynamic = "force-dynamic"
 
@@ -8,11 +8,17 @@ export default async function DiurnaEscalasPage() {
   const globalConfig = await getConfigValues()
   const session = await auth()
   
-  let initialPoliciaisFixos = []
+  let initialPoliciaisFixosDiurna = []
+  let initialPoliciaisFixosAlvorada = []
   try {
-    initialPoliciaisFixos = JSON.parse(globalConfig.escalaPoliciaisFixos_diurna || "[]")
+    initialPoliciaisFixosDiurna = JSON.parse(globalConfig.escalaPoliciaisFixos_diurna || "[]")
   } catch (error) {
     console.error("Error parsing fixed police officers for diurna:", error)
+  }
+  try {
+    initialPoliciaisFixosAlvorada = JSON.parse(globalConfig.escalaPoliciaisFixos_alvorada || "[]")
+  } catch (error) {
+    console.error("Error parsing fixed police officers for alvorada:", error)
   }
 
   let equipeAlfa = []
@@ -32,9 +38,7 @@ export default async function DiurnaEscalasPage() {
   } : null
 
   return (
-    <EscalasContainer 
-      tipo="diurna"
-      initialPoliciaisFixos={initialPoliciaisFixos}
+    <DiurnaClient 
       currentUser={currentUser}
       equipeAlfa={equipeAlfa}
       equipeBravo={equipeBravo}
@@ -42,10 +46,18 @@ export default async function DiurnaEscalasPage() {
       equipeFox={equipeFox}
       nomeUnidade={globalConfig.nomeUnidade}
       localidade={globalConfig.localidade}
-      initialPostosConfig={globalConfig.escalaPostosConfig_diurna}
-      initialHoraInicio={globalConfig.escalaHoraInicio_diurna}
-      initialHoraFim={globalConfig.escalaHoraFim_diurna}
-      initialNumFaixas={globalConfig.escalaNumFaixas_diurna}
+      // Diurna Configs
+      initialPoliciaisFixosDiurna={initialPoliciaisFixosDiurna}
+      initialPostosConfigDiurna={globalConfig.escalaPostosConfig_diurna}
+      initialHoraInicioDiurna={globalConfig.escalaHoraInicio_diurna}
+      initialHoraFimDiurna={globalConfig.escalaHoraFim_diurna}
+      initialNumFaixasDiurna={globalConfig.escalaNumFaixas_diurna}
+      // Alvorada Configs
+      initialPoliciaisFixosAlvorada={initialPoliciaisFixosAlvorada}
+      initialPostosConfigAlvorada={globalConfig.escalaPostosConfig_alvorada}
+      initialHoraInicioAlvorada={globalConfig.escalaHoraInicio_alvorada}
+      initialHoraFimAlvorada={globalConfig.escalaHoraFim_alvorada}
+      initialNumFaixasAlvorada={globalConfig.escalaNumFaixas_alvorada}
     />
   )
 }

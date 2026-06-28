@@ -51,11 +51,9 @@ const modules: MenuItem[] = [
     label: "Escalas",
     icon: Calendar,
     subItems: [
-      { href: "/escalas/diurna", label: "Diurna", icon: Calendar },
-      { href: "/escalas/almoco", label: "Revezamento Almoço", icon: Calendar },
-      { href: "/escalas/janta", label: "Revezamento Janta", icon: Calendar },
+      { href: "/escalas/diurna", label: "Diurna / Alvorada", icon: Calendar },
+      { href: "/escalas/revezamento", label: "Revezamento", icon: Calendar },
       { href: "/escalas/noturna", label: "Noturna", icon: Calendar },
-      { href: "/escalas/alvorada", label: "Alvorada", icon: Calendar },
     ]
   },
   { href: "/configuracoes", label: "Configurações", icon: Settings },
@@ -75,6 +73,11 @@ export function Sidebar({ role, userName }: SidebarProps) {
   const pathname = usePathname()
   const [isAlimHovered, setIsAlimHovered] = useState(false)
   const [isEscalasHovered, setIsEscalasHovered] = useState(false)
+  const [openMenu, setOpenMenu] = useState<string | null>(null)
+
+  const toggleMenu = (label: string) => {
+    setOpenMenu(prev => prev === label ? null : label)
+  }
 
   function isActive(href: string, exact?: boolean) {
     if (exact) return pathname === href
@@ -125,8 +128,10 @@ export function Sidebar({ role, userName }: SidebarProps) {
                 className={groupClass}
               >
                 <button
+                  type="button"
+                  onClick={() => toggleMenu(mod.label)}
                   className={clsx(
-                    "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 outline-none",
+                    "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 outline-none cursor-pointer",
                     isActiveNode
                       ? "bg-blue-600/10 text-blue-400 border border-blue-500/20"
                       : "text-slate-400 hover:text-white hover:bg-white/5"
@@ -138,7 +143,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                   </div>
                   <ChevronDown className={clsx(
                     "w-4 h-4 hidden lg:block text-slate-500 transition-transform duration-200",
-                    (isHovered || isActiveNode) && "rotate-180 text-blue-400"
+                    (isHovered || isActiveNode || openMenu === mod.label) && "rotate-180 text-blue-400"
                   )} />
                 </button>
 
@@ -146,7 +151,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                 <div
                   className={clsx(
                     "hidden lg:block transition-all duration-300 overflow-hidden ml-6 pl-4 border-l border-blue-500/20 space-y-1 relative mt-1",
-                    isHovered || isActiveNode
+                    isHovered || isActiveNode || openMenu === mod.label
                       ? "max-h-60 opacity-100 py-1"
                       : "max-h-0 opacity-0 pointer-events-none"
                   )}
@@ -158,6 +163,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                       <Link
                         key={sub.href}
                         href={sub.href}
+                        onClick={() => setOpenMenu(null)}
                         className={clsx(
                           "relative flex items-center gap-3 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 pl-6",
                           active
@@ -185,7 +191,8 @@ export function Sidebar({ role, userName }: SidebarProps) {
                   className={clsx(
                     "lg:hidden fixed left-16 bg-slate-950 border border-slate-800 rounded-xl p-2.5 shadow-2xl transition-all duration-200 z-50 flex flex-col gap-1 w-44 pointer-events-none opacity-0 translate-x-2",
                     collapsedGroupHoverClass,
-                    topAlignClass
+                    topAlignClass,
+                    openMenu === mod.label && "pointer-events-auto opacity-100 translate-x-0"
                   )}
                 >
                   <div className="text-[10px] font-extrabold uppercase text-slate-500 tracking-wider mb-1 px-1.5">
@@ -195,6 +202,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                     <Link
                       key={sub.href}
                       href={sub.href}
+                      onClick={() => setOpenMenu(null)}
                       className={clsx(
                         "flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150",
                         isActive(sub.href)

@@ -245,8 +245,8 @@ interface DBInstance {
   icone: string
   texto: string
   servidor: string
-  createdAt: Date
-  updatedAt: Date
+  createdAt: Date | string
+  updatedAt: Date | string
 }
 
 interface OcorrenciasContainerProps {
@@ -511,6 +511,7 @@ export default function OcorrenciasContainer({
                         : "border-slate-200 hover:border-indigo-400 hover:shadow-lg"
                       }`}
                     onClick={() => handleCopyTemplate(template.id, template.text)}
+                    onDoubleClick={() => openEditTemplate(template)}
                     title={template.title}
                   >
                     <span className="text-3xl leading-none">{template.icon}</span>
@@ -570,6 +571,7 @@ export default function OcorrenciasContainer({
                       : "border-slate-200 hover:border-indigo-400 hover:shadow-lg"
                     }`}
                   onClick={() => handleCopyTemplate(item.id, item.texto)}
+                  onDoubleClick={() => openEditForm(item)}
                   title={item.titulo}
                 >
                   <span className="text-3xl leading-none">{item.icone || CATEGORY_ICONS[item.categoria] || "📋"}</span>

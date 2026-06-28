@@ -17,7 +17,7 @@ export interface ExtractedVisitor {
 
 // Todas as alas válidas da UPI4
 export const ALAS_VALIDAS_UPI4 = [
-  "A", "B", "C", "D", "E", "F", "SEGURANÇA A", "SEGURANÇA B"
+  "A", "B", "C", "D", "E", "F", "SEGURANÇA A", "SEGURANÇA B", "ENFERMARIA"
 ]
 
 const normalizeStr = (s: string) =>
@@ -110,7 +110,7 @@ export const parsePDFText = (
     const prioridadeMatch = afterMatch.match(/Prioridade[:\s]+(Sim|Não)/i)
     const prioridade = prioridadeMatch ? prioridadeMatch[1].trim().toLowerCase() : "não"
 
-    const key = `${senha}-${normalizeStr(custodiado)}`
+    const key = `${senha}-${normalizeStr(custodiado)}-${normalizeStr(nomeVisitante)}`
     if (!seen.has(key)) {
       seen.add(key)
       tempData.push({
