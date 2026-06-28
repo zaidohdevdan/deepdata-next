@@ -48,7 +48,14 @@ export async function createOcorrenciaAction(formData: unknown) {
     })
 
     revalidatePath("/ocorrencias")
-    return { success: true, data: ocorrencia }
+    return {
+      success: true,
+      data: {
+        ...ocorrencia,
+        createdAt: ocorrencia.createdAt.toISOString(),
+        updatedAt: ocorrencia.updatedAt.toISOString(),
+      }
+    }
   } catch (error) {
     console.error("Error creating ocorrencia:", error)
     return { success: false, error: "Erro interno ao registrar ocorrência." }
@@ -79,7 +86,14 @@ export async function updateOcorrenciaAction(id: string, formData: unknown) {
     })
 
     revalidatePath("/ocorrencias")
-    return { success: true, data: ocorrencia }
+    return {
+      success: true,
+      data: {
+        ...ocorrencia,
+        createdAt: ocorrencia.createdAt.toISOString(),
+        updatedAt: ocorrencia.updatedAt.toISOString(),
+      }
+    }
   } catch (error) {
     console.error("Error updating ocorrencia:", error)
     return { success: false, error: "Erro ao atualizar a ocorrência." }
