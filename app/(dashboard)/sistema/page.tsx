@@ -9,6 +9,7 @@ import { UploadArea } from "@/components/sistema/UploadArea"
 import { VisitasSidebar } from "@/components/sistema/VisitasSidebar"
 import { VisitasTable } from "@/components/sistema/VisitasTable"
 import { ExtractedVisitor, parsePDFText, isAlaValida, ALAS_VALIDAS_UPI4 } from "@/lib/pdf-parser"
+import { getVisitasAction, saveVisitasAction, clearVisitasAction } from "@/app/actions/visitas"
 
 interface PDFTextItem { str: string }
 interface PDFTextContent { items: PDFTextItem[] }
@@ -21,8 +22,10 @@ interface PDFJSStatic {
 interface CustomWindow extends Window { pdfjsLib?: PDFJSStatic }
 
 export default function VisitasPage() {
+  // Lazy initializers: read localStorage once on mount without setState-in-effect
   const [data, setData] = useState<ExtractedVisitor[]>([])
-  const [totalVisits, setTotalVisits] = useState(0)
+  const [totalVisits, setTotalVisits] = useState<number>(0)
+  const [isLoadingVisits, setIsLoadingVisits] = useState(true)
 
   // Filtros
   const [searchInterno, setSearchInterno] = useState("")
@@ -39,42 +42,40 @@ export default function VisitasPage() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [showStats, setShowStats] = useState(false)
 
-  // Carregar dados salvos no localStorage ao montar a página
+  // Load from DB on mount
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedData = localStorage.getItem("sistema_visitas_data")
-      const storedTotal = localStorage.getItem("sistema_visitas_total")
-      if (storedData) {
-        try {
-          const parsed = JSON.parse(storedData)
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            setData(parsed)
-            if (storedTotal) {
-              setTotalVisits(parseInt(storedTotal, 10))
-            } else {
-              setTotalVisits(parsed.length)
-            }
-          }
-        } catch (e) {
-          console.error("Erro ao carregar visitas salvas", e)
+    getVisitasAction()
+      .then((dbData) => {
+        if (dbData && dbData.length > 0) {
+          const mapped = dbData.map((d) => ({
+            prontuario: d.prontuario,
+            senha: d.senha,
+            custodiado: d.custodiado,
+            localizacao: d.localizacao,
+            ala: d.ala,
+            prioridade: d.prioridade,
+            cela: d.cela,
+            cpfVisitante: d.cpfVisitante,
+            nomeVisitante: d.nomeVisitante,
+            relacao: d.relacao,
+            situacao: d.situacao,
+            visitantes: []
+          }))
+          setData(mapped)
+          setTotalVisits(mapped.length)
         }
-      }
-      setIsLoaded(true)
-    }
+      })
+      .catch((err) => console.error("Error loading visits from db:", err))
+      .finally(() => setIsLoadingVisits(false))
   }, [])
 
-  // Sincronizar dados com o localStorage ao alterar
+  // Mark as loaded after mount
   useEffect(() => {
-    if (typeof window !== "undefined" && isLoaded) {
-      if (data.length > 0) {
-        localStorage.setItem("sistema_visitas_data", JSON.stringify(data))
-        localStorage.setItem("sistema_visitas_total", String(totalVisits))
-      } else {
-        localStorage.removeItem("sistema_visitas_data")
-        localStorage.removeItem("sistema_visitas_total")
-      }
-    }
-  }, [data, totalVisits, isLoaded])
+    const timer = setTimeout(() => {
+      setIsLoaded(true)
+    }, 0)
+    return () => clearTimeout(timer)
+  }, [])
 
   // Load pdf.js
   useEffect(() => {
@@ -148,7 +149,7 @@ export default function VisitasPage() {
           if (!custodiado || !localizacao) return
 
           // Extrair Ala e Cela da string de localização
-          let match = String(localizacao).match(/Ala[:\s]+(.+?)\s*-\s*Cela\s+([A-Z0-9]+)/i)
+          const match = String(localizacao).match(/Ala[:\s]+(.+?)\s*-\s*Cela\s+([A-Z0-9]+)/i)
           let alaStr = match ? match[1].trim() : ""
           let celaFormatted = ""
           if (match) {
@@ -193,17 +194,30 @@ export default function VisitasPage() {
           })
         })
 
-        setData(extracted)
-        toast.success("Planilha importada com sucesso!", {
-          description: `${extracted.length} visitas válidas. ${rejected} rejeitadas por ala inválida.`,
-        })
-      } catch (err) {
+      const loadId = toast.loading("Gravando dados no banco de dados...")
+      saveVisitasAction(extracted).then((res) => {
+        toast.dismiss(loadId)
+        if (res.success) {
+          setData(extracted)
+          setTotalVisits(extracted.length)
+          toast.success("Planilha importada com sucesso!", {
+            description: `${extracted.length} visitas válidas salvas no banco. ${rejected} rejeitadas por ala inválida.`,
+          })
+        } else {
+          toast.error(res.error || "Erro ao salvar visitas no banco de dados.")
+        }
+      }).catch((err) => {
+        toast.dismiss(loadId)
         console.error(err)
-        toast.error("Erro ao ler a planilha.")
-      }
+        toast.error("Erro de conexão ao salvar.")
+      })
+    } catch (err) {
+      console.error(err)
+      toast.error("Erro ao ler a planilha.")
     }
-    reader.readAsArrayBuffer(file)
   }
+  reader.readAsArrayBuffer(file)
+}
 
   // Parse PDF
   const processPDFFile = (file: File) => {
@@ -227,9 +241,21 @@ export default function VisitasPage() {
           let textContent = ""
           contents.forEach((c) => { textContent += c.items.map((i) => i.str).join(" ") + " " })
           const { tempData, rejected } = parsePDFText(textContent)
-          setData(tempData)
-          setTotalVisits(tempData.length)
-          toast.success("PDF processado!", { description: `${tempData.length} visitas. ${rejected} rejeitadas.` })
+          const loadId = toast.loading("Gravando dados no banco de dados...")
+          saveVisitasAction(tempData).then((res) => {
+            toast.dismiss(loadId)
+            if (res.success) {
+              setData(tempData)
+              setTotalVisits(tempData.length)
+              toast.success("PDF processado!", { description: `${tempData.length} visitas salvas no banco. ${rejected} rejeitadas.` })
+            } else {
+              toast.error(res.error || "Erro ao salvar visitas no banco.")
+            }
+          }).catch((err) => {
+            toast.dismiss(loadId)
+            console.error(err)
+            toast.error("Erro de conexão ao salvar.")
+          })
         }).catch((err) => { console.error(err); toast.error("Erro ao ler PDF.") })
       }).catch((err) => { console.error(err); toast.error("Erro ao decodificar PDF.") })
     }
@@ -489,8 +515,24 @@ export default function VisitasPage() {
                 <FileText size={14} /> Gerar PDF
               </button>
               <button
-                onClick={() => { setData([]); setTotalVisits(0) }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-purple-800/60 hover:bg-purple-800/80 text-white rounded-xl border border-purple-400/30 shadow-sm transition"
+                onClick={async () => {
+                  const loadId = toast.loading("Limpando dados no banco...")
+                  try {
+                    const res = await clearVisitasAction()
+                    toast.dismiss(loadId)
+                    if (res.success) {
+                      setData([])
+                      setTotalVisits(0)
+                      toast.success("Todas as visitas foram limpas com sucesso.")
+                    } else {
+                      toast.error(res.error || "Erro ao limpar visitas no banco.")
+                    }
+                  } catch (error) {
+                    toast.dismiss(loadId)
+                    toast.error("Erro de conexão ao limpar visitas.")
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-purple-800/60 hover:bg-purple-800/80 text-white rounded-xl border border-purple-400/30 shadow-sm transition cursor-pointer"
               >
                 <RefreshCw size={14} /> Importar Outro
               </button>
@@ -679,7 +721,7 @@ export default function VisitasPage() {
                           reportText += "========================================\n\n"
 
                           let totalGeralVisitantes = 0
-                          let totalGeralInternosSet = new Set<number>()
+                          const totalGeralInternosSet = new Set<number>()
 
                           wings.forEach(wingName => {
                             const wingData = data.filter(d => d.ala.toUpperCase() === wingName)
@@ -721,7 +763,7 @@ export default function VisitasPage() {
                       reportText += "========================================\n\n"
 
                       let totalGeralVisitantes = 0
-                      let totalGeralInternosSet = new Set<number>()
+                      const totalGeralInternosSet = new Set<number>()
 
                       wings.forEach(wingName => {
                         const wingData = data.filter(d => d.ala.toUpperCase() === wingName)

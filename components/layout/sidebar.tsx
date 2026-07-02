@@ -83,7 +83,10 @@ export function Sidebar({ role, userName }: SidebarProps) {
 
   // Reset menu on pathname change (fires once navigation has successfully completed)
   useEffect(() => {
-    setOpenMenu(null)
+    const timer = setTimeout(() => {
+      setOpenMenu(null)
+    }, 0)
+    return () => clearTimeout(timer)
   }, [pathname])
 
   function isActive(href: string, exact?: boolean) {

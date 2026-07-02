@@ -1,7 +1,7 @@
 import Link from "next/link"
-import { 
-  Utensils, Coffee, Cookie, ClipboardList, 
-  Users, Calendar, ChevronRight, ShieldCheck, HelpCircle 
+import {
+  Utensils, Coffee, Cookie, ClipboardList,
+  Users, Calendar, ChevronRight, ShieldCheck, HelpCircle
 } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { getConfigValues } from "@/lib/calculation"
@@ -113,8 +113,8 @@ export default async function DashboardPage() {
           {modules.map((m) => {
             const Icon = m.icon
             return (
-              <Link 
-                key={m.href} 
+              <Link
+                key={m.href}
                 href={m.href}
                 className="group relative flex flex-col justify-between p-6 bg-white rounded-2xl border border-slate-200/80 hover:border-slate-300 hover:shadow-md transition duration-200 outline-none focus:ring-2 focus:ring-slate-900"
               >
@@ -123,7 +123,7 @@ export default async function DashboardPage() {
                   <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${m.color} text-white shadow-sm`}>
                     <Icon size={22} />
                   </div>
-                  
+
                   {/* Title & Desc */}
                   <div className="space-y-1.5">
                     <h3 className="font-bold text-slate-800 group-hover:text-slate-950 transition flex items-center gap-1">
@@ -156,7 +156,7 @@ export default async function DashboardPage() {
           <span>Dica: Use o menu lateral para gerenciar as configurações da unidade ou usuários.</span>
         </div>
         <div className="font-mono">
-          UPI-4 v1.0.0 • Prisma + SQLite
+          Versão 2.3.0 • Prisma + PostgreSQL
         </div>
       </div>
     </div>

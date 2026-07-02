@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useTransition } from "react"
-import { Plus, Search, Edit, Trash2, Shield, User, Loader2 } from "lucide-react"
+import { Plus, Search, Edit, Trash2, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { getChefesAction, saveChefesAction, ChefeEquipe } from "@/app/actions/chefes"
 
@@ -48,7 +48,7 @@ export default function ChefesPage() {
 
     startTransition(async () => {
       const newChefe: ChefeEquipe = {
-        id: "chefe_" + Math.random().toString(36).substr(2, 9),
+        id: crypto.randomUUID(),
         nome,
         matricula,
         equipes: equipesInput,
@@ -148,8 +148,8 @@ export default function ChefesPage() {
   const TEAM_LABELS: Record<string, string> = {
     alfa: "Equipe Alfa",
     bravo: "Equipe Bravo",
-    charlie: "Equipe Charlie (Echo)",
-    delta: "Equipe Delta (Fox)",
+    charlie: "Equipe Charlie",
+    delta: "Equipe Delta",
   }
 
   return (

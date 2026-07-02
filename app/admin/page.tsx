@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Users, Settings, ShieldCheck, ChevronRight, UserPlus, Sliders, UserCheck } from "lucide-react"
 import { prisma } from "@/lib/prisma"
+import { ChefeEquipe } from "@/app/actions/chefes"
 
 export const dynamic = "force-dynamic"
 
@@ -11,7 +12,7 @@ export default async function AdminDashboardPage() {
     prisma.configuracaoGlobal.findUnique({ where: { chave: "chefesEquipe" } }),
   ])
 
-  const chefesCount = chefesConfig ? (JSON.parse(chefesConfig.valor) as any[]).length : 0
+  const chefesCount = chefesConfig ? (JSON.parse(chefesConfig.valor) as ChefeEquipe[]).length : 0
 
   return (
     <div className="space-y-8 animate-fade-in">

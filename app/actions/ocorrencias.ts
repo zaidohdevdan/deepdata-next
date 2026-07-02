@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache"
 import { ocorrenciaSchema } from "@/lib/validators"
 import { auth } from "@/lib/auth"
 
+import { createAuditLogAction } from "./audit"
+
 async function ensureAuthenticated() {
   const session = await auth()
   if (!session) {
@@ -16,9 +18,16 @@ async function ensureAuthenticated() {
 export async function getOcorrenciasAction() {
   await ensureAuthenticated()
   try {
-    return await prisma.ocorrencia.findMany({
+    const list = await prisma.ocorrencia.findMany({
       orderBy: { createdAt: "desc" },
+      include: {
+        categoria: true
+      }
     })
+    return list.map((o) => ({
+      ...o,
+      categoria: o.categoria.nome
+    }))
   } catch (error) {
     console.error("Error fetching ocorrencias:", error)
     return []
@@ -26,7 +35,7 @@ export async function getOcorrenciasAction() {
 }
 
 export async function createOcorrenciaAction(formData: unknown) {
-  await ensureAuthenticated()
+  const session = await ensureAuthenticated()
 
   const parsed = ocorrenciaSchema.safeParse(formData)
   if (!parsed.success) {
@@ -34,17 +43,41 @@ export async function createOcorrenciaAction(formData: unknown) {
     return { success: false, error: errorMsg }
   }
 
-  const { titulo, categoria, icone, texto, servidor } = parsed.data
+  const { titulo, categoria: categoriaNome, icone, texto, servidor } = parsed.data
 
   try {
+    let catRecord = await prisma.ocorrenciaCategoria.findUnique({
+      where: { nome: categoriaNome.trim() }
+    })
+    if (!catRecord) {
+      catRecord = await prisma.ocorrenciaCategoria.create({
+        data: { nome: categoriaNome.trim() }
+      })
+    }
+
     const ocorrencia = await prisma.ocorrencia.create({
       data: {
         titulo,
-        categoria,
+        categoriaId: catRecord.id,
         icone,
         texto,
         servidor,
+        criadoPorId: session.user.id,
       },
+      include: {
+        categoria: true
+      }
+    })
+
+    // Auditoria
+    await createAuditLogAction({
+      acao: "CREATE_OCORRENCIA",
+      modulo: "OCORRENCIAS",
+      detalhes: {
+        ocorrenciaId: ocorrencia.id,
+        titulo: ocorrencia.titulo,
+        categoria: catRecord.nome
+      }
     })
 
     revalidatePath("/ocorrencias")
@@ -52,6 +85,7 @@ export async function createOcorrenciaAction(formData: unknown) {
       success: true,
       data: {
         ...ocorrencia,
+        categoria: ocorrencia.categoria.nome,
         createdAt: ocorrencia.createdAt.toISOString(),
         updatedAt: ocorrencia.updatedAt.toISOString(),
       }
@@ -63,7 +97,7 @@ export async function createOcorrenciaAction(formData: unknown) {
 }
 
 export async function updateOcorrenciaAction(id: string, formData: unknown) {
-  await ensureAuthenticated()
+  const session = await ensureAuthenticated()
 
   const parsed = ocorrenciaSchema.safeParse(formData)
   if (!parsed.success) {
@@ -71,18 +105,55 @@ export async function updateOcorrenciaAction(id: string, formData: unknown) {
     return { success: false, error: errorMsg }
   }
 
-  const { titulo, categoria, icone, texto, servidor } = parsed.data
+  const { titulo, categoria: categoriaNome, icone, texto, servidor } = parsed.data
 
   try {
+    const oldOcorrencia = await prisma.ocorrencia.findUnique({
+      where: { id },
+      include: { categoria: true }
+    })
+
+    let catRecord = await prisma.ocorrenciaCategoria.findUnique({
+      where: { nome: categoriaNome.trim() }
+    })
+    if (!catRecord) {
+      catRecord = await prisma.ocorrenciaCategoria.create({
+        data: { nome: categoriaNome.trim() }
+      })
+    }
+
     const ocorrencia = await prisma.ocorrencia.update({
       where: { id },
       data: {
         titulo,
-        categoria,
+        categoriaId: catRecord.id,
         icone,
         texto,
         servidor,
+        atualizadoPorId: session.user.id,
       },
+      include: {
+        categoria: true
+      }
+    })
+
+    // Auditoria
+    await createAuditLogAction({
+      acao: "UPDATE_OCORRENCIA",
+      modulo: "OCORRENCIAS",
+      detalhes: {
+        ocorrenciaId: id,
+        antes: {
+          titulo: oldOcorrencia?.titulo,
+          categoria: oldOcorrencia?.categoria.nome,
+          texto: oldOcorrencia?.texto
+        },
+        depois: {
+          titulo: ocorrencia.titulo,
+          categoria: catRecord.nome,
+          texto: ocorrencia.texto
+        }
+      }
     })
 
     revalidatePath("/ocorrencias")
@@ -90,6 +161,7 @@ export async function updateOcorrenciaAction(id: string, formData: unknown) {
       success: true,
       data: {
         ...ocorrencia,
+        categoria: ocorrencia.categoria.nome,
         createdAt: ocorrencia.createdAt.toISOString(),
         updatedAt: ocorrencia.updatedAt.toISOString(),
       }
@@ -104,8 +176,24 @@ export async function deleteOcorrenciaAction(id: string) {
   await ensureAuthenticated()
 
   try {
+    const oldOcorrencia = await prisma.ocorrencia.findUnique({
+      where: { id },
+      include: { categoria: true }
+    })
+
     await prisma.ocorrencia.delete({
       where: { id },
+    })
+
+    // Auditoria
+    await createAuditLogAction({
+      acao: "DELETE_OCORRENCIA",
+      modulo: "OCORRENCIAS",
+      detalhes: {
+        ocorrenciaId: id,
+        titulo: oldOcorrencia?.titulo,
+        categoria: oldOcorrencia?.categoria.nome
+      }
     })
 
     revalidatePath("/ocorrencias")
@@ -124,24 +212,31 @@ async function ensureAdmin() {
   return session
 }
 
-export async function getCategoriasAction() {
-  await ensureAuthenticated()
+// Ensures default categories exist in the database.
+// Should only be called during app initialization (e.g., seed.js) or admin setup.
+export async function ensureDefaultCategoriasAction() {
+  await ensureAdmin()
   try {
-    const list = await prisma.ocorrenciaCategoria.findMany({
-      orderBy: { nome: "asc" }
-    })
-    
-    if (list.length === 0) {
+    const count = await prisma.ocorrenciaCategoria.count()
+    if (count === 0) {
       const defaults = ["Saúde", "Jurídico/Atendimento", "Operação/Rotina", "Escoltas", "Alimentação"]
       await prisma.ocorrenciaCategoria.createMany({
         data: defaults.map(name => ({ nome: name }))
       })
-      return await prisma.ocorrenciaCategoria.findMany({
-        orderBy: { nome: "asc" }
-      })
     }
-    
-    return list
+    return { success: true }
+  } catch (error) {
+    console.error("Error seeding default categories:", error)
+    return { success: false, error: "Erro ao criar categorias padrão." }
+  }
+}
+
+export async function getCategoriasAction() {
+  await ensureAuthenticated()
+  try {
+    return await prisma.ocorrenciaCategoria.findMany({
+      orderBy: { nome: "asc" }
+    })
   } catch (error) {
     console.error("Error fetching categories:", error)
     return []
@@ -227,9 +322,10 @@ export async function generateOccurrenceTextAction(prompt: string) {
     }
 
     return { success: true, text: generatedText.trim() }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error generating occurrence text via AI:", error)
-    return { success: false, error: error.message || "Erro de conexão ao servidor de IA." }
+    const message = error instanceof Error ? error.message : "Erro de conexão ao servidor de IA."
+    return { success: false, error: message }
   }
 }
 
