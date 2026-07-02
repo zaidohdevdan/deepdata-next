@@ -1,9 +1,10 @@
 "use client"
 
 import { useState, useEffect, Fragment } from "react"
-import { Upload, Trash2, RefreshCw, Printer, AlertCircle, Shield, Plus, Copy, Save, Settings, Loader2 } from "lucide-react"
+import { Upload, Trash2, RefreshCw, Printer, AlertCircle, Shield, Plus, Copy, Save, Settings, Loader2, Check, Edit, X } from "lucide-react"
 import { toast } from "sonner"
 import { saveScaleConfigAction } from "@/app/actions/configuracoes"
+import { getChefesAction, ChefeEquipe } from "@/app/actions/chefes"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -147,8 +148,10 @@ export default function EscalasContainer({
   const LS_KEY = `escalaUPI4_${tipo}_v2`
 
   const [chefe, setChefe] = useState("")
+  const [isManualChefe, setIsManualChefe] = useState(false)
   const [equipe, setEquipe] = useState("")
   const [dataEscala, setDataEscala] = useState("")
+  const [availableChefes, setAvailableChefes] = useState<ChefeEquipe[]>([])
 
   const [horaInicio, setHoraInicio] = useState(() => {
     return initialHoraInicio || (tipo === "diurna" ? "06:00" : tipo === "almoco" ? "11:00" : tipo === "janta" ? "17:00" : tipo === "noturna" ? "18:00" : "06:00")
@@ -226,6 +229,13 @@ export default function EscalasContainer({
   const [draggedPostName, setDraggedPostName] = useState<string | null>(null)
   const [dragOverPostName, setDragOverPostName] = useState<string | null>(null)
   const [removedFixedTokens, setRemovedFixedTokens] = useState<string[]>([])
+
+  // Presence checklist management states
+  const [editingOfficerMatricula, setEditingOfficerMatricula] = useState<string | null>(null)
+  const [editOfficerNome, setEditOfficerNome] = useState("")
+  const [editOfficerMatricula, setEditOfficerMatricula] = useState("")
+  const [selectedForDeletion, setSelectedForDeletion] = useState<string[]>([])
+
 
 
   // Automatically load team based on logged user
@@ -347,6 +357,10 @@ export default function EscalasContainer({
   useEffect(() => {
     const today = new Date().toISOString().slice(0, 10)
     setDataEscala(today)
+
+    getChefesAction().then((data) => {
+      setAvailableChefes(data)
+    })
   }, [])
 
   // Calculate slots on time/slots changes
@@ -373,7 +387,25 @@ export default function EscalasContainer({
             const pp = basePoliciais.find((p) => p.matricula === fixed.matricula)
             if (pp) {
               const token = tokenId(pp.matricula, sIdx)
-              if (!removedFixedTokens.includes(token) && !currentList.includes(token)) {
+              
+              // Check if token is allocated in standard posts or other independent posts for this slot
+              let isAllocatedElsewhere = false
+              if (estado[sIdx]) {
+                for (const pKey of Object.keys(estado[sIdx])) {
+                  if (estado[sIdx][pKey] && estado[sIdx][pKey].includes(token)) {
+                    isAllocatedElsewhere = true
+                    break
+                  }
+                }
+              }
+              for (const otherGId of INDEPENDENT_POSTS) {
+                if (otherGId !== gId && prev[otherGId]?.[sIdx] && prev[otherGId][sIdx].includes(token)) {
+                  isAllocatedElsewhere = true
+                  break
+                }
+              }
+
+              if (!isAllocatedElsewhere && !removedFixedTokens.includes(token) && !currentList.includes(token)) {
                 currentList.push(token)
                 listChanged = true
               }
@@ -387,7 +419,7 @@ export default function EscalasContainer({
       })
       return changed ? novo : prev
     })
-  }, [basePoliciais, policiaisFixos, tipo, removedFixedTokens])
+  }, [basePoliciais, policiaisFixos, tipo, removedFixedTokens, estado])
 
   // Calculate slots on time/slots changes
   useEffect(() => {
@@ -407,7 +439,26 @@ export default function EscalasContainer({
             const pp = basePoliciais.find((p) => p.matricula === fixed.matricula)
             if (pp) {
               const token = tokenId(pp.matricula, f)
-              if (!removedFixedTokens.includes(token) && novo[f][fixed.posto] && !novo[f][fixed.posto].includes(token)) {
+              
+              // Check if token is allocated in any other post in prev[f]
+              let isAllocatedElsewhere = false
+              if (prev[f]) {
+                for (const pKey of Object.keys(prev[f])) {
+                  if (pKey !== fixed.posto && prev[f][pKey] && prev[f][pKey].includes(token)) {
+                    isAllocatedElsewhere = true
+                    break
+                  }
+                }
+                // Also check independent posts for this slot
+                for (const gId of INDEPENDENT_POSTS) {
+                  if (independentEstado[gId]?.[f] && independentEstado[gId][f].includes(token)) {
+                    isAllocatedElsewhere = true
+                    break
+                  }
+                }
+              }
+
+              if (!isAllocatedElsewhere && !removedFixedTokens.includes(token) && novo[f][fixed.posto] && !novo[f][fixed.posto].includes(token)) {
                 novo[f][fixed.posto].push(token)
               }
             }
@@ -454,6 +505,97 @@ export default function EscalasContainer({
       return novo
     })
   }, [numFaixas, basePoliciais, policiaisFixos, independentEstado, presenceMap, postosConfig, tipo, removedFixedTokens])
+
+  const [isLoadedFromStorage, setIsLoadedFromStorage] = useState(false)
+
+  // Load from Storage
+  useEffect(() => {
+    const raw = localStorage.getItem(LS_KEY)
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw)
+        if (parsed.chefe) setChefe(parsed.chefe)
+        if (parsed.equipe) setEquipe(parsed.equipe)
+        if (parsed.data) setDataEscala(parsed.data)
+        if (parsed.horaInicio) setHoraInicio(parsed.horaInicio)
+        if (parsed.horaFim) setHoraFim(parsed.horaFim)
+        if (parsed.faixas) setNumFaixas(Number(parsed.faixas))
+        if (parsed.basePoliciais) setBasePoliciais(parsed.basePoliciais)
+        if (parsed.estado) setEstado(parsed.estado)
+        if (parsed.independentEstado) setIndependentEstado(parsed.independentEstado)
+        if (parsed.independentHorarios) setIndependentHorarios(parsed.independentHorarios)
+        if (parsed.presenceMap) setPresenceMap(parsed.presenceMap)
+        if (parsed.removedFixedTokens) setRemovedFixedTokens(parsed.removedFixedTokens)
+        if (parsed.postosConfig) setPostosConfig(parsed.postosConfig)
+      } catch {
+        // Ignored
+      }
+    }
+    setIsLoadedFromStorage(true)
+  }, [LS_KEY])
+
+  // Debounced Auto-Save
+  useEffect(() => {
+    if (!isLoadedFromStorage) return
+
+    const timer = setTimeout(() => {
+      const payload = {
+        chefe,
+        equipe,
+        data: dataEscala,
+        horaInicio,
+        horaFim,
+        faixas: numFaixas,
+        basePoliciais,
+        estado,
+        independentEstado,
+        independentHorarios,
+        presenceMap,
+        removedFixedTokens,
+        postosConfig,
+      }
+      localStorage.setItem(LS_KEY, JSON.stringify(payload))
+    }, 600)
+
+    return () => clearTimeout(timer)
+  }, [
+    isLoadedFromStorage,
+    chefe,
+    equipe,
+    dataEscala,
+    horaInicio,
+    horaFim,
+    numFaixas,
+    basePoliciais,
+    estado,
+    independentEstado,
+    independentHorarios,
+    presenceMap,
+    removedFixedTokens,
+    postosConfig,
+    LS_KEY
+  ])
+
+  // Save to localStorage (manual)
+  const handleSave = () => {
+    const payload = {
+      chefe,
+      equipe,
+      data: dataEscala,
+      horaInicio,
+      horaFim,
+      faixas: numFaixas,
+      basePoliciais,
+      estado,
+      independentEstado,
+      independentHorarios,
+      presenceMap,
+      removedFixedTokens,
+      postosConfig,
+    }
+    localStorage.setItem(LS_KEY, JSON.stringify(payload))
+    toast.success("Escala gravada no navegador!")
+  }
 
   // Remove absent officers from all posts/slots automatically when unchecked in presence map
   useEffect(() => {
@@ -516,49 +658,7 @@ export default function EscalasContainer({
     })
   }, [presenceMap, basePoliciais])
 
-  // Load from Storage
-  useEffect(() => {
-    const raw = localStorage.getItem(LS_KEY)
-    if (!raw) return
 
-    try {
-      const parsed = JSON.parse(raw)
-      if (parsed.chefe) setChefe(parsed.chefe)
-      if (parsed.equipe) setEquipe(parsed.equipe)
-      if (parsed.data) setDataEscala(parsed.data)
-      if (parsed.horaInicio) setHoraInicio(parsed.horaInicio)
-      if (parsed.horaFim) setHoraFim(parsed.horaFim)
-      if (parsed.faixas) setNumFaixas(Number(parsed.faixas))
-      if (parsed.basePoliciais) setBasePoliciais(parsed.basePoliciais)
-      if (parsed.estado) setEstado(parsed.estado)
-      if (parsed.independentEstado) setIndependentEstado(parsed.independentEstado)
-      if (parsed.independentHorarios) setIndependentHorarios(parsed.independentHorarios)
-      if (parsed.presenceMap) setPresenceMap(parsed.presenceMap)
-      if (parsed.removedFixedTokens) setRemovedFixedTokens(parsed.removedFixedTokens)
-    } catch {
-      // Ignored
-    }
-  }, [])
-
-  // Save to localStorage
-  const handleSave = () => {
-    const payload = {
-      chefe,
-      equipe,
-      data: dataEscala,
-      horaInicio,
-      horaFim,
-      faixas: numFaixas,
-      basePoliciais,
-      estado,
-      independentEstado,
-      independentHorarios,
-      presenceMap,
-      removedFixedTokens,
-    }
-    localStorage.setItem(LS_KEY, JSON.stringify(payload))
-    toast.success("Escala gravada no navegador!")
-  }
 
   // Clear all
   const handleClear = () => {
@@ -649,7 +749,7 @@ export default function EscalasContainer({
       f => f.matricula === selectedPP.matricula && f.faixa === fixedFaixa && f.posto === fixedPosto
     )
     if (alreadyExists) {
-      toast.error("Este policial já está fixado neste posto e faixa.")
+      toast.error("Este policial já está inicializado neste posto e faixa.")
       return
     }
     const newFixed: PolicialFixo = {
@@ -658,10 +758,16 @@ export default function EscalasContainer({
       posto: fixedPosto,
       faixa: fixedFaixa
     }
+
+    // Clear from removed tokens if it was previously removed, to allow auto-inject
+    const slotIdx = Number(fixedFaixa.replace("Faixa ", "")) - 1
+    const token = tokenId(selectedPP.matricula, slotIdx)
+    setRemovedFixedTokens(prev => prev.filter(t => t !== token))
+
     setPoliciaisFixos(prev => [...prev, newFixed])
     setFixedMatricula("")
     setFixedNome("")
-    toast.success("Policial fixado com sucesso!")
+    toast.success("Policial inicializado no posto com sucesso!")
   }
 
   const handleAddPolicial = () => {
@@ -685,6 +791,157 @@ export default function EscalasContainer({
     setNewPPMatricula("")
     toast.success(`Policial ${nome} adicionado com sucesso!`)
   }
+
+  const handleStartEditOfficer = (pp: Policial) => {
+    setEditingOfficerMatricula(pp.matricula)
+    setEditOfficerNome(pp.nome)
+    setEditOfficerMatricula(pp.matricula)
+  }
+
+  const handleSaveEditOfficer = (oldMatricula: string) => {
+    const nome = editOfficerNome.trim().toUpperCase()
+    const matricula = editOfficerMatricula.trim().toUpperCase()
+    if (!nome || !matricula) {
+      toast.error("Nome e matrícula são obrigatórios.")
+      return
+    }
+
+    if (matricula !== oldMatricula && basePoliciais.some(p => p.matricula === matricula)) {
+      toast.error("Já existe outro policial com esta matrícula.")
+      return
+    }
+
+    setBasePoliciais(prev => prev.map(p => p.matricula === oldMatricula ? { ...p, nome, qra: nome, matricula } : p))
+    setPresenceMap(prev => {
+      const copy = { ...prev }
+      if (matricula !== oldMatricula) {
+        copy[matricula] = copy[oldMatricula] !== false
+        delete copy[oldMatricula]
+      }
+      return copy
+    })
+
+    // Also update any allocations in standard and independent scales if the matricula changed
+    if (matricula !== oldMatricula) {
+      setEstado(prev => {
+        const next = {} as typeof prev
+        Object.keys(prev).forEach((sKey) => {
+          const s = Number(sKey)
+          next[s] = {}
+          Object.keys(prev[s]).forEach((pKey) => {
+            next[s][pKey] = (prev[s][pKey] || []).map((t) => {
+              if (t.includes(oldMatricula)) {
+                return t.replace(oldMatricula, matricula)
+              }
+              return t
+            })
+          })
+        })
+        return next
+      })
+
+      setIndependentEstado(prev => {
+        const next = {} as typeof prev
+        Object.keys(prev).forEach((pKey) => {
+          next[pKey] = {}
+          Object.keys(prev[pKey]).forEach((sKey) => {
+            const s = Number(sKey)
+            next[pKey][s] = (prev[pKey][s] || []).map((t) => {
+              if (t.includes(oldMatricula)) {
+                return t.replace(oldMatricula, matricula)
+              }
+              return t
+            })
+          })
+        })
+        return next
+      })
+    }
+
+    setEditingOfficerMatricula(null)
+    toast.success("Policial atualizado com sucesso!")
+  }
+
+  const handleDeleteOfficer = (matricula: string) => {
+    setBasePoliciais(prev => prev.filter(p => p.matricula !== matricula))
+    setPresenceMap(prev => {
+      const copy = { ...prev }
+      delete copy[matricula]
+      return copy
+    })
+    // Clean up allocations
+    setEstado(prev => {
+      const next = {} as typeof prev
+      Object.keys(prev).forEach((sKey) => {
+        const s = Number(sKey)
+        next[s] = {}
+        Object.keys(prev[s]).forEach((pKey) => {
+          next[s][pKey] = (prev[s][pKey] || []).filter((t) => !t.includes(matricula))
+        })
+      })
+      return next
+    })
+    setIndependentEstado(prev => {
+      const next = {} as typeof prev
+      Object.keys(prev).forEach((pKey) => {
+        next[pKey] = {}
+        Object.keys(prev[pKey]).forEach((sKey) => {
+          const s = Number(sKey)
+          next[pKey][s] = (prev[pKey][s] || []).filter((t) => !t.includes(matricula))
+        })
+      })
+      return next
+    })
+    setSelectedForDeletion(prev => prev.filter(m => m !== matricula))
+    toast.success("Policial removido do efetivo.")
+  }
+
+  const handleDeleteSelectedOfficers = () => {
+    if (selectedForDeletion.length === 0) return
+    const setMatriculas = new Set(selectedForDeletion)
+    
+    setBasePoliciais(prev => prev.filter(p => !setMatriculas.has(p.matricula)))
+    setPresenceMap(prev => {
+      const copy = { ...prev }
+      selectedForDeletion.forEach(m => delete copy[m])
+      return copy
+    })
+
+    // Clean up allocations
+    setEstado(prev => {
+      const next = {} as typeof prev
+      Object.keys(prev).forEach((sKey) => {
+        const s = Number(sKey)
+        next[s] = {}
+        Object.keys(prev[s]).forEach((pKey) => {
+          next[s][pKey] = (prev[s][pKey] || []).filter((t) => {
+            const parsed = parseToken(t)
+            return parsed ? !setMatriculas.has(parsed.matricula) : true
+          })
+        })
+      })
+      return next
+    })
+
+    setIndependentEstado(prev => {
+      const next = {} as typeof prev
+      Object.keys(prev).forEach((pKey) => {
+        next[pKey] = {}
+        Object.keys(prev[pKey]).forEach((sKey) => {
+          const s = Number(sKey)
+          next[pKey][s] = (prev[pKey][s] || []).filter((t) => {
+            const parsed = parseToken(t)
+            return parsed ? !setMatriculas.has(parsed.matricula) : true
+          })
+        })
+      })
+      return next
+    })
+
+    setSelectedForDeletion([])
+    toast.success("Policiais selecionados foram removidos.")
+  }
+
 
   const handlePostReorder = (targetPostName: string) => {
     if (!draggedPostName || draggedPostName === targetPostName) return
@@ -1123,6 +1380,9 @@ export default function EscalasContainer({
     }
     toast.success(`Policial ${parsed.nome} duplicado no mesmo posto.`)
   }
+  const selectedChefeObj = availableChefes.find(c => c.nome === chefe)
+  const chefeMatricula = selectedChefeObj?.matricula || ""
+
   return (
     <div className="space-y-6">
       {/* -------------------- INTERACTIVE SCREEN UI (HIDDEN ON PRINT) -------------------- */}
@@ -1175,16 +1435,59 @@ export default function EscalasContainer({
         {/* Configuration Settings Box */}
         <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
           <div className="space-y-1">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">
-              Chefe de Equipe
-            </label>
-            <input
-              type="text"
-              placeholder="Nome do Chefe"
-              value={chefe}
-              onChange={(e) => setChefe(e.target.value)}
-              className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700"
-            />
+            <div className="flex justify-between items-center">
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                Chefe de Equipe
+              </label>
+              {availableChefes.length > 0 && isManualChefe && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsManualChefe(false)
+                    setChefe("")
+                  }}
+                  className="text-[9px] font-bold text-indigo-600 hover:text-indigo-800 transition bg-transparent border-0 cursor-pointer"
+                >
+                  Usar Lista
+                </button>
+              )}
+            </div>
+            {availableChefes.length > 0 && !isManualChefe ? (
+              <select
+                value={chefe}
+                onChange={(e) => {
+                  const val = e.target.value
+                  if (val === "__manual__") {
+                    setIsManualChefe(true)
+                    setChefe("")
+                  } else {
+                    setChefe(val)
+                    const matched = availableChefes.find(c => c.nome === val)
+                    if (matched && matched.equipes.length > 0) {
+                      const firstTeam = matched.equipes[0]
+                      setEquipe(firstTeam.charAt(0).toUpperCase() + firstTeam.slice(1))
+                    }
+                  }
+                }}
+                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 bg-white"
+              >
+                <option value="">Selecione...</option>
+                {availableChefes.map(c => (
+                  <option key={c.id} value={c.nome}>
+                    {c.nome} ({c.matricula})
+                  </option>
+                ))}
+                <option value="__manual__">Digitar manualmente...</option>
+              </select>
+            ) : (
+              <input
+                type="text"
+                placeholder="Nome do Chefe"
+                value={chefe}
+                onChange={(e) => setChefe(e.target.value)}
+                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 bg-white"
+              />
+            )}
           </div>
           <div className="space-y-1">
             <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">
@@ -1542,9 +1845,18 @@ export default function EscalasContainer({
                             toast.error("Nenhuma equipe vinculada a este usuário.")
                           }
                         }}
-                        className="px-2.5 py-1 text-[10px] font-bold bg-slate-800 hover:bg-slate-750 text-white rounded-lg transition cursor-pointer"
+                        className="px-2.5 py-1 text-[10px] font-bold bg-slate-800 hover:bg-slate-750 text-white rounded-lg transition cursor-pointer animate-none"
                       >
                         Recarregar Efetivo
+                      </button>
+                    )}
+                    {selectedForDeletion.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={handleDeleteSelectedOfficers}
+                        className="px-2.5 py-1 text-[10px] font-bold bg-rose-600 hover:bg-rose-750 text-white rounded-lg transition cursor-pointer"
+                      >
+                        Excluir Selecionados ({selectedForDeletion.length})
                       </button>
                     )}
                   </div>
@@ -1553,6 +1865,55 @@ export default function EscalasContainer({
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-[400px] overflow-y-auto pr-1">
                   {basePoliciais.map((pp) => {
                     const isPresent = presenceMap[pp.matricula] !== false
+                    const isEditing = editingOfficerMatricula === pp.matricula
+                    const isSelectedForDel = selectedForDeletion.includes(pp.matricula)
+
+                    if (isEditing) {
+                      return (
+                        <div
+                          key={pp.matricula}
+                          className="flex flex-col p-2.5 rounded-xl border border-indigo-400 bg-white text-xs font-semibold space-y-1.5 shadow-sm"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="space-y-1">
+                            <input
+                              type="text"
+                              value={editOfficerNome}
+                              onChange={(e) => setEditOfficerNome(e.target.value)}
+                              className="w-full px-2 py-1 border border-slate-200 rounded-lg text-[10px] font-extrabold uppercase outline-none focus:border-indigo-400 text-slate-700 bg-slate-50"
+                              placeholder="Nome do Policial"
+                              autoFocus
+                            />
+                            <input
+                              type="text"
+                              value={editOfficerMatricula}
+                              onChange={(e) => setEditOfficerMatricula(e.target.value)}
+                              className="w-full px-2 py-1 border border-slate-200 rounded-lg text-[10px] font-mono outline-none focus:border-indigo-400 text-slate-700 bg-slate-50"
+                              placeholder="Matrícula"
+                            />
+                          </div>
+                          <div className="flex justify-end gap-1">
+                            <button
+                              type="button"
+                              onClick={() => handleSaveEditOfficer(pp.matricula)}
+                              className="p-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition cursor-pointer"
+                              title="Salvar"
+                            >
+                              <Check size={11} />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setEditingOfficerMatricula(null)}
+                              className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition cursor-pointer"
+                              title="Cancelar"
+                            >
+                              <X size={11} />
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    }
+
                     return (
                       <div
                         key={pp.matricula}
@@ -1569,6 +1930,7 @@ export default function EscalasContainer({
                         }`}
                       >
                         <div className="flex items-center gap-2 min-w-0">
+                          {/* Presence checkbox */}
                           <div className={`w-3.5 h-3.5 rounded flex items-center justify-center border shrink-0 transition ${
                             isPresent
                               ? "bg-white border-white text-slate-900"
@@ -1580,6 +1942,52 @@ export default function EscalasContainer({
                             <div className="truncate text-[11px] leading-tight font-extrabold">{pp.qra || pp.nome}</div>
                             <div className="text-[9px] font-mono leading-none text-slate-400">{pp.matricula}</div>
                           </div>
+                        </div>
+
+                        {/* Hover action buttons */}
+                        <div className="flex items-center gap-1 opacity-0 group-hover/card:opacity-100 transition-opacity">
+                          {/* Batch delete checkbox */}
+                          <input
+                            type="checkbox"
+                            checked={isSelectedForDel}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={(e) => {
+                              e.stopPropagation()
+                              setSelectedForDeletion(prev =>
+                                e.target.checked
+                                  ? [...prev, pp.matricula]
+                                  : prev.filter(m => m !== pp.matricula)
+                              )
+                            }}
+                            className="w-3 h-3 border border-slate-300 rounded cursor-pointer accent-rose-600 mr-0.5"
+                            title="Selecionar para exclusão"
+                          />
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleStartEditOfficer(pp)
+                            }}
+                            className={`p-0.5 rounded transition hover:bg-white/25 cursor-pointer ${
+                              isPresent ? "text-slate-300 hover:text-white" : "text-slate-500 hover:text-slate-800"
+                            }`}
+                            title="Editar policial"
+                          >
+                            <Edit size={10} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleDeleteOfficer(pp.matricula)
+                            }}
+                            className={`p-0.5 rounded transition hover:bg-white/25 cursor-pointer ${
+                              isPresent ? "text-rose-400 hover:text-rose-350" : "text-rose-500 hover:text-rose-600"
+                            }`}
+                            title="Excluir policial"
+                          >
+                            <Trash2 size={10} />
+                          </button>
                         </div>
                       </div>
                     )
@@ -2119,9 +2527,9 @@ export default function EscalasContainer({
                   }
                   body {
                     background-color: #ffffff !important;
-                    color: #16191f !important;
+                    color: #111827 !important;
                     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-                    font-size: 10.5px !important;
+                    font-size: 12px !important;
                     margin: 0 !important;
                     padding: 0 !important;
                   }
@@ -2139,42 +2547,42 @@ export default function EscalasContainer({
                     flex-grow: 1 !important;
                   }
                   .print-header {
-                    border-bottom: 2px solid #232f3e !important;
+                    border-bottom: 2.5px solid #1f2937 !important;
                     padding-bottom: 6px !important;
                     margin-bottom: 10px !important;
                     text-align: center !important;
                   }
                   .print-header h3 {
-                    font-size: 11px !important;
+                    font-size: 12px !important;
                     font-weight: 700 !important;
-                    color: #545b64 !important;
+                    color: #4b5563 !important;
                     margin: 0 0 2px 0 !important;
                     text-transform: uppercase !important;
                   }
                   .print-header h4 {
-                    font-size: 14px !important;
+                    font-size: 16px !important;
                     font-weight: 800 !important;
-                    color: #232f3e !important;
+                    color: #111827 !important;
                     margin: 0 !important;
                     letter-spacing: 0.5px !important;
                   }
                   .print-meta-grid {
                     display: grid !important;
                     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-                    border: 1px solid #cbd5e1 !important;
-                    background-color: #f2f3f3 !important;
+                    border: 1.5px solid #374151 !important;
+                    background-color: #f3f4f6 !important;
                     margin-top: 6px !important;
-                    padding: 4px 8px !important;
+                    padding: 6px 10px !important;
                     border-radius: 2px !important;
                     text-align: left !important;
-                    font-size: 10px !important;
+                    font-size: 11px !important;
                   }
                   .print-section-title {
-                    font-size: 10.5px !important;
+                    font-size: 12px !important;
                     font-weight: 700 !important;
                     text-transform: uppercase !important;
-                    color: #232f3e !important;
-                    border-left: 3px solid #ec7211 !important; /* AWS Orange accent */
+                    color: #111827 !important;
+                    border-left: 3px solid #f97316 !important;
                     padding-left: 6px !important;
                     margin-bottom: 4px !important;
                     margin-top: 8px !important;
@@ -2184,22 +2592,23 @@ export default function EscalasContainer({
                     width: 100% !important;
                     border-collapse: collapse !important;
                     margin-bottom: 8px !important;
-                    font-size: 10px !important;
+                    font-size: 11.5px !important;
+                    border: 1.5px solid #1f2937 !important;
                   }
                   .print-table th {
-                    background-color: #f2f3f3 !important; /* AWS Cloudscape header gray */
-                    color: #16191f !important;
-                    font-weight: 700 !important;
-                    border: 1px solid #cbd5e1 !important;
-                    padding: 3px 5px !important;
+                    background-color: #e5e7eb !important;
+                    color: #111827 !important;
+                    font-weight: 800 !important;
+                    border: 1.5px solid #1f2937 !important;
+                    padding: 5px 6px !important;
                     text-transform: uppercase !important;
-                    font-size: 9.5px !important;
+                    font-size: 11px !important;
                     letter-spacing: 0.25px !important;
                     text-align: center !important;
                   }
                   .print-table td {
-                    border: 1px solid #cbd5e1 !important;
-                    padding: 3px 5px !important;
+                    border: 1.5px solid #1f2937 !important;
+                    padding: 5px 6px !important;
                     vertical-align: middle !important;
                     text-align: center !important;
                   }
@@ -2218,37 +2627,37 @@ export default function EscalasContainer({
                   .print-cell-divider {
                     width: 1px !important;
                     height: 14px !important;
-                    background-color: #a8b2c1 !important; /* Stylish grey divider */
+                    background-color: #9ca3af !important;
                     align-self: center !important;
                   }
                   .print-cell-active div:first-child {
-                    font-weight: 700 !important;
-                    color: #16191f !important;
-                    font-size: 10.5px !important;
+                    font-weight: 800 !important;
+                    color: #111827 !important;
+                    font-size: 12px !important;
                   }
                   .print-cell-subtext {
-                    font-size: 8.5px !important;
-                    color: #334155 !important; /* Darker slate gray for better physical print contrast */
+                    font-size: 9.5px !important;
+                    color: #374151 !important;
                     font-family: monospace !important;
                     margin-top: 0.5px !important;
                   }
                   .print-cell-empty {
-                    color: #94a3b8 !important;
+                    color: #9ca3af !important;
                     font-style: italic !important;
-                    font-size: 9px !important;
+                    font-size: 10px !important;
                   }
                   .print-signatures {
-                    margin-top: 14px !important;
+                    margin-top: 20px !important;
                     display: flex !important;
                     justify-content: center !important;
                     text-align: center !important;
                     page-break-inside: avoid !important;
-                    font-size: 10px !important;
+                    font-size: 11px !important;
                   }
                   .print-signature-line {
-                    border-top: 1px solid #545b64 !important;
-                    width: 250px !important;
-                    margin: 24px auto 3px auto !important;
+                    border-top: 1.5px solid #1f2937 !important;
+                    width: 280px !important;
+                    margin: 24px auto 4px auto !important;
                   }
                 }
               ` }} />
@@ -2257,7 +2666,7 @@ export default function EscalasContainer({
                 <h3>{nomeUnidade} — Localidade: {localidade}</h3>
                 <h4>ESCALA DE PLANTÃO</h4>
                 <div className="print-meta-grid uppercase font-semibold">
-                  <div><strong>Chefe de Equipe:</strong> {chefe || "______________________"}</div>
+                  <div><strong>Chefe de Equipe:</strong> {chefe ? `${chefe}${chefeMatricula ? ` (${chefeMatricula})` : ""}` : "______________________"}</div>
                   <div className="text-center"><strong>Equipe:</strong> {equipe || "______________________"}</div>
                   <div className="text-right"><strong>Data do Plantão:</strong> {dataEscala ? new Date(dataEscala + "T00:00:00").toLocaleDateString("pt-BR") : "____/____/______"}</div>
                 </div>
@@ -2415,7 +2824,10 @@ export default function EscalasContainer({
                 <div>
                   <div className="print-signature-line"></div>
                   <div className="font-bold text-slate-800 uppercase text-xs">{chefe || "______________________"}</div>
-                  <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">CHEFE DE EQUIPE (UPI-4)</div>
+                  {chefeMatricula && (
+                    <div className="text-[9.5px] text-slate-700 font-mono font-bold mt-0.5 uppercase">MATRÍCULA: {chefeMatricula}</div>
+                  )}
+                  <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-1">CHEFE DE EQUIPE (UPI-4)</div>
                 </div>
               </div>
             </div>

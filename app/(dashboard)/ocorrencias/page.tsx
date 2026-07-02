@@ -3,6 +3,8 @@ import { auth } from "@/lib/auth"
 import { getOcorrenciasAction, getCategoriasAction } from "@/app/actions/ocorrencias"
 import OcorrenciasContainer from "@/components/ocorrencias/OcorrenciasContainer"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Livro de Ocorrências",
   description: "Gerenciamento de relatórios e ocorrências da unidade prisional.",

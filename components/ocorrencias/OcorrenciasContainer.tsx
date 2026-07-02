@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useTransition } from "react"
-import { Search, Copy, Check, Info, FileText, Sparkles, Plus, Trash2, Edit, Filter, Calendar, User } from "lucide-react"
+import { useState, useTransition, useRef } from "react"
+import { Search, Copy, Check, Info, FileText, Sparkles, Plus, Trash2, Edit, Filter, Calendar, User, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
@@ -12,7 +12,8 @@ import {
   createOcorrenciaAction,
   updateOcorrenciaAction,
   deleteOcorrenciaAction,
-  createCategoriaAction
+  createCategoriaAction,
+  generateOccurrenceTextAction
 } from "@/app/actions/ocorrencias"
 
 interface Template {
@@ -267,6 +268,14 @@ export default function OcorrenciasContainer({
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const [historySearch, setHistorySearch] = useState("")
 
+  // Click conflict handling timer
+  const clickTimerRef = useRef<NodeJS.Timeout | null>(null)
+
+  // AI HELPER STATES
+  const [aiPrompt, setAiPrompt] = useState("")
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false)
+  const [showAiHelper, setShowAiHelper] = useState(false)
+
   // FORM / DIALOG STATES
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
@@ -307,6 +316,8 @@ export default function OcorrenciasContainer({
     setFormIcone(presetIcon || "📋")
     setFormTexto(presetText || "")
     setFormServidor(currentUserName)
+    setAiPrompt("")
+    setShowAiHelper(false)
     setIsFormOpen(true)
   }
 
@@ -317,6 +328,8 @@ export default function OcorrenciasContainer({
     setFormIcone(item.icone || "📋")
     setFormTexto(item.texto)
     setFormServidor(item.servidor)
+    setAiPrompt("")
+    setShowAiHelper(false)
     setIsFormOpen(true)
   }
 
@@ -446,9 +459,21 @@ export default function OcorrenciasContainer({
     }
   }
 
+  const handleCardClick = (id: string, text: string) => {
+    if (clickTimerRef.current) {
+      clearTimeout(clickTimerRef.current)
+      clickTimerRef.current = null
+      return
+    }
+    clickTimerRef.current = setTimeout(() => {
+      handleCopyTemplate(id, text)
+      clickTimerRef.current = null
+    }, 220)
+  }
+
   const openEditTemplate = (template: Template) => {
     // Pre-fill form with template data as a new custom occurrence
-    openNewForm(template.text, template.category, template.title)
+    openNewForm(template.text, template.category, template.title, template.icon)
   }
 
   return (
@@ -510,7 +535,7 @@ export default function OcorrenciasContainer({
                         ? "border-emerald-400 shadow-emerald-100 shadow-lg"
                         : "border-slate-200 hover:border-indigo-400 hover:shadow-lg"
                       }`}
-                    onClick={() => handleCopyTemplate(template.id, template.text)}
+                    onClick={() => handleCardClick(template.id, template.text)}
                     onDoubleClick={() => openEditTemplate(template)}
                     title={template.title}
                   >
@@ -570,7 +595,7 @@ export default function OcorrenciasContainer({
                       ? "border-emerald-400 shadow-emerald-100 shadow-lg"
                       : "border-slate-200 hover:border-indigo-400 hover:shadow-lg"
                     }`}
-                  onClick={() => handleCopyTemplate(item.id, item.texto)}
+                  onClick={() => handleCardClick(item.id, item.texto)}
                   onDoubleClick={() => openEditForm(item)}
                   title={item.titulo}
                 >
@@ -673,10 +698,18 @@ export default function OcorrenciasContainer({
               {/* Emoji grid */}
               <div className="flex flex-wrap gap-1.5 p-3 bg-slate-50 rounded-2xl border border-slate-100">
                 {[
-                  "👨‍⚕️","🦷","🤪","🦽","💁","🧠","💉","🔎","📹","👨‍💼","👨‍⚖️","⚖️","🖋️",
-                  "☀️","✂️","📦","🪒","💧","🚨","👀","🚔","🔫","⛺","🛡️","🔍","♻️",
-                  "🍽️","🥤","☕","🍕","🥘","🏠","🔧","🔑","📋","📝","✅","⚠️",
-                  "🚑","🏥","🧹","🧺","📦","🔒","📢","🗂️","👮","🚐","🌙","📞"
+                  // SAÚDE & MÉDICO
+                  "👨‍⚕️","🦷","🤪","🦽","🧠","💉","🔎","💊","🩺","🩹","🤒","🚑","🏥",
+                  // OPERAÇÃO & SEGURANÇA
+                  "🔒","🔓","🔏","🔑","👮","🛡️","🚨","🚔","🚐","👀","🔍","📢","🗂️",
+                  "🚪","🔗","⛓️","🛃","🛂","🔫","🏹","⚔️","⛺","🔥","🧯","🧹","🧺",
+                  // ROTINA & CONTATO
+                  "☀️","🌙","📞","📱","💻","🔋","🔌","💡","🔧","🛠️","🔨","⚙️",
+                  "🛁","🚿","🧼","🧻","🧴","✂️","🪒","📦","💧","♻️",
+                  // ATENDIMENTO & LEGAIS
+                  "💁","👨‍💼","👨‍⚖️","⚖️","🖋️","📝","📋","✅","⚠️","ℹ️",
+                  // ALIMENTAÇÃO & REFEIÇÃO
+                  "🍽️","🥤","☕","🍕","🥘","🍞","🥪","🍎","🍌","🥛","🍵"
                 ].map((emoji) => (
                   <button
                     key={emoji}
@@ -732,8 +765,71 @@ export default function OcorrenciasContainer({
               </div>
             </div>
 
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Texto da Ocorrência</label>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide font-semibold">Texto da Ocorrência</label>
+                <button
+                  type="button"
+                  onClick={() => setShowAiHelper(!showAiHelper)}
+                  className="inline-flex items-center gap-1 text-[10px] font-extrabold text-indigo-650 hover:text-indigo-800 transition cursor-pointer"
+                >
+                  <Sparkles size={12} /> {showAiHelper ? "Fechar Assistente de IA" : "Elaborar com IA (Gemini)"}
+                </button>
+              </div>
+
+              {showAiHelper && (
+                <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100/80 space-y-3">
+                  <div className="space-y-1">
+                    <label className="block text-[9px] font-bold text-indigo-500 uppercase">Resuma o que aconteceu de forma simples:</label>
+                    <textarea
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                      rows={3}
+                      placeholder="Ex: Condução do preso João Silva (matrícula 123456) da ala A cela 2 para atendimento odontológico às 14:00 por dor de dente, conduzido pelo PP Bezerra, sem novidades."
+                      className="w-full p-2 text-xs border border-indigo-200 rounded-xl focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none bg-white font-semibold text-slate-700 leading-normal"
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <Button
+                      type="button"
+                      disabled={isGeneratingAi}
+                      onClick={async () => {
+                        if (!aiPrompt.trim()) {
+                          toast.error("Por favor, digite o resumo do fato.")
+                          return
+                        }
+                        setIsGeneratingAi(true)
+                        try {
+                          const res = await generateOccurrenceTextAction(aiPrompt)
+                          if (res.success && res.text) {
+                            setFormTexto(res.text)
+                            toast.success("Texto oficial gerado pela IA!")
+                            setShowAiHelper(false)
+                          } else {
+                            toast.error(res.error || "Erro ao gerar redação.")
+                          }
+                        } catch (e: any) {
+                          toast.error(e.message || "Erro de conexão.")
+                        } finally {
+                          setIsGeneratingAi(false)
+                        }
+                      }}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold gap-1"
+                    >
+                      {isGeneratingAi ? (
+                        <>
+                          <Loader2 size={12} className="animate-spin" /> Gerando Redação...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={12} /> Gerar Texto Oficial
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
               <textarea
                 value={formTexto}
                 onChange={(e) => setFormTexto(e.target.value)}

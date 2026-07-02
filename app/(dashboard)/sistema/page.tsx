@@ -423,14 +423,14 @@ export default function VisitasPage() {
     const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
 <title>${viewMode === "visitas" ? "Visitas" : "Internos"} UPI-4</title>
 <style>
-  body { font-family: Arial, sans-serif; font-size: 10px; margin: 20px; }
-  h1 { font-size: 14px; margin-bottom: 4px; }
-  p { font-size: 9px; color: #666; margin-bottom: 12px; }
-  table { width: 100%; border-collapse: collapse; }
-  th { background: #5b21b6; color: white; padding: 5px 6px; text-align: left; font-size: 9px; text-transform: uppercase; }
-  td { padding: 4px 6px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
-  tr:nth-child(even) td { background: #f8f7ff; }
-  small { color: #888; font-size: 8px; }
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; color: #111827; }
+  h1 { font-size: 18px; margin-bottom: 4px; color: #111827; }
+  p { font-size: 11px; color: #4b5563; margin-bottom: 12px; font-weight: bold; }
+  table { width: 100%; border-collapse: collapse; border: 1.5px solid #1f2937; }
+  th { background: #5b21b6; color: white; padding: 6px 8px; text-align: left; font-size: 11.5px; text-transform: uppercase; border: 1px solid #1f2937; }
+  td { padding: 6px 8px; border: 1px solid #1f2937; vertical-align: middle; font-size: 11px; }
+  tr:nth-child(even) td { background: #f9fafb; }
+  small { color: #4b5563; font-size: 9.5px; font-weight: bold; }
   @page { margin: 15mm; }
 </style></head><body>
 <h1>Sistema de ${viewMode === "visitas" ? "Visitas" : "Internos"} UPI-4</h1>

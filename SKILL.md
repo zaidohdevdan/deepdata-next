@@ -2,27 +2,24 @@
 
 ## 🚨 EM OCORRÊNCIAS
 - [ ] Verificar e corrigir a edição de ocorrências (dados não estão sendo persistidos).
+- [] add mais bibliotecas de emogis para diversificar as identificações de ocorrencias.
+- [] add uma Ia para auxiliar na elaboração de ocorrencias personalizadas. E que possa ser possível salvar os modelos de ocorrencias criados. E que possa ser possível adicionar novos modelos de ocorrencias.
 
 ## 📅 ELABORAÇÃO DAS ESCALAS
-- [ ] Unificar na sidebar: "Revezamento almoço" e "Revezamento janta" em uma única escala de revezamento.
-- [ ] Unificar na sidebar: "Escala Diurna" e "Alvorada" em uma única escala.
-- [ ] Migrar o card "Controle de Presença do Efetivo" para a tela de Configurações.
-- [ ] Garantir que o card "Controle de Presença" mantenha o estado e atualize dinamicamente ao adicionar um novo policial.
-- [ ] Aumentar o tamanho do card "Controle de Presença" para abranger os dados listados.
-- [ ] Implementar controle para o usuário poder adicionar um Policial Penal.
-- [ ] Corrigir a exibição do Posto "Tenda ABC" no frontend (atualmente aparece apenas na impressão).
-- [ ] Implementar função de arrastar/soltar (drag and drop) dos postos em "Configurações da Escala".
-- [ ] Habilitar as funções de duplicar e excluir para o policial marcado como "fixo" na escala.
-- [ ] Atualizar o subtítulo desatualizado: *"Carregue a lista de policiais por CSV, defina a divisão de faixas horárias e arraste para organizar o plantão"*.
+- [ ] Usar pesistencias: ao add postos, policiais, configurações, essas informações nao podem ser perdidas ao recarregar a pagina. Encontre um modo para o carregamento ser rapido e otimizavel.
+- [ ] A impressão das escalar ficou com fontesize muito pequena. em um ambiente prisional as fontes devem ser de tamanho adequado para leitura, principalmente na impressao.
+- [ ] add um botao "inicializar em posto" ao inves do fixar no elemento policial. O que faz que o policial penal inicializa em determinado posto; atualmente temos a funçao fixar, que impede do policial ser movido do posto. vamore refatorar a logica para que o mesmo possa ser inicilizado em um determinado posto e que pode ser movido, duplicado ou excluido em qualquer momento. ou seja, iremos descartar a funcionalidade do "fixar" em posto. com isso o sistema ganha mais elasticidade.
+- [] em configurações, deve ser possivel excluir ou editar policiais que estão listados no card Controle de presença do efetivo.
+- [] No card de efetivo, deve ser possivel adicionar novos policiais penais. Atualmente não tem como add policial penal na lista.
+- [] Deve ser possivel a impressão já trazer o nome do chefe de equipe e matricula vinculado.
+- [] No card de efetivo, deve ser possivel selecionar varios policiais penais e exclui-los.
+- [] No card de efetivo, deve ser possivel editar ou excluir os policiais penais. Atualmente não tem como editar ou excluir os policiais penais.  
+
+## 👥 ADMINSTRAÇÃO 
+- [ ] Criar uma funcionalidade para cadastrar chefes de equipe os quais podem está vinculados a um ou mais equipes[ alfa, bravo, charlie ou delta].
 
 ## 🖨️ TRATAMENTO DE IMPRESSÃO
-- [ ] Corrigir o problema de margem na impressão A4.
+- [ ] Corrigir o problema de margem na impressão A4 para impressão de alimentaçao[ almoço/janta/etc].
 
 ## 👥 VISITA COMUM
-- [ ] Elaborar relatório de Controle de Visitas contendo:
-  - [ ] Resumo com as alas visitadas.
-  - [ ] Quantidade de visitas por ala (com e sem prioridade).
-  - [ ] Quantidade de internos por ala.
-  - [ ] Total de visitantes por ala (ex: ALA C: COM PRIORIDADE: 70, SEM PRIORIDADE: 155, TOTAL: 267).
-- [ ] Corrigir a divergência de dados entre a importação de PDF e XLSX.
-- [ ] Criar um card com aba que se abra e mostre as "Estatísticas por Ala".
+- [ ] reveja o que podemos melhorar no tamaho das fontes para impressao sem quebrar o layout de impressão atual.

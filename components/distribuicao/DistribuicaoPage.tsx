@@ -398,6 +398,53 @@ export function DistribuicaoPage({ modulo, initialData, globalConfig }: Distribu
 
   return (
     <div className="space-y-6">
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media print {
+          @page {
+            size: A4 portrait;
+            margin: 10mm 12mm 10mm 12mm;
+          }
+          body {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+            font-size: 11px !important;
+          }
+          .print\\:hidden, button, header, nav, aside, footer {
+            display: none !important;
+          }
+          table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            border: 1.5px solid #111827 !important;
+            margin-top: 15px !important;
+          }
+          th, td {
+            border: 1.5px solid #111827 !important;
+            padding: 6px 8px !important;
+            color: #111827 !important;
+            font-size: 11px !important;
+          }
+          th {
+            background-color: #e5e7eb !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+          }
+          tr {
+            page-break-inside: avoid !important;
+          }
+          /* Ensure cells inside the table show values clearly */
+          td input, td select {
+            border: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+            font-weight: bold !important;
+            color: #111827 !important;
+            width: auto !important;
+            text-align: center !important;
+          }
+        }
+      ` }} />
       <DistribuicaoHeader
         config={config}
         globalConfig={globalConfig}
