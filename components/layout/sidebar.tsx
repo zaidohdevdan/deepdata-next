@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Settings,
   ChevronDown,
+  UserCheck,
 } from "lucide-react"
 import { clsx } from "clsx"
 import { LucideIcon } from "lucide-react"
@@ -62,6 +63,7 @@ const modules: MenuItem[] = [
 const adminModules = [
   { href: "/admin", label: "Painel Admin", icon: ShieldCheck, exact: true },
   { href: "/admin/usuarios", label: "Usuários", icon: Users },
+  { href: "/admin/chefes", label: "Chefes de Equipe", icon: UserCheck },
 ]
 
 interface SidebarProps {

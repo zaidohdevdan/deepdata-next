@@ -177,3 +177,60 @@ export async function createCategoriaAction(nome: string) {
   }
 }
 
+export async function generateOccurrenceTextAction(prompt: string) {
+  await ensureAuthenticated()
+
+  if (!prompt || !prompt.trim()) {
+    return { success: false, error: "O resumo do fato é obrigatório." }
+  }
+
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY
+
+  if (!apiKey) {
+    return { 
+      success: false, 
+      error: "A chave API do Gemini (GEMINI_API_KEY) não está configurada no servidor. Contate o administrador." 
+    }
+  }
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: `Você é um assistente de redação oficial para policiais penais em uma unidade prisional (UPI-4). Escreva um texto formal, impessoal e detalhado em português para um livro de ocorrências com base no seguinte resumo fornecido. Escreva apenas o texto final da ocorrência, sem introduções, cumprimentos, observações ou caracteres de formatação Markdown extra (como asteriscos de negrito, a não ser que seja estritamente necessário para tabelas). Resumo: ${prompt.trim()}`,
+                },
+              ],
+            },
+          ],
+        }),
+      }
+    )
+
+    if (!response.ok) {
+      const errBody = await response.text()
+      console.error("Gemini API error response:", errBody)
+      return { success: false, error: `Erro na API do Gemini: ${response.statusText}` }
+    }
+
+    const resData = await response.json()
+    const generatedText = resData?.candidates?.[0]?.content?.parts?.[0]?.text
+
+    if (!generatedText) {
+      return { success: false, error: "A resposta do modelo de IA veio vazia." }
+    }
+
+    return { success: true, text: generatedText.trim() }
+  } catch (error: any) {
+    console.error("Error generating occurrence text via AI:", error)
+    return { success: false, error: error.message || "Erro de conexão ao servidor de IA." }
+  }
+}
+
+
