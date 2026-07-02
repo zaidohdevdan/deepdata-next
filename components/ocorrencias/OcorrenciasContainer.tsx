@@ -808,8 +808,9 @@ export default function OcorrenciasContainer({
                           } else {
                             toast.error(res.error || "Erro ao gerar redação.")
                           }
-                        } catch (e: any) {
-                          toast.error(e.message || "Erro de conexão.")
+                        } catch (e: unknown) {
+                          const message = e instanceof Error ? e.message : "Erro de conexão."
+                          toast.error(message)
                         } finally {
                           setIsGeneratingAi(false)
                         }

@@ -6,7 +6,6 @@ import { toast } from "sonner"
 import * as XLSX from "xlsx"
 import { ConfigValues, alimentacaoConfig, cafeConfig, biscoitoConfig } from "@/lib/calculation"
 import { AlaDistribData, saveDistribuicaoData, clearDistribuicaoData, addAlaAction, deleteAlaAction } from "@/app/actions/distribuicao"
-import { RefreshCw } from "lucide-react"
 
 import { DistribuicaoHeader } from "./DistribuicaoHeader"
 import { DistribuicaoTable } from "./DistribuicaoTable"
@@ -28,11 +27,25 @@ interface DistribuicaoPageProps {
 export function DistribuicaoPage({ modulo, initialData, globalConfig }: DistribuicaoPageProps) {
   const config = configMap[modulo]
   const router = useRouter()
-  const [data, setData] = useState<AlaDistribData[]>(initialData)
+
+  // Lazy initializer: reads localStorage once on mount, avoiding setState-in-effect
+  const [data, setData] = useState<AlaDistribData[]>(() => {
+    if (typeof window === "undefined") return initialData
+    const stored = localStorage.getItem(`distrib_data_${modulo}`)
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored) as AlaDistribData[]
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      } catch {
+        // fallback to initialData
+      }
+    }
+    return initialData
+  })
+
   const [isPending, startTransition] = useTransition()
   const [showAddModal, setShowAddModal] = useState(false)
   const [showClearModal, setShowClearModal] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
   const [alaToDelete, setAlaToDelete] = useState<{ id: string; name: string } | null>(null)
 
   // Track the previous initialData to detect server-side changes
@@ -51,34 +64,15 @@ export function DistribuicaoPage({ modulo, initialData, globalConfig }: Distribu
     }
   }, [initialData])
 
-  // Carregar dados salvos no localStorage ao montar a página
+  // Persist to localStorage whenever data changes
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem(`distrib_data_${modulo}`)
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored)
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            setData(parsed)
-          }
-        } catch (e) {
-          console.error("Erro ao carregar dados salvos da distribuição", e)
-        }
-      }
-      setIsLoaded(true)
+    if (typeof window === "undefined") return
+    if (data.length > 0) {
+      localStorage.setItem(`distrib_data_${modulo}`, JSON.stringify(data))
+    } else {
+      localStorage.removeItem(`distrib_data_${modulo}`)
     }
-  }, [modulo])
-
-  // Sincronizar dados com o localStorage ao alterar
-  useEffect(() => {
-    if (typeof window !== "undefined" && isLoaded) {
-      if (data.length > 0) {
-        localStorage.setItem(`distrib_data_${modulo}`, JSON.stringify(data))
-      } else {
-        localStorage.removeItem(`distrib_data_${modulo}`)
-      }
-    }
-  }, [data, isLoaded, modulo])
+  }, [data, modulo])
 
   // Handle cell change
   const handleCellChange = (id: string, field: "internos" | "dietas", value: string) => {
@@ -105,7 +99,7 @@ export function DistribuicaoPage({ modulo, initialData, globalConfig }: Distribu
       const res = await saveDistribuicaoData(config.modulo, data)
       if (res.success) {
         toast.success("Dados salvos com sucesso!", {
-          description: "Os dados foram armazenados no banco de dados SQLite.",
+          description: "Os dados foram armazenados no banco de dados.",
         })
         router.refresh()
       } else {
@@ -383,18 +377,7 @@ export function DistribuicaoPage({ modulo, initialData, globalConfig }: Distribu
     globalConfig
   )
 
-  if (!isLoaded) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] bg-slate-50/50 rounded-2xl border border-slate-100 p-8 shadow-sm">
-        <div className="flex flex-col items-center gap-3">
-          <RefreshCw className="animate-spin text-slate-400" size={32} />
-          <span className="text-sm font-semibold text-slate-500 tracking-wide animate-pulse">
-            Carregando dados de {config.titulo.toLowerCase()}...
-          </span>
-        </div>
-      </div>
-    )
-  }
+
 
   return (
     <div className="space-y-6">

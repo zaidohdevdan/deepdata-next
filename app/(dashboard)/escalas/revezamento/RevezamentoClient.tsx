@@ -2,22 +2,40 @@
 import { useState } from "react"
 import EscalasContainer from "@/components/escalas/EscalasContainer"
 
+interface PolicialEquipe {
+  nome: string
+  matricula: string
+}
+
+interface PolicialFixo {
+  matricula: string
+  nome: string
+  posto: string
+  faixa: string
+}
+
+interface CurrentUser {
+  username: string
+  name: string
+  role: string
+}
+
 interface RevezamentoClientProps {
-  currentUser: any
-  equipeAlfa: any[]
-  equipeBravo: any[]
-  equipeEcho: any[]
-  equipeFox: any[]
+  currentUser: CurrentUser | null
+  equipeAlfa: PolicialEquipe[]
+  equipeBravo: PolicialEquipe[]
+  equipeEcho: PolicialEquipe[]
+  equipeFox: PolicialEquipe[]
   nomeUnidade: string
   localidade: string
   // Almoco
-  initialPoliciaisFixosAlmoco: any[]
+  initialPoliciaisFixosAlmoco: PolicialFixo[]
   initialPostosConfigAlmoco?: string
   initialHoraInicioAlmoco?: string
   initialHoraFimAlmoco?: string
   initialNumFaixasAlmoco?: string
   // Janta
-  initialPoliciaisFixosJanta: any[]
+  initialPoliciaisFixosJanta: PolicialFixo[]
   initialPostosConfigJanta?: string
   initialHoraInicioJanta?: string
   initialHoraFimJanta?: string

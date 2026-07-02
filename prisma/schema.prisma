@@ -21,6 +21,11 @@ model User {
   // NextAuth relations
   accounts Account[]
   sessions Session[]
+
+  // Auditoria e auditorias de Ocorrencias
+  ocorrenciasCriadas   Ocorrencia[] @relation("OcorrenciasCriadas")
+  ocorrenciasAlteradas Ocorrencia[] @relation("OcorrenciasAlteradas")
+  logsAuditoria        AuditLog[]
 }
 
 enum Role {
@@ -102,18 +107,52 @@ enum Modulo {
 }
 
 model Ocorrencia {
-  id        String   @id @default(cuid())
-  titulo    String
-  categoria String
-  icone     String   @default("📋")
-  texto     String
-  servidor  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String              @id @default(cuid())
+  titulo          String
+  categoriaId     String
+  categoria       OcorrenciaCategoria @relation(fields: [categoriaId], references: [id])
+  icone           String              @default("📋")
+  texto           String
+  servidor        String
+  criadoPorId     String
+  criadoPor       User                @relation("OcorrenciasCriadas", fields: [criadoPorId], references: [id])
+  atualizadoPorId String?
+  atualizadoPor   User?               @relation("OcorrenciasAlteradas", fields: [atualizadoPorId], references: [id])
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
 }
 
 model OcorrenciaCategoria {
+  id          String       @id @default(cuid())
+  nome        String       @unique
+  ocorrencias Ocorrencia[]
+  createdAt   DateTime     @default(now())
+}
+
+model AuditLog {
   id        String   @id @default(cuid())
-  nome      String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  acao      String   // Ex: "LOGIN", "CREATE_OCORRENCIA", "UPDATE_ESCALA", "DELETE_USER"
+  modulo    String   // Ex: "AUTENTICACAO", "OCORRENCIAS", "ESCALAS", "ADMIN"
+  detalhes  String   // JSON string
+  ipAddress String?
   createdAt DateTime @default(now())
+}
+
+model Visita {
+  id            String   @id @default(cuid())
+  prontuario    Int
+  senha         Int
+  custodiado    String
+  localizacao   String
+  ala           String
+  prioridade    String
+  cela          String
+  cpfVisitante  String
+  nomeVisitante String
+  relacao       String
+  situacao      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

@@ -188,10 +188,12 @@ exports.Prisma.DistribAlaScalarFieldEnum = {
 exports.Prisma.OcorrenciaScalarFieldEnum = {
   id: 'id',
   titulo: 'titulo',
-  categoria: 'categoria',
+  categoriaId: 'categoriaId',
   icone: 'icone',
   texto: 'texto',
   servidor: 'servidor',
+  criadoPorId: 'criadoPorId',
+  atualizadoPorId: 'atualizadoPorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -200,6 +202,33 @@ exports.Prisma.OcorrenciaCategoriaScalarFieldEnum = {
   id: 'id',
   nome: 'nome',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  acao: 'acao',
+  modulo: 'modulo',
+  detalhes: 'detalhes',
+  ipAddress: 'ipAddress',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.VisitaScalarFieldEnum = {
+  id: 'id',
+  prontuario: 'prontuario',
+  senha: 'senha',
+  custodiado: 'custodiado',
+  localizacao: 'localizacao',
+  ala: 'ala',
+  prioridade: 'prioridade',
+  cela: 'cela',
+  cpfVisitante: 'cpfVisitante',
+  nomeVisitante: 'nomeVisitante',
+  relacao: 'relacao',
+  situacao: 'situacao',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -236,7 +265,9 @@ exports.Prisma.ModelName = {
   Ala: 'Ala',
   DistribAla: 'DistribAla',
   Ocorrencia: 'Ocorrencia',
-  OcorrenciaCategoria: 'OcorrenciaCategoria'
+  OcorrenciaCategoria: 'OcorrenciaCategoria',
+  AuditLog: 'AuditLog',
+  Visita: 'Visita'
 };
 
 /**

@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { Modulo } from "@/prisma/generated-client"
+import { createAuditLogAction } from "./audit"
 
 export interface AlaDistribData {
   id: string // alaId
@@ -67,6 +68,17 @@ export async function saveDistribuicaoData(
     })
 
     await prisma.$transaction(operations)
+
+    // Auditoria
+    await createAuditLogAction({
+      acao: "SAVE_DISTRIBUICAO",
+      modulo: "DISTRIBUICAO",
+      detalhes: {
+        modulo,
+        totalAlas: data.length
+      }
+    })
+
     revalidatePath(`/${modulo.toLowerCase()}`)
     return { success: true }
   } catch (error) {
@@ -85,6 +97,14 @@ export async function clearDistribuicaoData(modulo: Modulo) {
         dietas: 0,
       },
     })
+
+    // Auditoria
+    await createAuditLogAction({
+      acao: "CLEAR_DISTRIBUICAO",
+      modulo: "DISTRIBUICAO",
+      detalhes: { modulo }
+    })
+
     revalidatePath(`/${modulo.toLowerCase()}`)
     return { success: true }
   } catch (error) {
@@ -138,6 +158,14 @@ export async function addAlaAction(nome: string) {
     )
 
     await prisma.$transaction(seedDistribs)
+
+    // Auditoria
+    await createAuditLogAction({
+      acao: "ADD_ALA",
+      modulo: "DISTRIBUICAO",
+      detalhes: { nome: nome.trim().toUpperCase() }
+    })
+
     revalidatePath("/(dashboard)", "layout")
     return { success: true }
   } catch (error) {
@@ -153,6 +181,14 @@ export async function deleteAlaAction(alaId: string) {
       where: { id: alaId },
       data: { ativa: false },
     })
+
+    // Auditoria
+    await createAuditLogAction({
+      acao: "DELETE_ALA",
+      modulo: "DISTRIBUICAO",
+      detalhes: { alaId }
+    })
+
     revalidatePath("/(dashboard)", "layout")
     return { success: true }
   } catch (error) {

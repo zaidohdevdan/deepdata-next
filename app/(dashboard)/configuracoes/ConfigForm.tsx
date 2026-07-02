@@ -52,7 +52,7 @@ interface PolicialEquipe {
   const [equipeAlfa, setEquipeAlfa] = useState<PolicialEquipe[]>(() => {
     try {
       const parsed = JSON.parse(initialConfig.equipeAlfa || "[]")
-      return parsed.map((p: any) => ({
+      return parsed.map((p: PolicialEquipe) => ({
         nome: p.nome,
         qra: p.qra || p.nome,
         matricula: p.matricula
@@ -62,7 +62,7 @@ interface PolicialEquipe {
   const [equipeBravo, setEquipeBravo] = useState<PolicialEquipe[]>(() => {
     try {
       const parsed = JSON.parse(initialConfig.equipeBravo || "[]")
-      return parsed.map((p: any) => ({
+      return parsed.map((p: PolicialEquipe) => ({
         nome: p.nome,
         qra: p.qra || p.nome,
         matricula: p.matricula
@@ -72,7 +72,7 @@ interface PolicialEquipe {
   const [equipeEcho, setEquipeEcho] = useState<PolicialEquipe[]>(() => {
     try {
       const parsed = JSON.parse(initialConfig.equipeEcho || "[]")
-      return parsed.map((p: any) => ({
+      return parsed.map((p: PolicialEquipe) => ({
         nome: p.nome,
         qra: p.qra || p.nome,
         matricula: p.matricula
@@ -82,7 +82,7 @@ interface PolicialEquipe {
   const [equipeFox, setEquipeFox] = useState<PolicialEquipe[]>(() => {
     try {
       const parsed = JSON.parse(initialConfig.equipeFox || "[]")
-      return parsed.map((p: any) => ({
+      return parsed.map((p: PolicialEquipe) => ({
         nome: p.nome,
         qra: p.qra || p.nome,
         matricula: p.matricula

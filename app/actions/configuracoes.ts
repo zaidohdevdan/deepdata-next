@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { configSchema } from "@/lib/validators"
 import { auth } from "@/lib/auth"
+import { createAuditLogAction } from "./audit"
 
 async function ensureAuthenticated() {
   const session = await auth()
@@ -30,7 +31,6 @@ export async function saveGlobalConfigAction(formData: unknown) {
     cafeLitrosPorGarrafa,
     biscoitoPorInterno,
     biscoitoCapacidadePacote,
-    escalaPoliciaisFixos,
     equipeAlfa,
     equipeBravo,
     equipeEcho,
@@ -93,11 +93,7 @@ export async function saveGlobalConfigAction(formData: unknown) {
         valor: String(biscoitoCapacidadePacote),
         descricao: "Capacidade do pacote de biscoitos (unidades)",
       },
-      {
-        chave: "escalaPoliciaisFixos",
-        valor: escalaPoliciaisFixos || "[]",
-        descricao: "JSON de policiais fixos por posto e faixa",
-      },
+      // Note: per-scale policiais fixos are stored by saveScaleConfigAction (e.g. escalaPoliciaisFixos_diurna)
       {
         chave: "equipeAlfa",
         valor: finalEquipeAlfa || "[]",
@@ -129,6 +125,16 @@ export async function saveGlobalConfigAction(formData: unknown) {
     )
 
     await prisma.$transaction(operations)
+
+    // Auditoria
+    await createAuditLogAction({
+      acao: "UPDATE_CONFIG_GLOBAL",
+      modulo: "CONFIGURACOES",
+      detalhes: {
+        nomeUnidade,
+        localidade
+      }
+    })
 
     revalidatePath("/", "layout")
     return { success: true }
@@ -173,6 +179,17 @@ export async function saveScaleConfigAction(
     )
 
     await prisma.$transaction(operations)
+
+    // Auditoria
+    await createAuditLogAction({
+      acao: "UPDATE_ESCALA_CONFIG",
+      modulo: "ESCALAS",
+      detalhes: {
+        tipo,
+        numFaixas
+      }
+    })
+
     revalidatePath("/", "layout")
     return { success: true }
   } catch (error) {

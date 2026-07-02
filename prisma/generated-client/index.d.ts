@@ -58,6 +58,16 @@ export type Ocorrencia = $Result.DefaultSelection<Prisma.$OcorrenciaPayload>
  * 
  */
 export type OcorrenciaCategoria = $Result.DefaultSelection<Prisma.$OcorrenciaCategoriaPayload>
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = $Result.DefaultSelection<Prisma.$AuditLogPayload>
+/**
+ * Model Visita
+ * 
+ */
+export type Visita = $Result.DefaultSelection<Prisma.$VisitaPayload>
 
 /**
  * Enums
@@ -296,6 +306,26 @@ export class PrismaClient<
     * ```
     */
   get ocorrenciaCategoria(): Prisma.OcorrenciaCategoriaDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AuditLogs
+    * const auditLogs = await prisma.auditLog.findMany()
+    * ```
+    */
+  get auditLog(): Prisma.AuditLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.visita`: Exposes CRUD operations for the **Visita** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Visitas
+    * const visitas = await prisma.visita.findMany()
+    * ```
+    */
+  get visita(): Prisma.VisitaDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -745,7 +775,9 @@ export namespace Prisma {
     Ala: 'Ala',
     DistribAla: 'DistribAla',
     Ocorrencia: 'Ocorrencia',
-    OcorrenciaCategoria: 'OcorrenciaCategoria'
+    OcorrenciaCategoria: 'OcorrenciaCategoria',
+    AuditLog: 'AuditLog',
+    Visita: 'Visita'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -764,7 +796,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verificationToken" | "configuracaoGlobal" | "ala" | "distribAla" | "ocorrencia" | "ocorrenciaCategoria"
+      modelProps: "user" | "account" | "session" | "verificationToken" | "configuracaoGlobal" | "ala" | "distribAla" | "ocorrencia" | "ocorrenciaCategoria" | "auditLog" | "visita"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1434,6 +1466,154 @@ export namespace Prisma {
           }
         }
       }
+      AuditLog: {
+        payload: Prisma.$AuditLogPayload<ExtArgs>
+        fields: Prisma.AuditLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AuditLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AuditLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          findFirst: {
+            args: Prisma.AuditLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AuditLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          findMany: {
+            args: Prisma.AuditLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+          }
+          create: {
+            args: Prisma.AuditLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          createMany: {
+            args: Prisma.AuditLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AuditLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+          }
+          delete: {
+            args: Prisma.AuditLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          update: {
+            args: Prisma.AuditLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.AuditLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AuditLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AuditLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.AuditLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AuditLogPayload>
+          }
+          aggregate: {
+            args: Prisma.AuditLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAuditLog>
+          }
+          groupBy: {
+            args: Prisma.AuditLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AuditLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AuditLogCountArgs<ExtArgs>
+            result: $Utils.Optional<AuditLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      Visita: {
+        payload: Prisma.$VisitaPayload<ExtArgs>
+        fields: Prisma.VisitaFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VisitaFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VisitaFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload>
+          }
+          findFirst: {
+            args: Prisma.VisitaFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VisitaFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload>
+          }
+          findMany: {
+            args: Prisma.VisitaFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload>[]
+          }
+          create: {
+            args: Prisma.VisitaCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload>
+          }
+          createMany: {
+            args: Prisma.VisitaCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.VisitaCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload>[]
+          }
+          delete: {
+            args: Prisma.VisitaDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload>
+          }
+          update: {
+            args: Prisma.VisitaUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload>
+          }
+          deleteMany: {
+            args: Prisma.VisitaDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VisitaUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.VisitaUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload>[]
+          }
+          upsert: {
+            args: Prisma.VisitaUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VisitaPayload>
+          }
+          aggregate: {
+            args: Prisma.VisitaAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVisita>
+          }
+          groupBy: {
+            args: Prisma.VisitaGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VisitaGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VisitaCountArgs<ExtArgs>
+            result: $Utils.Optional<VisitaCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1539,6 +1719,8 @@ export namespace Prisma {
     distribAla?: DistribAlaOmit
     ocorrencia?: OcorrenciaOmit
     ocorrenciaCategoria?: OcorrenciaCategoriaOmit
+    auditLog?: AuditLogOmit
+    visita?: VisitaOmit
   }
 
   /* Types for Logging */
@@ -1621,11 +1803,17 @@ export namespace Prisma {
   export type UserCountOutputType = {
     accounts: number
     sessions: number
+    ocorrenciasCriadas: number
+    ocorrenciasAlteradas: number
+    logsAuditoria: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | UserCountOutputTypeCountAccountsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+    ocorrenciasCriadas?: boolean | UserCountOutputTypeCountOcorrenciasCriadasArgs
+    ocorrenciasAlteradas?: boolean | UserCountOutputTypeCountOcorrenciasAlteradasArgs
+    logsAuditoria?: boolean | UserCountOutputTypeCountLogsAuditoriaArgs
   }
 
   // Custom InputTypes
@@ -1651,6 +1839,27 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SessionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOcorrenciasCriadasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OcorrenciaWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOcorrenciasAlteradasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OcorrenciaWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLogsAuditoriaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AuditLogWhereInput
   }
 
 
@@ -1682,6 +1891,37 @@ export namespace Prisma {
    */
   export type AlaCountOutputTypeCountDistribsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DistribAlaWhereInput
+  }
+
+
+  /**
+   * Count Type OcorrenciaCategoriaCountOutputType
+   */
+
+  export type OcorrenciaCategoriaCountOutputType = {
+    ocorrencias: number
+  }
+
+  export type OcorrenciaCategoriaCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ocorrencias?: boolean | OcorrenciaCategoriaCountOutputTypeCountOcorrenciasArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * OcorrenciaCategoriaCountOutputType without action
+   */
+  export type OcorrenciaCategoriaCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the OcorrenciaCategoriaCountOutputType
+     */
+    select?: OcorrenciaCategoriaCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * OcorrenciaCategoriaCountOutputType without action
+   */
+  export type OcorrenciaCategoriaCountOutputTypeCountOcorrenciasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: OcorrenciaWhereInput
   }
 
 
@@ -1879,6 +2119,9 @@ export namespace Prisma {
     updatedAt?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    ocorrenciasCriadas?: boolean | User$ocorrenciasCriadasArgs<ExtArgs>
+    ocorrenciasAlteradas?: boolean | User$ocorrenciasAlteradasArgs<ExtArgs>
+    logsAuditoria?: boolean | User$logsAuditoriaArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1919,6 +2162,9 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    ocorrenciasCriadas?: boolean | User$ocorrenciasCriadasArgs<ExtArgs>
+    ocorrenciasAlteradas?: boolean | User$ocorrenciasAlteradasArgs<ExtArgs>
+    logsAuditoria?: boolean | User$logsAuditoriaArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1929,6 +2175,9 @@ export namespace Prisma {
     objects: {
       accounts: Prisma.$AccountPayload<ExtArgs>[]
       sessions: Prisma.$SessionPayload<ExtArgs>[]
+      ocorrenciasCriadas: Prisma.$OcorrenciaPayload<ExtArgs>[]
+      ocorrenciasAlteradas: Prisma.$OcorrenciaPayload<ExtArgs>[]
+      logsAuditoria: Prisma.$AuditLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2335,6 +2584,9 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    ocorrenciasCriadas<T extends User$ocorrenciasCriadasArgs<ExtArgs> = {}>(args?: Subset<T, User$ocorrenciasCriadasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OcorrenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    ocorrenciasAlteradas<T extends User$ocorrenciasAlteradasArgs<ExtArgs> = {}>(args?: Subset<T, User$ocorrenciasAlteradasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OcorrenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    logsAuditoria<T extends User$logsAuditoriaArgs<ExtArgs> = {}>(args?: Subset<T, User$logsAuditoriaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2805,6 +3057,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SessionScalarFieldEnum | SessionScalarFieldEnum[]
+  }
+
+  /**
+   * User.ocorrenciasCriadas
+   */
+  export type User$ocorrenciasCriadasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ocorrencia
+     */
+    select?: OcorrenciaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ocorrencia
+     */
+    omit?: OcorrenciaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
+    where?: OcorrenciaWhereInput
+    orderBy?: OcorrenciaOrderByWithRelationInput | OcorrenciaOrderByWithRelationInput[]
+    cursor?: OcorrenciaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OcorrenciaScalarFieldEnum | OcorrenciaScalarFieldEnum[]
+  }
+
+  /**
+   * User.ocorrenciasAlteradas
+   */
+  export type User$ocorrenciasAlteradasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ocorrencia
+     */
+    select?: OcorrenciaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ocorrencia
+     */
+    omit?: OcorrenciaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
+    where?: OcorrenciaWhereInput
+    orderBy?: OcorrenciaOrderByWithRelationInput | OcorrenciaOrderByWithRelationInput[]
+    cursor?: OcorrenciaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OcorrenciaScalarFieldEnum | OcorrenciaScalarFieldEnum[]
+  }
+
+  /**
+   * User.logsAuditoria
+   */
+  export type User$logsAuditoriaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    where?: AuditLogWhereInput
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    cursor?: AuditLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
   }
 
   /**
@@ -9244,10 +9568,12 @@ export namespace Prisma {
   export type OcorrenciaMinAggregateOutputType = {
     id: string | null
     titulo: string | null
-    categoria: string | null
+    categoriaId: string | null
     icone: string | null
     texto: string | null
     servidor: string | null
+    criadoPorId: string | null
+    atualizadoPorId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9255,10 +9581,12 @@ export namespace Prisma {
   export type OcorrenciaMaxAggregateOutputType = {
     id: string | null
     titulo: string | null
-    categoria: string | null
+    categoriaId: string | null
     icone: string | null
     texto: string | null
     servidor: string | null
+    criadoPorId: string | null
+    atualizadoPorId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9266,10 +9594,12 @@ export namespace Prisma {
   export type OcorrenciaCountAggregateOutputType = {
     id: number
     titulo: number
-    categoria: number
+    categoriaId: number
     icone: number
     texto: number
     servidor: number
+    criadoPorId: number
+    atualizadoPorId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9279,10 +9609,12 @@ export namespace Prisma {
   export type OcorrenciaMinAggregateInputType = {
     id?: true
     titulo?: true
-    categoria?: true
+    categoriaId?: true
     icone?: true
     texto?: true
     servidor?: true
+    criadoPorId?: true
+    atualizadoPorId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9290,10 +9622,12 @@ export namespace Prisma {
   export type OcorrenciaMaxAggregateInputType = {
     id?: true
     titulo?: true
-    categoria?: true
+    categoriaId?: true
     icone?: true
     texto?: true
     servidor?: true
+    criadoPorId?: true
+    atualizadoPorId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9301,10 +9635,12 @@ export namespace Prisma {
   export type OcorrenciaCountAggregateInputType = {
     id?: true
     titulo?: true
-    categoria?: true
+    categoriaId?: true
     icone?: true
     texto?: true
     servidor?: true
+    criadoPorId?: true
+    atualizadoPorId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9385,10 +9721,12 @@ export namespace Prisma {
   export type OcorrenciaGroupByOutputType = {
     id: string
     titulo: string
-    categoria: string
+    categoriaId: string
     icone: string
     texto: string
     servidor: string
+    criadoPorId: string
+    atualizadoPorId: string | null
     createdAt: Date
     updatedAt: Date
     _count: OcorrenciaCountAggregateOutputType | null
@@ -9413,59 +9751,97 @@ export namespace Prisma {
   export type OcorrenciaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     titulo?: boolean
-    categoria?: boolean
+    categoriaId?: boolean
     icone?: boolean
     texto?: boolean
     servidor?: boolean
+    criadoPorId?: boolean
+    atualizadoPorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    categoria?: boolean | OcorrenciaCategoriaDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | Ocorrencia$atualizadoPorArgs<ExtArgs>
   }, ExtArgs["result"]["ocorrencia"]>
 
   export type OcorrenciaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     titulo?: boolean
-    categoria?: boolean
+    categoriaId?: boolean
     icone?: boolean
     texto?: boolean
     servidor?: boolean
+    criadoPorId?: boolean
+    atualizadoPorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    categoria?: boolean | OcorrenciaCategoriaDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | Ocorrencia$atualizadoPorArgs<ExtArgs>
   }, ExtArgs["result"]["ocorrencia"]>
 
   export type OcorrenciaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     titulo?: boolean
-    categoria?: boolean
+    categoriaId?: boolean
     icone?: boolean
     texto?: boolean
     servidor?: boolean
+    criadoPorId?: boolean
+    atualizadoPorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    categoria?: boolean | OcorrenciaCategoriaDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | Ocorrencia$atualizadoPorArgs<ExtArgs>
   }, ExtArgs["result"]["ocorrencia"]>
 
   export type OcorrenciaSelectScalar = {
     id?: boolean
     titulo?: boolean
-    categoria?: boolean
+    categoriaId?: boolean
     icone?: boolean
     texto?: boolean
     servidor?: boolean
+    criadoPorId?: boolean
+    atualizadoPorId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type OcorrenciaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "categoria" | "icone" | "texto" | "servidor" | "createdAt" | "updatedAt", ExtArgs["result"]["ocorrencia"]>
+  export type OcorrenciaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "titulo" | "categoriaId" | "icone" | "texto" | "servidor" | "criadoPorId" | "atualizadoPorId" | "createdAt" | "updatedAt", ExtArgs["result"]["ocorrencia"]>
+  export type OcorrenciaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categoria?: boolean | OcorrenciaCategoriaDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | Ocorrencia$atualizadoPorArgs<ExtArgs>
+  }
+  export type OcorrenciaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categoria?: boolean | OcorrenciaCategoriaDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | Ocorrencia$atualizadoPorArgs<ExtArgs>
+  }
+  export type OcorrenciaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categoria?: boolean | OcorrenciaCategoriaDefaultArgs<ExtArgs>
+    criadoPor?: boolean | UserDefaultArgs<ExtArgs>
+    atualizadoPor?: boolean | Ocorrencia$atualizadoPorArgs<ExtArgs>
+  }
 
   export type $OcorrenciaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Ocorrencia"
-    objects: {}
+    objects: {
+      categoria: Prisma.$OcorrenciaCategoriaPayload<ExtArgs>
+      criadoPor: Prisma.$UserPayload<ExtArgs>
+      atualizadoPor: Prisma.$UserPayload<ExtArgs> | null
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       titulo: string
-      categoria: string
+      categoriaId: string
       icone: string
       texto: string
       servidor: string
+      criadoPorId: string
+      atualizadoPorId: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["ocorrencia"]>
@@ -9862,6 +10238,9 @@ export namespace Prisma {
    */
   export interface Prisma__OcorrenciaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    categoria<T extends OcorrenciaCategoriaDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OcorrenciaCategoriaDefaultArgs<ExtArgs>>): Prisma__OcorrenciaCategoriaClient<$Result.GetResult<Prisma.$OcorrenciaCategoriaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    criadoPor<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    atualizadoPor<T extends Ocorrencia$atualizadoPorArgs<ExtArgs> = {}>(args?: Subset<T, Ocorrencia$atualizadoPorArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9893,10 +10272,12 @@ export namespace Prisma {
   interface OcorrenciaFieldRefs {
     readonly id: FieldRef<"Ocorrencia", 'String'>
     readonly titulo: FieldRef<"Ocorrencia", 'String'>
-    readonly categoria: FieldRef<"Ocorrencia", 'String'>
+    readonly categoriaId: FieldRef<"Ocorrencia", 'String'>
     readonly icone: FieldRef<"Ocorrencia", 'String'>
     readonly texto: FieldRef<"Ocorrencia", 'String'>
     readonly servidor: FieldRef<"Ocorrencia", 'String'>
+    readonly criadoPorId: FieldRef<"Ocorrencia", 'String'>
+    readonly atualizadoPorId: FieldRef<"Ocorrencia", 'String'>
     readonly createdAt: FieldRef<"Ocorrencia", 'DateTime'>
     readonly updatedAt: FieldRef<"Ocorrencia", 'DateTime'>
   }
@@ -9916,6 +10297,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
+    /**
      * Filter, which Ocorrencia to fetch.
      */
     where: OcorrenciaWhereUniqueInput
@@ -9934,6 +10319,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
+    /**
      * Filter, which Ocorrencia to fetch.
      */
     where: OcorrenciaWhereUniqueInput
@@ -9951,6 +10340,10 @@ export namespace Prisma {
      * Omit specific fields from the Ocorrencia
      */
     omit?: OcorrenciaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
     /**
      * Filter, which Ocorrencia to fetch.
      */
@@ -10000,6 +10393,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
+    /**
      * Filter, which Ocorrencia to fetch.
      */
     where?: OcorrenciaWhereInput
@@ -10048,6 +10445,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
+    /**
      * Filter, which Ocorrencias to fetch.
      */
     where?: OcorrenciaWhereInput
@@ -10091,6 +10492,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
+    /**
      * The data needed to create a Ocorrencia.
      */
     data: XOR<OcorrenciaCreateInput, OcorrenciaUncheckedCreateInput>
@@ -10124,6 +10529,10 @@ export namespace Prisma {
      */
     data: OcorrenciaCreateManyInput | OcorrenciaCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -10138,6 +10547,10 @@ export namespace Prisma {
      * Omit specific fields from the Ocorrencia
      */
     omit?: OcorrenciaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
     /**
      * The data needed to update a Ocorrencia.
      */
@@ -10190,6 +10603,10 @@ export namespace Prisma {
      * Limit how many Ocorrencias to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -10204,6 +10621,10 @@ export namespace Prisma {
      * Omit specific fields from the Ocorrencia
      */
     omit?: OcorrenciaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
     /**
      * The filter to search for the Ocorrencia to update in case it exists.
      */
@@ -10231,6 +10652,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
+    /**
      * Filter which Ocorrencia to delete.
      */
     where: OcorrenciaWhereUniqueInput
@@ -10251,6 +10676,25 @@ export namespace Prisma {
   }
 
   /**
+   * Ocorrencia.atualizadoPor
+   */
+  export type Ocorrencia$atualizadoPorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
    * Ocorrencia without action
    */
   export type OcorrenciaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10262,6 +10706,10 @@ export namespace Prisma {
      * Omit specific fields from the Ocorrencia
      */
     omit?: OcorrenciaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
   }
 
 
@@ -10413,6 +10861,8 @@ export namespace Prisma {
     id?: boolean
     nome?: boolean
     createdAt?: boolean
+    ocorrencias?: boolean | OcorrenciaCategoria$ocorrenciasArgs<ExtArgs>
+    _count?: boolean | OcorrenciaCategoriaCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["ocorrenciaCategoria"]>
 
   export type OcorrenciaCategoriaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10434,10 +10884,18 @@ export namespace Prisma {
   }
 
   export type OcorrenciaCategoriaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "nome" | "createdAt", ExtArgs["result"]["ocorrenciaCategoria"]>
+  export type OcorrenciaCategoriaInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ocorrencias?: boolean | OcorrenciaCategoria$ocorrenciasArgs<ExtArgs>
+    _count?: boolean | OcorrenciaCategoriaCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type OcorrenciaCategoriaIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type OcorrenciaCategoriaIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
 
   export type $OcorrenciaCategoriaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "OcorrenciaCategoria"
-    objects: {}
+    objects: {
+      ocorrencias: Prisma.$OcorrenciaPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       nome: string
@@ -10836,6 +11294,7 @@ export namespace Prisma {
    */
   export interface Prisma__OcorrenciaCategoriaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    ocorrencias<T extends OcorrenciaCategoria$ocorrenciasArgs<ExtArgs> = {}>(args?: Subset<T, OcorrenciaCategoria$ocorrenciasArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OcorrenciaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10885,6 +11344,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaCategoriaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaCategoriaInclude<ExtArgs> | null
+    /**
      * Filter, which OcorrenciaCategoria to fetch.
      */
     where: OcorrenciaCategoriaWhereUniqueInput
@@ -10903,6 +11366,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaCategoriaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaCategoriaInclude<ExtArgs> | null
+    /**
      * Filter, which OcorrenciaCategoria to fetch.
      */
     where: OcorrenciaCategoriaWhereUniqueInput
@@ -10920,6 +11387,10 @@ export namespace Prisma {
      * Omit specific fields from the OcorrenciaCategoria
      */
     omit?: OcorrenciaCategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaCategoriaInclude<ExtArgs> | null
     /**
      * Filter, which OcorrenciaCategoria to fetch.
      */
@@ -10969,6 +11440,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaCategoriaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaCategoriaInclude<ExtArgs> | null
+    /**
      * Filter, which OcorrenciaCategoria to fetch.
      */
     where?: OcorrenciaCategoriaWhereInput
@@ -11017,6 +11492,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaCategoriaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaCategoriaInclude<ExtArgs> | null
+    /**
      * Filter, which OcorrenciaCategorias to fetch.
      */
     where?: OcorrenciaCategoriaWhereInput
@@ -11059,6 +11538,10 @@ export namespace Prisma {
      * Omit specific fields from the OcorrenciaCategoria
      */
     omit?: OcorrenciaCategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaCategoriaInclude<ExtArgs> | null
     /**
      * The data needed to create a OcorrenciaCategoria.
      */
@@ -11107,6 +11590,10 @@ export namespace Prisma {
      * Omit specific fields from the OcorrenciaCategoria
      */
     omit?: OcorrenciaCategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaCategoriaInclude<ExtArgs> | null
     /**
      * The data needed to update a OcorrenciaCategoria.
      */
@@ -11174,6 +11661,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaCategoriaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaCategoriaInclude<ExtArgs> | null
+    /**
      * The filter to search for the OcorrenciaCategoria to update in case it exists.
      */
     where: OcorrenciaCategoriaWhereUniqueInput
@@ -11200,6 +11691,10 @@ export namespace Prisma {
      */
     omit?: OcorrenciaCategoriaOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaCategoriaInclude<ExtArgs> | null
+    /**
      * Filter which OcorrenciaCategoria to delete.
      */
     where: OcorrenciaCategoriaWhereUniqueInput
@@ -11220,6 +11715,30 @@ export namespace Prisma {
   }
 
   /**
+   * OcorrenciaCategoria.ocorrencias
+   */
+  export type OcorrenciaCategoria$ocorrenciasArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Ocorrencia
+     */
+    select?: OcorrenciaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Ocorrencia
+     */
+    omit?: OcorrenciaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaInclude<ExtArgs> | null
+    where?: OcorrenciaWhereInput
+    orderBy?: OcorrenciaOrderByWithRelationInput | OcorrenciaOrderByWithRelationInput[]
+    cursor?: OcorrenciaWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: OcorrenciaScalarFieldEnum | OcorrenciaScalarFieldEnum[]
+  }
+
+  /**
    * OcorrenciaCategoria without action
    */
   export type OcorrenciaCategoriaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11231,6 +11750,2244 @@ export namespace Prisma {
      * Omit specific fields from the OcorrenciaCategoria
      */
     omit?: OcorrenciaCategoriaOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: OcorrenciaCategoriaInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model AuditLog
+   */
+
+  export type AggregateAuditLog = {
+    _count: AuditLogCountAggregateOutputType | null
+    _min: AuditLogMinAggregateOutputType | null
+    _max: AuditLogMaxAggregateOutputType | null
+  }
+
+  export type AuditLogMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    acao: string | null
+    modulo: string | null
+    detalhes: string | null
+    ipAddress: string | null
+    createdAt: Date | null
+  }
+
+  export type AuditLogMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    acao: string | null
+    modulo: string | null
+    detalhes: string | null
+    ipAddress: string | null
+    createdAt: Date | null
+  }
+
+  export type AuditLogCountAggregateOutputType = {
+    id: number
+    userId: number
+    acao: number
+    modulo: number
+    detalhes: number
+    ipAddress: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AuditLogMinAggregateInputType = {
+    id?: true
+    userId?: true
+    acao?: true
+    modulo?: true
+    detalhes?: true
+    ipAddress?: true
+    createdAt?: true
+  }
+
+  export type AuditLogMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    acao?: true
+    modulo?: true
+    detalhes?: true
+    ipAddress?: true
+    createdAt?: true
+  }
+
+  export type AuditLogCountAggregateInputType = {
+    id?: true
+    userId?: true
+    acao?: true
+    modulo?: true
+    detalhes?: true
+    ipAddress?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AuditLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AuditLog to aggregate.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AuditLogs
+    **/
+    _count?: true | AuditLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AuditLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AuditLogMaxAggregateInputType
+  }
+
+  export type GetAuditLogAggregateType<T extends AuditLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateAuditLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAuditLog[P]>
+      : GetScalarType<T[P], AggregateAuditLog[P]>
+  }
+
+
+
+
+  export type AuditLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AuditLogWhereInput
+    orderBy?: AuditLogOrderByWithAggregationInput | AuditLogOrderByWithAggregationInput[]
+    by: AuditLogScalarFieldEnum[] | AuditLogScalarFieldEnum
+    having?: AuditLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AuditLogCountAggregateInputType | true
+    _min?: AuditLogMinAggregateInputType
+    _max?: AuditLogMaxAggregateInputType
+  }
+
+  export type AuditLogGroupByOutputType = {
+    id: string
+    userId: string
+    acao: string
+    modulo: string
+    detalhes: string
+    ipAddress: string | null
+    createdAt: Date
+    _count: AuditLogCountAggregateOutputType | null
+    _min: AuditLogMinAggregateOutputType | null
+    _max: AuditLogMaxAggregateOutputType | null
+  }
+
+  type GetAuditLogGroupByPayload<T extends AuditLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AuditLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AuditLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AuditLogGroupByOutputType[P]>
+            : GetScalarType<T[P], AuditLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AuditLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    acao?: boolean
+    modulo?: boolean
+    detalhes?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["auditLog"]>
+
+  export type AuditLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    acao?: boolean
+    modulo?: boolean
+    detalhes?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["auditLog"]>
+
+  export type AuditLogSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    acao?: boolean
+    modulo?: boolean
+    detalhes?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["auditLog"]>
+
+  export type AuditLogSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    acao?: boolean
+    modulo?: boolean
+    detalhes?: boolean
+    ipAddress?: boolean
+    createdAt?: boolean
+  }
+
+  export type AuditLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "acao" | "modulo" | "detalhes" | "ipAddress" | "createdAt", ExtArgs["result"]["auditLog"]>
+  export type AuditLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AuditLogIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type AuditLogIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $AuditLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AuditLog"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      acao: string
+      modulo: string
+      detalhes: string
+      ipAddress: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["auditLog"]>
+    composites: {}
+  }
+
+  type AuditLogGetPayload<S extends boolean | null | undefined | AuditLogDefaultArgs> = $Result.GetResult<Prisma.$AuditLogPayload, S>
+
+  type AuditLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AuditLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AuditLogCountAggregateInputType | true
+    }
+
+  export interface AuditLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AuditLog'], meta: { name: 'AuditLog' } }
+    /**
+     * Find zero or one AuditLog that matches the filter.
+     * @param {AuditLogFindUniqueArgs} args - Arguments to find a AuditLog
+     * @example
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AuditLogFindUniqueArgs>(args: SelectSubset<T, AuditLogFindUniqueArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AuditLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AuditLogFindUniqueOrThrowArgs} args - Arguments to find a AuditLog
+     * @example
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AuditLogFindUniqueOrThrowArgs>(args: SelectSubset<T, AuditLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AuditLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogFindFirstArgs} args - Arguments to find a AuditLog
+     * @example
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AuditLogFindFirstArgs>(args?: SelectSubset<T, AuditLogFindFirstArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AuditLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogFindFirstOrThrowArgs} args - Arguments to find a AuditLog
+     * @example
+     * // Get one AuditLog
+     * const auditLog = await prisma.auditLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AuditLogFindFirstOrThrowArgs>(args?: SelectSubset<T, AuditLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AuditLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AuditLogs
+     * const auditLogs = await prisma.auditLog.findMany()
+     * 
+     * // Get first 10 AuditLogs
+     * const auditLogs = await prisma.auditLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const auditLogWithIdOnly = await prisma.auditLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AuditLogFindManyArgs>(args?: SelectSubset<T, AuditLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AuditLog.
+     * @param {AuditLogCreateArgs} args - Arguments to create a AuditLog.
+     * @example
+     * // Create one AuditLog
+     * const AuditLog = await prisma.auditLog.create({
+     *   data: {
+     *     // ... data to create a AuditLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends AuditLogCreateArgs>(args: SelectSubset<T, AuditLogCreateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AuditLogs.
+     * @param {AuditLogCreateManyArgs} args - Arguments to create many AuditLogs.
+     * @example
+     * // Create many AuditLogs
+     * const auditLog = await prisma.auditLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AuditLogCreateManyArgs>(args?: SelectSubset<T, AuditLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AuditLogs and returns the data saved in the database.
+     * @param {AuditLogCreateManyAndReturnArgs} args - Arguments to create many AuditLogs.
+     * @example
+     * // Create many AuditLogs
+     * const auditLog = await prisma.auditLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AuditLogs and only return the `id`
+     * const auditLogWithIdOnly = await prisma.auditLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AuditLogCreateManyAndReturnArgs>(args?: SelectSubset<T, AuditLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AuditLog.
+     * @param {AuditLogDeleteArgs} args - Arguments to delete one AuditLog.
+     * @example
+     * // Delete one AuditLog
+     * const AuditLog = await prisma.auditLog.delete({
+     *   where: {
+     *     // ... filter to delete one AuditLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AuditLogDeleteArgs>(args: SelectSubset<T, AuditLogDeleteArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AuditLog.
+     * @param {AuditLogUpdateArgs} args - Arguments to update one AuditLog.
+     * @example
+     * // Update one AuditLog
+     * const auditLog = await prisma.auditLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AuditLogUpdateArgs>(args: SelectSubset<T, AuditLogUpdateArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AuditLogs.
+     * @param {AuditLogDeleteManyArgs} args - Arguments to filter AuditLogs to delete.
+     * @example
+     * // Delete a few AuditLogs
+     * const { count } = await prisma.auditLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AuditLogDeleteManyArgs>(args?: SelectSubset<T, AuditLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AuditLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AuditLogs
+     * const auditLog = await prisma.auditLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AuditLogUpdateManyArgs>(args: SelectSubset<T, AuditLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AuditLogs and returns the data updated in the database.
+     * @param {AuditLogUpdateManyAndReturnArgs} args - Arguments to update many AuditLogs.
+     * @example
+     * // Update many AuditLogs
+     * const auditLog = await prisma.auditLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AuditLogs and only return the `id`
+     * const auditLogWithIdOnly = await prisma.auditLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AuditLogUpdateManyAndReturnArgs>(args: SelectSubset<T, AuditLogUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AuditLog.
+     * @param {AuditLogUpsertArgs} args - Arguments to update or create a AuditLog.
+     * @example
+     * // Update or create a AuditLog
+     * const auditLog = await prisma.auditLog.upsert({
+     *   create: {
+     *     // ... data to create a AuditLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AuditLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AuditLogUpsertArgs>(args: SelectSubset<T, AuditLogUpsertArgs<ExtArgs>>): Prisma__AuditLogClient<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AuditLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogCountArgs} args - Arguments to filter AuditLogs to count.
+     * @example
+     * // Count the number of AuditLogs
+     * const count = await prisma.auditLog.count({
+     *   where: {
+     *     // ... the filter for the AuditLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends AuditLogCountArgs>(
+      args?: Subset<T, AuditLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AuditLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AuditLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AuditLogAggregateArgs>(args: Subset<T, AuditLogAggregateArgs>): Prisma.PrismaPromise<GetAuditLogAggregateType<T>>
+
+    /**
+     * Group by AuditLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AuditLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AuditLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AuditLogGroupByArgs['orderBy'] }
+        : { orderBy?: AuditLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AuditLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAuditLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AuditLog model
+   */
+  readonly fields: AuditLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AuditLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AuditLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AuditLog model
+   */
+  interface AuditLogFieldRefs {
+    readonly id: FieldRef<"AuditLog", 'String'>
+    readonly userId: FieldRef<"AuditLog", 'String'>
+    readonly acao: FieldRef<"AuditLog", 'String'>
+    readonly modulo: FieldRef<"AuditLog", 'String'>
+    readonly detalhes: FieldRef<"AuditLog", 'String'>
+    readonly ipAddress: FieldRef<"AuditLog", 'String'>
+    readonly createdAt: FieldRef<"AuditLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AuditLog findUnique
+   */
+  export type AuditLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog findUniqueOrThrow
+   */
+  export type AuditLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog findFirst
+   */
+  export type AuditLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AuditLogs.
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AuditLogs.
+     */
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * AuditLog findFirstOrThrow
+   */
+  export type AuditLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditLog to fetch.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AuditLogs.
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AuditLogs.
+     */
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * AuditLog findMany
+   */
+  export type AuditLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter, which AuditLogs to fetch.
+     */
+    where?: AuditLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AuditLogs to fetch.
+     */
+    orderBy?: AuditLogOrderByWithRelationInput | AuditLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AuditLogs.
+     */
+    cursor?: AuditLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AuditLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AuditLogs.
+     */
+    skip?: number
+    distinct?: AuditLogScalarFieldEnum | AuditLogScalarFieldEnum[]
+  }
+
+  /**
+   * AuditLog create
+   */
+  export type AuditLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a AuditLog.
+     */
+    data: XOR<AuditLogCreateInput, AuditLogUncheckedCreateInput>
+  }
+
+  /**
+   * AuditLog createMany
+   */
+  export type AuditLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AuditLogs.
+     */
+    data: AuditLogCreateManyInput | AuditLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AuditLog createManyAndReturn
+   */
+  export type AuditLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many AuditLogs.
+     */
+    data: AuditLogCreateManyInput | AuditLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AuditLog update
+   */
+  export type AuditLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a AuditLog.
+     */
+    data: XOR<AuditLogUpdateInput, AuditLogUncheckedUpdateInput>
+    /**
+     * Choose, which AuditLog to update.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog updateMany
+   */
+  export type AuditLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AuditLogs.
+     */
+    data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyInput>
+    /**
+     * Filter which AuditLogs to update
+     */
+    where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AuditLog updateManyAndReturn
+   */
+  export type AuditLogUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * The data used to update AuditLogs.
+     */
+    data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyInput>
+    /**
+     * Filter which AuditLogs to update
+     */
+    where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * AuditLog upsert
+   */
+  export type AuditLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the AuditLog to update in case it exists.
+     */
+    where: AuditLogWhereUniqueInput
+    /**
+     * In case the AuditLog found by the `where` argument doesn't exist, create a new AuditLog with this data.
+     */
+    create: XOR<AuditLogCreateInput, AuditLogUncheckedCreateInput>
+    /**
+     * In case the AuditLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AuditLogUpdateInput, AuditLogUncheckedUpdateInput>
+  }
+
+  /**
+   * AuditLog delete
+   */
+  export type AuditLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+    /**
+     * Filter which AuditLog to delete.
+     */
+    where: AuditLogWhereUniqueInput
+  }
+
+  /**
+   * AuditLog deleteMany
+   */
+  export type AuditLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AuditLogs to delete
+     */
+    where?: AuditLogWhereInput
+    /**
+     * Limit how many AuditLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AuditLog without action
+   */
+  export type AuditLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AuditLog
+     */
+    select?: AuditLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AuditLog
+     */
+    omit?: AuditLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: AuditLogInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Visita
+   */
+
+  export type AggregateVisita = {
+    _count: VisitaCountAggregateOutputType | null
+    _avg: VisitaAvgAggregateOutputType | null
+    _sum: VisitaSumAggregateOutputType | null
+    _min: VisitaMinAggregateOutputType | null
+    _max: VisitaMaxAggregateOutputType | null
+  }
+
+  export type VisitaAvgAggregateOutputType = {
+    prontuario: number | null
+    senha: number | null
+  }
+
+  export type VisitaSumAggregateOutputType = {
+    prontuario: number | null
+    senha: number | null
+  }
+
+  export type VisitaMinAggregateOutputType = {
+    id: string | null
+    prontuario: number | null
+    senha: number | null
+    custodiado: string | null
+    localizacao: string | null
+    ala: string | null
+    prioridade: string | null
+    cela: string | null
+    cpfVisitante: string | null
+    nomeVisitante: string | null
+    relacao: string | null
+    situacao: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VisitaMaxAggregateOutputType = {
+    id: string | null
+    prontuario: number | null
+    senha: number | null
+    custodiado: string | null
+    localizacao: string | null
+    ala: string | null
+    prioridade: string | null
+    cela: string | null
+    cpfVisitante: string | null
+    nomeVisitante: string | null
+    relacao: string | null
+    situacao: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VisitaCountAggregateOutputType = {
+    id: number
+    prontuario: number
+    senha: number
+    custodiado: number
+    localizacao: number
+    ala: number
+    prioridade: number
+    cela: number
+    cpfVisitante: number
+    nomeVisitante: number
+    relacao: number
+    situacao: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VisitaAvgAggregateInputType = {
+    prontuario?: true
+    senha?: true
+  }
+
+  export type VisitaSumAggregateInputType = {
+    prontuario?: true
+    senha?: true
+  }
+
+  export type VisitaMinAggregateInputType = {
+    id?: true
+    prontuario?: true
+    senha?: true
+    custodiado?: true
+    localizacao?: true
+    ala?: true
+    prioridade?: true
+    cela?: true
+    cpfVisitante?: true
+    nomeVisitante?: true
+    relacao?: true
+    situacao?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VisitaMaxAggregateInputType = {
+    id?: true
+    prontuario?: true
+    senha?: true
+    custodiado?: true
+    localizacao?: true
+    ala?: true
+    prioridade?: true
+    cela?: true
+    cpfVisitante?: true
+    nomeVisitante?: true
+    relacao?: true
+    situacao?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VisitaCountAggregateInputType = {
+    id?: true
+    prontuario?: true
+    senha?: true
+    custodiado?: true
+    localizacao?: true
+    ala?: true
+    prioridade?: true
+    cela?: true
+    cpfVisitante?: true
+    nomeVisitante?: true
+    relacao?: true
+    situacao?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VisitaAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Visita to aggregate.
+     */
+    where?: VisitaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Visitas to fetch.
+     */
+    orderBy?: VisitaOrderByWithRelationInput | VisitaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VisitaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Visitas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Visitas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Visitas
+    **/
+    _count?: true | VisitaCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: VisitaAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: VisitaSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VisitaMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VisitaMaxAggregateInputType
+  }
+
+  export type GetVisitaAggregateType<T extends VisitaAggregateArgs> = {
+        [P in keyof T & keyof AggregateVisita]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVisita[P]>
+      : GetScalarType<T[P], AggregateVisita[P]>
+  }
+
+
+
+
+  export type VisitaGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VisitaWhereInput
+    orderBy?: VisitaOrderByWithAggregationInput | VisitaOrderByWithAggregationInput[]
+    by: VisitaScalarFieldEnum[] | VisitaScalarFieldEnum
+    having?: VisitaScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VisitaCountAggregateInputType | true
+    _avg?: VisitaAvgAggregateInputType
+    _sum?: VisitaSumAggregateInputType
+    _min?: VisitaMinAggregateInputType
+    _max?: VisitaMaxAggregateInputType
+  }
+
+  export type VisitaGroupByOutputType = {
+    id: string
+    prontuario: number
+    senha: number
+    custodiado: string
+    localizacao: string
+    ala: string
+    prioridade: string
+    cela: string
+    cpfVisitante: string
+    nomeVisitante: string
+    relacao: string
+    situacao: string
+    createdAt: Date
+    updatedAt: Date
+    _count: VisitaCountAggregateOutputType | null
+    _avg: VisitaAvgAggregateOutputType | null
+    _sum: VisitaSumAggregateOutputType | null
+    _min: VisitaMinAggregateOutputType | null
+    _max: VisitaMaxAggregateOutputType | null
+  }
+
+  type GetVisitaGroupByPayload<T extends VisitaGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VisitaGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VisitaGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VisitaGroupByOutputType[P]>
+            : GetScalarType<T[P], VisitaGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VisitaSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    prontuario?: boolean
+    senha?: boolean
+    custodiado?: boolean
+    localizacao?: boolean
+    ala?: boolean
+    prioridade?: boolean
+    cela?: boolean
+    cpfVisitante?: boolean
+    nomeVisitante?: boolean
+    relacao?: boolean
+    situacao?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["visita"]>
+
+  export type VisitaSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    prontuario?: boolean
+    senha?: boolean
+    custodiado?: boolean
+    localizacao?: boolean
+    ala?: boolean
+    prioridade?: boolean
+    cela?: boolean
+    cpfVisitante?: boolean
+    nomeVisitante?: boolean
+    relacao?: boolean
+    situacao?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["visita"]>
+
+  export type VisitaSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    prontuario?: boolean
+    senha?: boolean
+    custodiado?: boolean
+    localizacao?: boolean
+    ala?: boolean
+    prioridade?: boolean
+    cela?: boolean
+    cpfVisitante?: boolean
+    nomeVisitante?: boolean
+    relacao?: boolean
+    situacao?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["visita"]>
+
+  export type VisitaSelectScalar = {
+    id?: boolean
+    prontuario?: boolean
+    senha?: boolean
+    custodiado?: boolean
+    localizacao?: boolean
+    ala?: boolean
+    prioridade?: boolean
+    cela?: boolean
+    cpfVisitante?: boolean
+    nomeVisitante?: boolean
+    relacao?: boolean
+    situacao?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type VisitaOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "prontuario" | "senha" | "custodiado" | "localizacao" | "ala" | "prioridade" | "cela" | "cpfVisitante" | "nomeVisitante" | "relacao" | "situacao" | "createdAt" | "updatedAt", ExtArgs["result"]["visita"]>
+
+  export type $VisitaPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Visita"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      prontuario: number
+      senha: number
+      custodiado: string
+      localizacao: string
+      ala: string
+      prioridade: string
+      cela: string
+      cpfVisitante: string
+      nomeVisitante: string
+      relacao: string
+      situacao: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["visita"]>
+    composites: {}
+  }
+
+  type VisitaGetPayload<S extends boolean | null | undefined | VisitaDefaultArgs> = $Result.GetResult<Prisma.$VisitaPayload, S>
+
+  type VisitaCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VisitaFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VisitaCountAggregateInputType | true
+    }
+
+  export interface VisitaDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Visita'], meta: { name: 'Visita' } }
+    /**
+     * Find zero or one Visita that matches the filter.
+     * @param {VisitaFindUniqueArgs} args - Arguments to find a Visita
+     * @example
+     * // Get one Visita
+     * const visita = await prisma.visita.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VisitaFindUniqueArgs>(args: SelectSubset<T, VisitaFindUniqueArgs<ExtArgs>>): Prisma__VisitaClient<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Visita that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VisitaFindUniqueOrThrowArgs} args - Arguments to find a Visita
+     * @example
+     * // Get one Visita
+     * const visita = await prisma.visita.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VisitaFindUniqueOrThrowArgs>(args: SelectSubset<T, VisitaFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VisitaClient<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Visita that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisitaFindFirstArgs} args - Arguments to find a Visita
+     * @example
+     * // Get one Visita
+     * const visita = await prisma.visita.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VisitaFindFirstArgs>(args?: SelectSubset<T, VisitaFindFirstArgs<ExtArgs>>): Prisma__VisitaClient<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Visita that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisitaFindFirstOrThrowArgs} args - Arguments to find a Visita
+     * @example
+     * // Get one Visita
+     * const visita = await prisma.visita.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VisitaFindFirstOrThrowArgs>(args?: SelectSubset<T, VisitaFindFirstOrThrowArgs<ExtArgs>>): Prisma__VisitaClient<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Visitas that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisitaFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Visitas
+     * const visitas = await prisma.visita.findMany()
+     * 
+     * // Get first 10 Visitas
+     * const visitas = await prisma.visita.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const visitaWithIdOnly = await prisma.visita.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VisitaFindManyArgs>(args?: SelectSubset<T, VisitaFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Visita.
+     * @param {VisitaCreateArgs} args - Arguments to create a Visita.
+     * @example
+     * // Create one Visita
+     * const Visita = await prisma.visita.create({
+     *   data: {
+     *     // ... data to create a Visita
+     *   }
+     * })
+     * 
+     */
+    create<T extends VisitaCreateArgs>(args: SelectSubset<T, VisitaCreateArgs<ExtArgs>>): Prisma__VisitaClient<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Visitas.
+     * @param {VisitaCreateManyArgs} args - Arguments to create many Visitas.
+     * @example
+     * // Create many Visitas
+     * const visita = await prisma.visita.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VisitaCreateManyArgs>(args?: SelectSubset<T, VisitaCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Visitas and returns the data saved in the database.
+     * @param {VisitaCreateManyAndReturnArgs} args - Arguments to create many Visitas.
+     * @example
+     * // Create many Visitas
+     * const visita = await prisma.visita.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Visitas and only return the `id`
+     * const visitaWithIdOnly = await prisma.visita.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends VisitaCreateManyAndReturnArgs>(args?: SelectSubset<T, VisitaCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Visita.
+     * @param {VisitaDeleteArgs} args - Arguments to delete one Visita.
+     * @example
+     * // Delete one Visita
+     * const Visita = await prisma.visita.delete({
+     *   where: {
+     *     // ... filter to delete one Visita
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VisitaDeleteArgs>(args: SelectSubset<T, VisitaDeleteArgs<ExtArgs>>): Prisma__VisitaClient<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Visita.
+     * @param {VisitaUpdateArgs} args - Arguments to update one Visita.
+     * @example
+     * // Update one Visita
+     * const visita = await prisma.visita.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VisitaUpdateArgs>(args: SelectSubset<T, VisitaUpdateArgs<ExtArgs>>): Prisma__VisitaClient<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Visitas.
+     * @param {VisitaDeleteManyArgs} args - Arguments to filter Visitas to delete.
+     * @example
+     * // Delete a few Visitas
+     * const { count } = await prisma.visita.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VisitaDeleteManyArgs>(args?: SelectSubset<T, VisitaDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Visitas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisitaUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Visitas
+     * const visita = await prisma.visita.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VisitaUpdateManyArgs>(args: SelectSubset<T, VisitaUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Visitas and returns the data updated in the database.
+     * @param {VisitaUpdateManyAndReturnArgs} args - Arguments to update many Visitas.
+     * @example
+     * // Update many Visitas
+     * const visita = await prisma.visita.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Visitas and only return the `id`
+     * const visitaWithIdOnly = await prisma.visita.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends VisitaUpdateManyAndReturnArgs>(args: SelectSubset<T, VisitaUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Visita.
+     * @param {VisitaUpsertArgs} args - Arguments to update or create a Visita.
+     * @example
+     * // Update or create a Visita
+     * const visita = await prisma.visita.upsert({
+     *   create: {
+     *     // ... data to create a Visita
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Visita we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VisitaUpsertArgs>(args: SelectSubset<T, VisitaUpsertArgs<ExtArgs>>): Prisma__VisitaClient<$Result.GetResult<Prisma.$VisitaPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Visitas.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisitaCountArgs} args - Arguments to filter Visitas to count.
+     * @example
+     * // Count the number of Visitas
+     * const count = await prisma.visita.count({
+     *   where: {
+     *     // ... the filter for the Visitas we want to count
+     *   }
+     * })
+    **/
+    count<T extends VisitaCountArgs>(
+      args?: Subset<T, VisitaCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VisitaCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Visita.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisitaAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VisitaAggregateArgs>(args: Subset<T, VisitaAggregateArgs>): Prisma.PrismaPromise<GetVisitaAggregateType<T>>
+
+    /**
+     * Group by Visita.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VisitaGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VisitaGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VisitaGroupByArgs['orderBy'] }
+        : { orderBy?: VisitaGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VisitaGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVisitaGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Visita model
+   */
+  readonly fields: VisitaFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Visita.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VisitaClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Visita model
+   */
+  interface VisitaFieldRefs {
+    readonly id: FieldRef<"Visita", 'String'>
+    readonly prontuario: FieldRef<"Visita", 'Int'>
+    readonly senha: FieldRef<"Visita", 'Int'>
+    readonly custodiado: FieldRef<"Visita", 'String'>
+    readonly localizacao: FieldRef<"Visita", 'String'>
+    readonly ala: FieldRef<"Visita", 'String'>
+    readonly prioridade: FieldRef<"Visita", 'String'>
+    readonly cela: FieldRef<"Visita", 'String'>
+    readonly cpfVisitante: FieldRef<"Visita", 'String'>
+    readonly nomeVisitante: FieldRef<"Visita", 'String'>
+    readonly relacao: FieldRef<"Visita", 'String'>
+    readonly situacao: FieldRef<"Visita", 'String'>
+    readonly createdAt: FieldRef<"Visita", 'DateTime'>
+    readonly updatedAt: FieldRef<"Visita", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Visita findUnique
+   */
+  export type VisitaFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * Filter, which Visita to fetch.
+     */
+    where: VisitaWhereUniqueInput
+  }
+
+  /**
+   * Visita findUniqueOrThrow
+   */
+  export type VisitaFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * Filter, which Visita to fetch.
+     */
+    where: VisitaWhereUniqueInput
+  }
+
+  /**
+   * Visita findFirst
+   */
+  export type VisitaFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * Filter, which Visita to fetch.
+     */
+    where?: VisitaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Visitas to fetch.
+     */
+    orderBy?: VisitaOrderByWithRelationInput | VisitaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Visitas.
+     */
+    cursor?: VisitaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Visitas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Visitas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Visitas.
+     */
+    distinct?: VisitaScalarFieldEnum | VisitaScalarFieldEnum[]
+  }
+
+  /**
+   * Visita findFirstOrThrow
+   */
+  export type VisitaFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * Filter, which Visita to fetch.
+     */
+    where?: VisitaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Visitas to fetch.
+     */
+    orderBy?: VisitaOrderByWithRelationInput | VisitaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Visitas.
+     */
+    cursor?: VisitaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Visitas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Visitas.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Visitas.
+     */
+    distinct?: VisitaScalarFieldEnum | VisitaScalarFieldEnum[]
+  }
+
+  /**
+   * Visita findMany
+   */
+  export type VisitaFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * Filter, which Visitas to fetch.
+     */
+    where?: VisitaWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Visitas to fetch.
+     */
+    orderBy?: VisitaOrderByWithRelationInput | VisitaOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Visitas.
+     */
+    cursor?: VisitaWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Visitas from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Visitas.
+     */
+    skip?: number
+    distinct?: VisitaScalarFieldEnum | VisitaScalarFieldEnum[]
+  }
+
+  /**
+   * Visita create
+   */
+  export type VisitaCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Visita.
+     */
+    data: XOR<VisitaCreateInput, VisitaUncheckedCreateInput>
+  }
+
+  /**
+   * Visita createMany
+   */
+  export type VisitaCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Visitas.
+     */
+    data: VisitaCreateManyInput | VisitaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Visita createManyAndReturn
+   */
+  export type VisitaCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * The data used to create many Visitas.
+     */
+    data: VisitaCreateManyInput | VisitaCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Visita update
+   */
+  export type VisitaUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Visita.
+     */
+    data: XOR<VisitaUpdateInput, VisitaUncheckedUpdateInput>
+    /**
+     * Choose, which Visita to update.
+     */
+    where: VisitaWhereUniqueInput
+  }
+
+  /**
+   * Visita updateMany
+   */
+  export type VisitaUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Visitas.
+     */
+    data: XOR<VisitaUpdateManyMutationInput, VisitaUncheckedUpdateManyInput>
+    /**
+     * Filter which Visitas to update
+     */
+    where?: VisitaWhereInput
+    /**
+     * Limit how many Visitas to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Visita updateManyAndReturn
+   */
+  export type VisitaUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * The data used to update Visitas.
+     */
+    data: XOR<VisitaUpdateManyMutationInput, VisitaUncheckedUpdateManyInput>
+    /**
+     * Filter which Visitas to update
+     */
+    where?: VisitaWhereInput
+    /**
+     * Limit how many Visitas to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Visita upsert
+   */
+  export type VisitaUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Visita to update in case it exists.
+     */
+    where: VisitaWhereUniqueInput
+    /**
+     * In case the Visita found by the `where` argument doesn't exist, create a new Visita with this data.
+     */
+    create: XOR<VisitaCreateInput, VisitaUncheckedCreateInput>
+    /**
+     * In case the Visita was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VisitaUpdateInput, VisitaUncheckedUpdateInput>
+  }
+
+  /**
+   * Visita delete
+   */
+  export type VisitaDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
+    /**
+     * Filter which Visita to delete.
+     */
+    where: VisitaWhereUniqueInput
+  }
+
+  /**
+   * Visita deleteMany
+   */
+  export type VisitaDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Visitas to delete
+     */
+    where?: VisitaWhereInput
+    /**
+     * Limit how many Visitas to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Visita without action
+   */
+  export type VisitaDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Visita
+     */
+    select?: VisitaSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Visita
+     */
+    omit?: VisitaOmit<ExtArgs> | null
   }
 
 
@@ -11336,10 +14093,12 @@ export namespace Prisma {
   export const OcorrenciaScalarFieldEnum: {
     id: 'id',
     titulo: 'titulo',
-    categoria: 'categoria',
+    categoriaId: 'categoriaId',
     icone: 'icone',
     texto: 'texto',
     servidor: 'servidor',
+    criadoPorId: 'criadoPorId',
+    atualizadoPorId: 'atualizadoPorId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11354,6 +14113,39 @@ export namespace Prisma {
   };
 
   export type OcorrenciaCategoriaScalarFieldEnum = (typeof OcorrenciaCategoriaScalarFieldEnum)[keyof typeof OcorrenciaCategoriaScalarFieldEnum]
+
+
+  export const AuditLogScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    acao: 'acao',
+    modulo: 'modulo',
+    detalhes: 'detalhes',
+    ipAddress: 'ipAddress',
+    createdAt: 'createdAt'
+  };
+
+  export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+  export const VisitaScalarFieldEnum: {
+    id: 'id',
+    prontuario: 'prontuario',
+    senha: 'senha',
+    custodiado: 'custodiado',
+    localizacao: 'localizacao',
+    ala: 'ala',
+    prioridade: 'prioridade',
+    cela: 'cela',
+    cpfVisitante: 'cpfVisitante',
+    nomeVisitante: 'nomeVisitante',
+    relacao: 'relacao',
+    situacao: 'situacao',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VisitaScalarFieldEnum = (typeof VisitaScalarFieldEnum)[keyof typeof VisitaScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -11493,6 +14285,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
+    ocorrenciasCriadas?: OcorrenciaListRelationFilter
+    ocorrenciasAlteradas?: OcorrenciaListRelationFilter
+    logsAuditoria?: AuditLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -11506,6 +14301,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
+    ocorrenciasCriadas?: OcorrenciaOrderByRelationAggregateInput
+    ocorrenciasAlteradas?: OcorrenciaOrderByRelationAggregateInput
+    logsAuditoria?: AuditLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -11522,6 +14320,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
+    ocorrenciasCriadas?: OcorrenciaListRelationFilter
+    ocorrenciasAlteradas?: OcorrenciaListRelationFilter
+    logsAuditoria?: AuditLogListRelationFilter
   }, "id" | "username">
 
   export type UserOrderByWithAggregationInput = {
@@ -11916,23 +14717,33 @@ export namespace Prisma {
     NOT?: OcorrenciaWhereInput | OcorrenciaWhereInput[]
     id?: StringFilter<"Ocorrencia"> | string
     titulo?: StringFilter<"Ocorrencia"> | string
-    categoria?: StringFilter<"Ocorrencia"> | string
+    categoriaId?: StringFilter<"Ocorrencia"> | string
     icone?: StringFilter<"Ocorrencia"> | string
     texto?: StringFilter<"Ocorrencia"> | string
     servidor?: StringFilter<"Ocorrencia"> | string
+    criadoPorId?: StringFilter<"Ocorrencia"> | string
+    atualizadoPorId?: StringNullableFilter<"Ocorrencia"> | string | null
     createdAt?: DateTimeFilter<"Ocorrencia"> | Date | string
     updatedAt?: DateTimeFilter<"Ocorrencia"> | Date | string
+    categoria?: XOR<OcorrenciaCategoriaScalarRelationFilter, OcorrenciaCategoriaWhereInput>
+    criadoPor?: XOR<UserScalarRelationFilter, UserWhereInput>
+    atualizadoPor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }
 
   export type OcorrenciaOrderByWithRelationInput = {
     id?: SortOrder
     titulo?: SortOrder
-    categoria?: SortOrder
+    categoriaId?: SortOrder
     icone?: SortOrder
     texto?: SortOrder
     servidor?: SortOrder
+    criadoPorId?: SortOrder
+    atualizadoPorId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    categoria?: OcorrenciaCategoriaOrderByWithRelationInput
+    criadoPor?: UserOrderByWithRelationInput
+    atualizadoPor?: UserOrderByWithRelationInput
   }
 
   export type OcorrenciaWhereUniqueInput = Prisma.AtLeast<{
@@ -11941,21 +14752,28 @@ export namespace Prisma {
     OR?: OcorrenciaWhereInput[]
     NOT?: OcorrenciaWhereInput | OcorrenciaWhereInput[]
     titulo?: StringFilter<"Ocorrencia"> | string
-    categoria?: StringFilter<"Ocorrencia"> | string
+    categoriaId?: StringFilter<"Ocorrencia"> | string
     icone?: StringFilter<"Ocorrencia"> | string
     texto?: StringFilter<"Ocorrencia"> | string
     servidor?: StringFilter<"Ocorrencia"> | string
+    criadoPorId?: StringFilter<"Ocorrencia"> | string
+    atualizadoPorId?: StringNullableFilter<"Ocorrencia"> | string | null
     createdAt?: DateTimeFilter<"Ocorrencia"> | Date | string
     updatedAt?: DateTimeFilter<"Ocorrencia"> | Date | string
+    categoria?: XOR<OcorrenciaCategoriaScalarRelationFilter, OcorrenciaCategoriaWhereInput>
+    criadoPor?: XOR<UserScalarRelationFilter, UserWhereInput>
+    atualizadoPor?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
   }, "id">
 
   export type OcorrenciaOrderByWithAggregationInput = {
     id?: SortOrder
     titulo?: SortOrder
-    categoria?: SortOrder
+    categoriaId?: SortOrder
     icone?: SortOrder
     texto?: SortOrder
     servidor?: SortOrder
+    criadoPorId?: SortOrder
+    atualizadoPorId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: OcorrenciaCountOrderByAggregateInput
@@ -11969,10 +14787,12 @@ export namespace Prisma {
     NOT?: OcorrenciaScalarWhereWithAggregatesInput | OcorrenciaScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Ocorrencia"> | string
     titulo?: StringWithAggregatesFilter<"Ocorrencia"> | string
-    categoria?: StringWithAggregatesFilter<"Ocorrencia"> | string
+    categoriaId?: StringWithAggregatesFilter<"Ocorrencia"> | string
     icone?: StringWithAggregatesFilter<"Ocorrencia"> | string
     texto?: StringWithAggregatesFilter<"Ocorrencia"> | string
     servidor?: StringWithAggregatesFilter<"Ocorrencia"> | string
+    criadoPorId?: StringWithAggregatesFilter<"Ocorrencia"> | string
+    atualizadoPorId?: StringNullableWithAggregatesFilter<"Ocorrencia"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Ocorrencia"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Ocorrencia"> | Date | string
   }
@@ -11984,12 +14804,14 @@ export namespace Prisma {
     id?: StringFilter<"OcorrenciaCategoria"> | string
     nome?: StringFilter<"OcorrenciaCategoria"> | string
     createdAt?: DateTimeFilter<"OcorrenciaCategoria"> | Date | string
+    ocorrencias?: OcorrenciaListRelationFilter
   }
 
   export type OcorrenciaCategoriaOrderByWithRelationInput = {
     id?: SortOrder
     nome?: SortOrder
     createdAt?: SortOrder
+    ocorrencias?: OcorrenciaOrderByRelationAggregateInput
   }
 
   export type OcorrenciaCategoriaWhereUniqueInput = Prisma.AtLeast<{
@@ -11999,6 +14821,7 @@ export namespace Prisma {
     OR?: OcorrenciaCategoriaWhereInput[]
     NOT?: OcorrenciaCategoriaWhereInput | OcorrenciaCategoriaWhereInput[]
     createdAt?: DateTimeFilter<"OcorrenciaCategoria"> | Date | string
+    ocorrencias?: OcorrenciaListRelationFilter
   }, "id" | "nome">
 
   export type OcorrenciaCategoriaOrderByWithAggregationInput = {
@@ -12019,6 +14842,170 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"OcorrenciaCategoria"> | Date | string
   }
 
+  export type AuditLogWhereInput = {
+    AND?: AuditLogWhereInput | AuditLogWhereInput[]
+    OR?: AuditLogWhereInput[]
+    NOT?: AuditLogWhereInput | AuditLogWhereInput[]
+    id?: StringFilter<"AuditLog"> | string
+    userId?: StringFilter<"AuditLog"> | string
+    acao?: StringFilter<"AuditLog"> | string
+    modulo?: StringFilter<"AuditLog"> | string
+    detalhes?: StringFilter<"AuditLog"> | string
+    ipAddress?: StringNullableFilter<"AuditLog"> | string | null
+    createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type AuditLogOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    acao?: SortOrder
+    modulo?: SortOrder
+    detalhes?: SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type AuditLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: AuditLogWhereInput | AuditLogWhereInput[]
+    OR?: AuditLogWhereInput[]
+    NOT?: AuditLogWhereInput | AuditLogWhereInput[]
+    userId?: StringFilter<"AuditLog"> | string
+    acao?: StringFilter<"AuditLog"> | string
+    modulo?: StringFilter<"AuditLog"> | string
+    detalhes?: StringFilter<"AuditLog"> | string
+    ipAddress?: StringNullableFilter<"AuditLog"> | string | null
+    createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type AuditLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    acao?: SortOrder
+    modulo?: SortOrder
+    detalhes?: SortOrder
+    ipAddress?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: AuditLogCountOrderByAggregateInput
+    _max?: AuditLogMaxOrderByAggregateInput
+    _min?: AuditLogMinOrderByAggregateInput
+  }
+
+  export type AuditLogScalarWhereWithAggregatesInput = {
+    AND?: AuditLogScalarWhereWithAggregatesInput | AuditLogScalarWhereWithAggregatesInput[]
+    OR?: AuditLogScalarWhereWithAggregatesInput[]
+    NOT?: AuditLogScalarWhereWithAggregatesInput | AuditLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AuditLog"> | string
+    userId?: StringWithAggregatesFilter<"AuditLog"> | string
+    acao?: StringWithAggregatesFilter<"AuditLog"> | string
+    modulo?: StringWithAggregatesFilter<"AuditLog"> | string
+    detalhes?: StringWithAggregatesFilter<"AuditLog"> | string
+    ipAddress?: StringNullableWithAggregatesFilter<"AuditLog"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"AuditLog"> | Date | string
+  }
+
+  export type VisitaWhereInput = {
+    AND?: VisitaWhereInput | VisitaWhereInput[]
+    OR?: VisitaWhereInput[]
+    NOT?: VisitaWhereInput | VisitaWhereInput[]
+    id?: StringFilter<"Visita"> | string
+    prontuario?: IntFilter<"Visita"> | number
+    senha?: IntFilter<"Visita"> | number
+    custodiado?: StringFilter<"Visita"> | string
+    localizacao?: StringFilter<"Visita"> | string
+    ala?: StringFilter<"Visita"> | string
+    prioridade?: StringFilter<"Visita"> | string
+    cela?: StringFilter<"Visita"> | string
+    cpfVisitante?: StringFilter<"Visita"> | string
+    nomeVisitante?: StringFilter<"Visita"> | string
+    relacao?: StringFilter<"Visita"> | string
+    situacao?: StringFilter<"Visita"> | string
+    createdAt?: DateTimeFilter<"Visita"> | Date | string
+    updatedAt?: DateTimeFilter<"Visita"> | Date | string
+  }
+
+  export type VisitaOrderByWithRelationInput = {
+    id?: SortOrder
+    prontuario?: SortOrder
+    senha?: SortOrder
+    custodiado?: SortOrder
+    localizacao?: SortOrder
+    ala?: SortOrder
+    prioridade?: SortOrder
+    cela?: SortOrder
+    cpfVisitante?: SortOrder
+    nomeVisitante?: SortOrder
+    relacao?: SortOrder
+    situacao?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VisitaWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: VisitaWhereInput | VisitaWhereInput[]
+    OR?: VisitaWhereInput[]
+    NOT?: VisitaWhereInput | VisitaWhereInput[]
+    prontuario?: IntFilter<"Visita"> | number
+    senha?: IntFilter<"Visita"> | number
+    custodiado?: StringFilter<"Visita"> | string
+    localizacao?: StringFilter<"Visita"> | string
+    ala?: StringFilter<"Visita"> | string
+    prioridade?: StringFilter<"Visita"> | string
+    cela?: StringFilter<"Visita"> | string
+    cpfVisitante?: StringFilter<"Visita"> | string
+    nomeVisitante?: StringFilter<"Visita"> | string
+    relacao?: StringFilter<"Visita"> | string
+    situacao?: StringFilter<"Visita"> | string
+    createdAt?: DateTimeFilter<"Visita"> | Date | string
+    updatedAt?: DateTimeFilter<"Visita"> | Date | string
+  }, "id">
+
+  export type VisitaOrderByWithAggregationInput = {
+    id?: SortOrder
+    prontuario?: SortOrder
+    senha?: SortOrder
+    custodiado?: SortOrder
+    localizacao?: SortOrder
+    ala?: SortOrder
+    prioridade?: SortOrder
+    cela?: SortOrder
+    cpfVisitante?: SortOrder
+    nomeVisitante?: SortOrder
+    relacao?: SortOrder
+    situacao?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: VisitaCountOrderByAggregateInput
+    _avg?: VisitaAvgOrderByAggregateInput
+    _max?: VisitaMaxOrderByAggregateInput
+    _min?: VisitaMinOrderByAggregateInput
+    _sum?: VisitaSumOrderByAggregateInput
+  }
+
+  export type VisitaScalarWhereWithAggregatesInput = {
+    AND?: VisitaScalarWhereWithAggregatesInput | VisitaScalarWhereWithAggregatesInput[]
+    OR?: VisitaScalarWhereWithAggregatesInput[]
+    NOT?: VisitaScalarWhereWithAggregatesInput | VisitaScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Visita"> | string
+    prontuario?: IntWithAggregatesFilter<"Visita"> | number
+    senha?: IntWithAggregatesFilter<"Visita"> | number
+    custodiado?: StringWithAggregatesFilter<"Visita"> | string
+    localizacao?: StringWithAggregatesFilter<"Visita"> | string
+    ala?: StringWithAggregatesFilter<"Visita"> | string
+    prioridade?: StringWithAggregatesFilter<"Visita"> | string
+    cela?: StringWithAggregatesFilter<"Visita"> | string
+    cpfVisitante?: StringWithAggregatesFilter<"Visita"> | string
+    nomeVisitante?: StringWithAggregatesFilter<"Visita"> | string
+    relacao?: StringWithAggregatesFilter<"Visita"> | string
+    situacao?: StringWithAggregatesFilter<"Visita"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Visita"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Visita"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -12030,6 +15017,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
+    ocorrenciasCriadas?: OcorrenciaCreateNestedManyWithoutCriadoPorInput
+    ocorrenciasAlteradas?: OcorrenciaCreateNestedManyWithoutAtualizadoPorInput
+    logsAuditoria?: AuditLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -12043,6 +15033,9 @@ export namespace Prisma {
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    ocorrenciasCriadas?: OcorrenciaUncheckedCreateNestedManyWithoutCriadoPorInput
+    ocorrenciasAlteradas?: OcorrenciaUncheckedCreateNestedManyWithoutAtualizadoPorInput
+    logsAuditoria?: AuditLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -12056,6 +15049,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    ocorrenciasCriadas?: OcorrenciaUpdateManyWithoutCriadoPorNestedInput
+    ocorrenciasAlteradas?: OcorrenciaUpdateManyWithoutAtualizadoPorNestedInput
+    logsAuditoria?: AuditLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -12069,6 +15065,9 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    ocorrenciasCriadas?: OcorrenciaUncheckedUpdateManyWithoutCriadoPorNestedInput
+    ocorrenciasAlteradas?: OcorrenciaUncheckedUpdateManyWithoutAtualizadoPorNestedInput
+    logsAuditoria?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -12479,21 +15478,25 @@ export namespace Prisma {
   export type OcorrenciaCreateInput = {
     id?: string
     titulo: string
-    categoria: string
     icone?: string
     texto: string
     servidor: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    categoria: OcorrenciaCategoriaCreateNestedOneWithoutOcorrenciasInput
+    criadoPor: UserCreateNestedOneWithoutOcorrenciasCriadasInput
+    atualizadoPor?: UserCreateNestedOneWithoutOcorrenciasAlteradasInput
   }
 
   export type OcorrenciaUncheckedCreateInput = {
     id?: string
     titulo: string
-    categoria: string
+    categoriaId: string
     icone?: string
     texto: string
     servidor: string
+    criadoPorId: string
+    atualizadoPorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12501,21 +15504,25 @@ export namespace Prisma {
   export type OcorrenciaUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     titulo?: StringFieldUpdateOperationsInput | string
-    categoria?: StringFieldUpdateOperationsInput | string
     icone?: StringFieldUpdateOperationsInput | string
     texto?: StringFieldUpdateOperationsInput | string
     servidor?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoria?: OcorrenciaCategoriaUpdateOneRequiredWithoutOcorrenciasNestedInput
+    criadoPor?: UserUpdateOneRequiredWithoutOcorrenciasCriadasNestedInput
+    atualizadoPor?: UserUpdateOneWithoutOcorrenciasAlteradasNestedInput
   }
 
   export type OcorrenciaUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     titulo?: StringFieldUpdateOperationsInput | string
-    categoria?: StringFieldUpdateOperationsInput | string
+    categoriaId?: StringFieldUpdateOperationsInput | string
     icone?: StringFieldUpdateOperationsInput | string
     texto?: StringFieldUpdateOperationsInput | string
     servidor?: StringFieldUpdateOperationsInput | string
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12523,10 +15530,12 @@ export namespace Prisma {
   export type OcorrenciaCreateManyInput = {
     id?: string
     titulo: string
-    categoria: string
+    categoriaId: string
     icone?: string
     texto: string
     servidor: string
+    criadoPorId: string
+    atualizadoPorId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12534,7 +15543,6 @@ export namespace Prisma {
   export type OcorrenciaUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     titulo?: StringFieldUpdateOperationsInput | string
-    categoria?: StringFieldUpdateOperationsInput | string
     icone?: StringFieldUpdateOperationsInput | string
     texto?: StringFieldUpdateOperationsInput | string
     servidor?: StringFieldUpdateOperationsInput | string
@@ -12545,10 +15553,12 @@ export namespace Prisma {
   export type OcorrenciaUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     titulo?: StringFieldUpdateOperationsInput | string
-    categoria?: StringFieldUpdateOperationsInput | string
+    categoriaId?: StringFieldUpdateOperationsInput | string
     icone?: StringFieldUpdateOperationsInput | string
     texto?: StringFieldUpdateOperationsInput | string
     servidor?: StringFieldUpdateOperationsInput | string
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12557,24 +15567,28 @@ export namespace Prisma {
     id?: string
     nome: string
     createdAt?: Date | string
+    ocorrencias?: OcorrenciaCreateNestedManyWithoutCategoriaInput
   }
 
   export type OcorrenciaCategoriaUncheckedCreateInput = {
     id?: string
     nome: string
     createdAt?: Date | string
+    ocorrencias?: OcorrenciaUncheckedCreateNestedManyWithoutCategoriaInput
   }
 
   export type OcorrenciaCategoriaUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ocorrencias?: OcorrenciaUpdateManyWithoutCategoriaNestedInput
   }
 
   export type OcorrenciaCategoriaUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ocorrencias?: OcorrenciaUncheckedUpdateManyWithoutCategoriaNestedInput
   }
 
   export type OcorrenciaCategoriaCreateManyInput = {
@@ -12593,6 +15607,194 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     nome?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogCreateInput = {
+    id?: string
+    acao: string
+    modulo: string
+    detalhes: string
+    ipAddress?: string | null
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutLogsAuditoriaInput
+  }
+
+  export type AuditLogUncheckedCreateInput = {
+    id?: string
+    userId: string
+    acao: string
+    modulo: string
+    detalhes: string
+    ipAddress?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AuditLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    modulo?: StringFieldUpdateOperationsInput | string
+    detalhes?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutLogsAuditoriaNestedInput
+  }
+
+  export type AuditLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    modulo?: StringFieldUpdateOperationsInput | string
+    detalhes?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogCreateManyInput = {
+    id?: string
+    userId: string
+    acao: string
+    modulo: string
+    detalhes: string
+    ipAddress?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AuditLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    modulo?: StringFieldUpdateOperationsInput | string
+    detalhes?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    modulo?: StringFieldUpdateOperationsInput | string
+    detalhes?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VisitaCreateInput = {
+    id?: string
+    prontuario: number
+    senha: number
+    custodiado: string
+    localizacao: string
+    ala: string
+    prioridade: string
+    cela: string
+    cpfVisitante: string
+    nomeVisitante: string
+    relacao: string
+    situacao: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VisitaUncheckedCreateInput = {
+    id?: string
+    prontuario: number
+    senha: number
+    custodiado: string
+    localizacao: string
+    ala: string
+    prioridade: string
+    cela: string
+    cpfVisitante: string
+    nomeVisitante: string
+    relacao: string
+    situacao: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VisitaUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    prontuario?: IntFieldUpdateOperationsInput | number
+    senha?: IntFieldUpdateOperationsInput | number
+    custodiado?: StringFieldUpdateOperationsInput | string
+    localizacao?: StringFieldUpdateOperationsInput | string
+    ala?: StringFieldUpdateOperationsInput | string
+    prioridade?: StringFieldUpdateOperationsInput | string
+    cela?: StringFieldUpdateOperationsInput | string
+    cpfVisitante?: StringFieldUpdateOperationsInput | string
+    nomeVisitante?: StringFieldUpdateOperationsInput | string
+    relacao?: StringFieldUpdateOperationsInput | string
+    situacao?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VisitaUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    prontuario?: IntFieldUpdateOperationsInput | number
+    senha?: IntFieldUpdateOperationsInput | number
+    custodiado?: StringFieldUpdateOperationsInput | string
+    localizacao?: StringFieldUpdateOperationsInput | string
+    ala?: StringFieldUpdateOperationsInput | string
+    prioridade?: StringFieldUpdateOperationsInput | string
+    cela?: StringFieldUpdateOperationsInput | string
+    cpfVisitante?: StringFieldUpdateOperationsInput | string
+    nomeVisitante?: StringFieldUpdateOperationsInput | string
+    relacao?: StringFieldUpdateOperationsInput | string
+    situacao?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VisitaCreateManyInput = {
+    id?: string
+    prontuario: number
+    senha: number
+    custodiado: string
+    localizacao: string
+    ala: string
+    prioridade: string
+    cela: string
+    cpfVisitante: string
+    nomeVisitante: string
+    relacao: string
+    situacao: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VisitaUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    prontuario?: IntFieldUpdateOperationsInput | number
+    senha?: IntFieldUpdateOperationsInput | number
+    custodiado?: StringFieldUpdateOperationsInput | string
+    localizacao?: StringFieldUpdateOperationsInput | string
+    ala?: StringFieldUpdateOperationsInput | string
+    prioridade?: StringFieldUpdateOperationsInput | string
+    cela?: StringFieldUpdateOperationsInput | string
+    cpfVisitante?: StringFieldUpdateOperationsInput | string
+    nomeVisitante?: StringFieldUpdateOperationsInput | string
+    relacao?: StringFieldUpdateOperationsInput | string
+    situacao?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VisitaUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    prontuario?: IntFieldUpdateOperationsInput | number
+    senha?: IntFieldUpdateOperationsInput | number
+    custodiado?: StringFieldUpdateOperationsInput | string
+    localizacao?: StringFieldUpdateOperationsInput | string
+    ala?: StringFieldUpdateOperationsInput | string
+    prioridade?: StringFieldUpdateOperationsInput | string
+    cela?: StringFieldUpdateOperationsInput | string
+    cpfVisitante?: StringFieldUpdateOperationsInput | string
+    nomeVisitante?: StringFieldUpdateOperationsInput | string
+    relacao?: StringFieldUpdateOperationsInput | string
+    situacao?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -12645,11 +15847,31 @@ export namespace Prisma {
     none?: SessionWhereInput
   }
 
+  export type OcorrenciaListRelationFilter = {
+    every?: OcorrenciaWhereInput
+    some?: OcorrenciaWhereInput
+    none?: OcorrenciaWhereInput
+  }
+
+  export type AuditLogListRelationFilter = {
+    every?: AuditLogWhereInput
+    some?: AuditLogWhereInput
+    none?: AuditLogWhereInput
+  }
+
   export type AccountOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type SessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type OcorrenciaOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type AuditLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -13065,13 +16287,25 @@ export namespace Prisma {
     _max?: NestedEnumModuloFilter<$PrismaModel>
   }
 
+  export type OcorrenciaCategoriaScalarRelationFilter = {
+    is?: OcorrenciaCategoriaWhereInput
+    isNot?: OcorrenciaCategoriaWhereInput
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
   export type OcorrenciaCountOrderByAggregateInput = {
     id?: SortOrder
     titulo?: SortOrder
-    categoria?: SortOrder
+    categoriaId?: SortOrder
     icone?: SortOrder
     texto?: SortOrder
     servidor?: SortOrder
+    criadoPorId?: SortOrder
+    atualizadoPorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13079,10 +16313,12 @@ export namespace Prisma {
   export type OcorrenciaMaxOrderByAggregateInput = {
     id?: SortOrder
     titulo?: SortOrder
-    categoria?: SortOrder
+    categoriaId?: SortOrder
     icone?: SortOrder
     texto?: SortOrder
     servidor?: SortOrder
+    criadoPorId?: SortOrder
+    atualizadoPorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13090,10 +16326,12 @@ export namespace Prisma {
   export type OcorrenciaMinOrderByAggregateInput = {
     id?: SortOrder
     titulo?: SortOrder
-    categoria?: SortOrder
+    categoriaId?: SortOrder
     icone?: SortOrder
     texto?: SortOrder
     servidor?: SortOrder
+    criadoPorId?: SortOrder
+    atualizadoPorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13116,6 +16354,97 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type AuditLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    acao?: SortOrder
+    modulo?: SortOrder
+    detalhes?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AuditLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    acao?: SortOrder
+    modulo?: SortOrder
+    detalhes?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AuditLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    acao?: SortOrder
+    modulo?: SortOrder
+    detalhes?: SortOrder
+    ipAddress?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type VisitaCountOrderByAggregateInput = {
+    id?: SortOrder
+    prontuario?: SortOrder
+    senha?: SortOrder
+    custodiado?: SortOrder
+    localizacao?: SortOrder
+    ala?: SortOrder
+    prioridade?: SortOrder
+    cela?: SortOrder
+    cpfVisitante?: SortOrder
+    nomeVisitante?: SortOrder
+    relacao?: SortOrder
+    situacao?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VisitaAvgOrderByAggregateInput = {
+    prontuario?: SortOrder
+    senha?: SortOrder
+  }
+
+  export type VisitaMaxOrderByAggregateInput = {
+    id?: SortOrder
+    prontuario?: SortOrder
+    senha?: SortOrder
+    custodiado?: SortOrder
+    localizacao?: SortOrder
+    ala?: SortOrder
+    prioridade?: SortOrder
+    cela?: SortOrder
+    cpfVisitante?: SortOrder
+    nomeVisitante?: SortOrder
+    relacao?: SortOrder
+    situacao?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VisitaMinOrderByAggregateInput = {
+    id?: SortOrder
+    prontuario?: SortOrder
+    senha?: SortOrder
+    custodiado?: SortOrder
+    localizacao?: SortOrder
+    ala?: SortOrder
+    prioridade?: SortOrder
+    cela?: SortOrder
+    cpfVisitante?: SortOrder
+    nomeVisitante?: SortOrder
+    relacao?: SortOrder
+    situacao?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VisitaSumOrderByAggregateInput = {
+    prontuario?: SortOrder
+    senha?: SortOrder
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -13130,6 +16459,27 @@ export namespace Prisma {
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
   }
 
+  export type OcorrenciaCreateNestedManyWithoutCriadoPorInput = {
+    create?: XOR<OcorrenciaCreateWithoutCriadoPorInput, OcorrenciaUncheckedCreateWithoutCriadoPorInput> | OcorrenciaCreateWithoutCriadoPorInput[] | OcorrenciaUncheckedCreateWithoutCriadoPorInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutCriadoPorInput | OcorrenciaCreateOrConnectWithoutCriadoPorInput[]
+    createMany?: OcorrenciaCreateManyCriadoPorInputEnvelope
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+  }
+
+  export type OcorrenciaCreateNestedManyWithoutAtualizadoPorInput = {
+    create?: XOR<OcorrenciaCreateWithoutAtualizadoPorInput, OcorrenciaUncheckedCreateWithoutAtualizadoPorInput> | OcorrenciaCreateWithoutAtualizadoPorInput[] | OcorrenciaUncheckedCreateWithoutAtualizadoPorInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutAtualizadoPorInput | OcorrenciaCreateOrConnectWithoutAtualizadoPorInput[]
+    createMany?: OcorrenciaCreateManyAtualizadoPorInputEnvelope
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+  }
+
+  export type AuditLogCreateNestedManyWithoutUserInput = {
+    create?: XOR<AuditLogCreateWithoutUserInput, AuditLogUncheckedCreateWithoutUserInput> | AuditLogCreateWithoutUserInput[] | AuditLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutUserInput | AuditLogCreateOrConnectWithoutUserInput[]
+    createMany?: AuditLogCreateManyUserInputEnvelope
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+  }
+
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -13142,6 +16492,27 @@ export namespace Prisma {
     connectOrCreate?: SessionCreateOrConnectWithoutUserInput | SessionCreateOrConnectWithoutUserInput[]
     createMany?: SessionCreateManyUserInputEnvelope
     connect?: SessionWhereUniqueInput | SessionWhereUniqueInput[]
+  }
+
+  export type OcorrenciaUncheckedCreateNestedManyWithoutCriadoPorInput = {
+    create?: XOR<OcorrenciaCreateWithoutCriadoPorInput, OcorrenciaUncheckedCreateWithoutCriadoPorInput> | OcorrenciaCreateWithoutCriadoPorInput[] | OcorrenciaUncheckedCreateWithoutCriadoPorInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutCriadoPorInput | OcorrenciaCreateOrConnectWithoutCriadoPorInput[]
+    createMany?: OcorrenciaCreateManyCriadoPorInputEnvelope
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+  }
+
+  export type OcorrenciaUncheckedCreateNestedManyWithoutAtualizadoPorInput = {
+    create?: XOR<OcorrenciaCreateWithoutAtualizadoPorInput, OcorrenciaUncheckedCreateWithoutAtualizadoPorInput> | OcorrenciaCreateWithoutAtualizadoPorInput[] | OcorrenciaUncheckedCreateWithoutAtualizadoPorInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutAtualizadoPorInput | OcorrenciaCreateOrConnectWithoutAtualizadoPorInput[]
+    createMany?: OcorrenciaCreateManyAtualizadoPorInputEnvelope
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+  }
+
+  export type AuditLogUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<AuditLogCreateWithoutUserInput, AuditLogUncheckedCreateWithoutUserInput> | AuditLogCreateWithoutUserInput[] | AuditLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutUserInput | AuditLogCreateOrConnectWithoutUserInput[]
+    createMany?: AuditLogCreateManyUserInputEnvelope
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -13188,6 +16559,48 @@ export namespace Prisma {
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
   }
 
+  export type OcorrenciaUpdateManyWithoutCriadoPorNestedInput = {
+    create?: XOR<OcorrenciaCreateWithoutCriadoPorInput, OcorrenciaUncheckedCreateWithoutCriadoPorInput> | OcorrenciaCreateWithoutCriadoPorInput[] | OcorrenciaUncheckedCreateWithoutCriadoPorInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutCriadoPorInput | OcorrenciaCreateOrConnectWithoutCriadoPorInput[]
+    upsert?: OcorrenciaUpsertWithWhereUniqueWithoutCriadoPorInput | OcorrenciaUpsertWithWhereUniqueWithoutCriadoPorInput[]
+    createMany?: OcorrenciaCreateManyCriadoPorInputEnvelope
+    set?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    disconnect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    delete?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    update?: OcorrenciaUpdateWithWhereUniqueWithoutCriadoPorInput | OcorrenciaUpdateWithWhereUniqueWithoutCriadoPorInput[]
+    updateMany?: OcorrenciaUpdateManyWithWhereWithoutCriadoPorInput | OcorrenciaUpdateManyWithWhereWithoutCriadoPorInput[]
+    deleteMany?: OcorrenciaScalarWhereInput | OcorrenciaScalarWhereInput[]
+  }
+
+  export type OcorrenciaUpdateManyWithoutAtualizadoPorNestedInput = {
+    create?: XOR<OcorrenciaCreateWithoutAtualizadoPorInput, OcorrenciaUncheckedCreateWithoutAtualizadoPorInput> | OcorrenciaCreateWithoutAtualizadoPorInput[] | OcorrenciaUncheckedCreateWithoutAtualizadoPorInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutAtualizadoPorInput | OcorrenciaCreateOrConnectWithoutAtualizadoPorInput[]
+    upsert?: OcorrenciaUpsertWithWhereUniqueWithoutAtualizadoPorInput | OcorrenciaUpsertWithWhereUniqueWithoutAtualizadoPorInput[]
+    createMany?: OcorrenciaCreateManyAtualizadoPorInputEnvelope
+    set?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    disconnect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    delete?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    update?: OcorrenciaUpdateWithWhereUniqueWithoutAtualizadoPorInput | OcorrenciaUpdateWithWhereUniqueWithoutAtualizadoPorInput[]
+    updateMany?: OcorrenciaUpdateManyWithWhereWithoutAtualizadoPorInput | OcorrenciaUpdateManyWithWhereWithoutAtualizadoPorInput[]
+    deleteMany?: OcorrenciaScalarWhereInput | OcorrenciaScalarWhereInput[]
+  }
+
+  export type AuditLogUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AuditLogCreateWithoutUserInput, AuditLogUncheckedCreateWithoutUserInput> | AuditLogCreateWithoutUserInput[] | AuditLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutUserInput | AuditLogCreateOrConnectWithoutUserInput[]
+    upsert?: AuditLogUpsertWithWhereUniqueWithoutUserInput | AuditLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AuditLogCreateManyUserInputEnvelope
+    set?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    disconnect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    delete?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    update?: AuditLogUpdateWithWhereUniqueWithoutUserInput | AuditLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AuditLogUpdateManyWithWhereWithoutUserInput | AuditLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -13214,6 +16627,48 @@ export namespace Prisma {
     update?: SessionUpdateWithWhereUniqueWithoutUserInput | SessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SessionUpdateManyWithWhereWithoutUserInput | SessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SessionScalarWhereInput | SessionScalarWhereInput[]
+  }
+
+  export type OcorrenciaUncheckedUpdateManyWithoutCriadoPorNestedInput = {
+    create?: XOR<OcorrenciaCreateWithoutCriadoPorInput, OcorrenciaUncheckedCreateWithoutCriadoPorInput> | OcorrenciaCreateWithoutCriadoPorInput[] | OcorrenciaUncheckedCreateWithoutCriadoPorInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutCriadoPorInput | OcorrenciaCreateOrConnectWithoutCriadoPorInput[]
+    upsert?: OcorrenciaUpsertWithWhereUniqueWithoutCriadoPorInput | OcorrenciaUpsertWithWhereUniqueWithoutCriadoPorInput[]
+    createMany?: OcorrenciaCreateManyCriadoPorInputEnvelope
+    set?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    disconnect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    delete?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    update?: OcorrenciaUpdateWithWhereUniqueWithoutCriadoPorInput | OcorrenciaUpdateWithWhereUniqueWithoutCriadoPorInput[]
+    updateMany?: OcorrenciaUpdateManyWithWhereWithoutCriadoPorInput | OcorrenciaUpdateManyWithWhereWithoutCriadoPorInput[]
+    deleteMany?: OcorrenciaScalarWhereInput | OcorrenciaScalarWhereInput[]
+  }
+
+  export type OcorrenciaUncheckedUpdateManyWithoutAtualizadoPorNestedInput = {
+    create?: XOR<OcorrenciaCreateWithoutAtualizadoPorInput, OcorrenciaUncheckedCreateWithoutAtualizadoPorInput> | OcorrenciaCreateWithoutAtualizadoPorInput[] | OcorrenciaUncheckedCreateWithoutAtualizadoPorInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutAtualizadoPorInput | OcorrenciaCreateOrConnectWithoutAtualizadoPorInput[]
+    upsert?: OcorrenciaUpsertWithWhereUniqueWithoutAtualizadoPorInput | OcorrenciaUpsertWithWhereUniqueWithoutAtualizadoPorInput[]
+    createMany?: OcorrenciaCreateManyAtualizadoPorInputEnvelope
+    set?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    disconnect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    delete?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    update?: OcorrenciaUpdateWithWhereUniqueWithoutAtualizadoPorInput | OcorrenciaUpdateWithWhereUniqueWithoutAtualizadoPorInput[]
+    updateMany?: OcorrenciaUpdateManyWithWhereWithoutAtualizadoPorInput | OcorrenciaUpdateManyWithWhereWithoutAtualizadoPorInput[]
+    deleteMany?: OcorrenciaScalarWhereInput | OcorrenciaScalarWhereInput[]
+  }
+
+  export type AuditLogUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<AuditLogCreateWithoutUserInput, AuditLogUncheckedCreateWithoutUserInput> | AuditLogCreateWithoutUserInput[] | AuditLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: AuditLogCreateOrConnectWithoutUserInput | AuditLogCreateOrConnectWithoutUserInput[]
+    upsert?: AuditLogUpsertWithWhereUniqueWithoutUserInput | AuditLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: AuditLogCreateManyUserInputEnvelope
+    set?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    disconnect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    delete?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
+    update?: AuditLogUpdateWithWhereUniqueWithoutUserInput | AuditLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: AuditLogUpdateManyWithWhereWithoutUserInput | AuditLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutAccountsInput = {
@@ -13322,6 +16777,106 @@ export namespace Prisma {
     upsert?: AlaUpsertWithoutDistribsInput
     connect?: AlaWhereUniqueInput
     update?: XOR<XOR<AlaUpdateToOneWithWhereWithoutDistribsInput, AlaUpdateWithoutDistribsInput>, AlaUncheckedUpdateWithoutDistribsInput>
+  }
+
+  export type OcorrenciaCategoriaCreateNestedOneWithoutOcorrenciasInput = {
+    create?: XOR<OcorrenciaCategoriaCreateWithoutOcorrenciasInput, OcorrenciaCategoriaUncheckedCreateWithoutOcorrenciasInput>
+    connectOrCreate?: OcorrenciaCategoriaCreateOrConnectWithoutOcorrenciasInput
+    connect?: OcorrenciaCategoriaWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutOcorrenciasCriadasInput = {
+    create?: XOR<UserCreateWithoutOcorrenciasCriadasInput, UserUncheckedCreateWithoutOcorrenciasCriadasInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOcorrenciasCriadasInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutOcorrenciasAlteradasInput = {
+    create?: XOR<UserCreateWithoutOcorrenciasAlteradasInput, UserUncheckedCreateWithoutOcorrenciasAlteradasInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOcorrenciasAlteradasInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type OcorrenciaCategoriaUpdateOneRequiredWithoutOcorrenciasNestedInput = {
+    create?: XOR<OcorrenciaCategoriaCreateWithoutOcorrenciasInput, OcorrenciaCategoriaUncheckedCreateWithoutOcorrenciasInput>
+    connectOrCreate?: OcorrenciaCategoriaCreateOrConnectWithoutOcorrenciasInput
+    upsert?: OcorrenciaCategoriaUpsertWithoutOcorrenciasInput
+    connect?: OcorrenciaCategoriaWhereUniqueInput
+    update?: XOR<XOR<OcorrenciaCategoriaUpdateToOneWithWhereWithoutOcorrenciasInput, OcorrenciaCategoriaUpdateWithoutOcorrenciasInput>, OcorrenciaCategoriaUncheckedUpdateWithoutOcorrenciasInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutOcorrenciasCriadasNestedInput = {
+    create?: XOR<UserCreateWithoutOcorrenciasCriadasInput, UserUncheckedCreateWithoutOcorrenciasCriadasInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOcorrenciasCriadasInput
+    upsert?: UserUpsertWithoutOcorrenciasCriadasInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOcorrenciasCriadasInput, UserUpdateWithoutOcorrenciasCriadasInput>, UserUncheckedUpdateWithoutOcorrenciasCriadasInput>
+  }
+
+  export type UserUpdateOneWithoutOcorrenciasAlteradasNestedInput = {
+    create?: XOR<UserCreateWithoutOcorrenciasAlteradasInput, UserUncheckedCreateWithoutOcorrenciasAlteradasInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOcorrenciasAlteradasInput
+    upsert?: UserUpsertWithoutOcorrenciasAlteradasInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOcorrenciasAlteradasInput, UserUpdateWithoutOcorrenciasAlteradasInput>, UserUncheckedUpdateWithoutOcorrenciasAlteradasInput>
+  }
+
+  export type OcorrenciaCreateNestedManyWithoutCategoriaInput = {
+    create?: XOR<OcorrenciaCreateWithoutCategoriaInput, OcorrenciaUncheckedCreateWithoutCategoriaInput> | OcorrenciaCreateWithoutCategoriaInput[] | OcorrenciaUncheckedCreateWithoutCategoriaInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutCategoriaInput | OcorrenciaCreateOrConnectWithoutCategoriaInput[]
+    createMany?: OcorrenciaCreateManyCategoriaInputEnvelope
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+  }
+
+  export type OcorrenciaUncheckedCreateNestedManyWithoutCategoriaInput = {
+    create?: XOR<OcorrenciaCreateWithoutCategoriaInput, OcorrenciaUncheckedCreateWithoutCategoriaInput> | OcorrenciaCreateWithoutCategoriaInput[] | OcorrenciaUncheckedCreateWithoutCategoriaInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutCategoriaInput | OcorrenciaCreateOrConnectWithoutCategoriaInput[]
+    createMany?: OcorrenciaCreateManyCategoriaInputEnvelope
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+  }
+
+  export type OcorrenciaUpdateManyWithoutCategoriaNestedInput = {
+    create?: XOR<OcorrenciaCreateWithoutCategoriaInput, OcorrenciaUncheckedCreateWithoutCategoriaInput> | OcorrenciaCreateWithoutCategoriaInput[] | OcorrenciaUncheckedCreateWithoutCategoriaInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutCategoriaInput | OcorrenciaCreateOrConnectWithoutCategoriaInput[]
+    upsert?: OcorrenciaUpsertWithWhereUniqueWithoutCategoriaInput | OcorrenciaUpsertWithWhereUniqueWithoutCategoriaInput[]
+    createMany?: OcorrenciaCreateManyCategoriaInputEnvelope
+    set?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    disconnect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    delete?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    update?: OcorrenciaUpdateWithWhereUniqueWithoutCategoriaInput | OcorrenciaUpdateWithWhereUniqueWithoutCategoriaInput[]
+    updateMany?: OcorrenciaUpdateManyWithWhereWithoutCategoriaInput | OcorrenciaUpdateManyWithWhereWithoutCategoriaInput[]
+    deleteMany?: OcorrenciaScalarWhereInput | OcorrenciaScalarWhereInput[]
+  }
+
+  export type OcorrenciaUncheckedUpdateManyWithoutCategoriaNestedInput = {
+    create?: XOR<OcorrenciaCreateWithoutCategoriaInput, OcorrenciaUncheckedCreateWithoutCategoriaInput> | OcorrenciaCreateWithoutCategoriaInput[] | OcorrenciaUncheckedCreateWithoutCategoriaInput[]
+    connectOrCreate?: OcorrenciaCreateOrConnectWithoutCategoriaInput | OcorrenciaCreateOrConnectWithoutCategoriaInput[]
+    upsert?: OcorrenciaUpsertWithWhereUniqueWithoutCategoriaInput | OcorrenciaUpsertWithWhereUniqueWithoutCategoriaInput[]
+    createMany?: OcorrenciaCreateManyCategoriaInputEnvelope
+    set?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    disconnect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    delete?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    connect?: OcorrenciaWhereUniqueInput | OcorrenciaWhereUniqueInput[]
+    update?: OcorrenciaUpdateWithWhereUniqueWithoutCategoriaInput | OcorrenciaUpdateWithWhereUniqueWithoutCategoriaInput[]
+    updateMany?: OcorrenciaUpdateManyWithWhereWithoutCategoriaInput | OcorrenciaUpdateManyWithWhereWithoutCategoriaInput[]
+    deleteMany?: OcorrenciaScalarWhereInput | OcorrenciaScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutLogsAuditoriaInput = {
+    create?: XOR<UserCreateWithoutLogsAuditoriaInput, UserUncheckedCreateWithoutLogsAuditoriaInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLogsAuditoriaInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutLogsAuditoriaNestedInput = {
+    create?: XOR<UserCreateWithoutLogsAuditoriaInput, UserUncheckedCreateWithoutLogsAuditoriaInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLogsAuditoriaInput
+    upsert?: UserUpsertWithoutLogsAuditoriaInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLogsAuditoriaInput, UserUpdateWithoutLogsAuditoriaInput>, UserUncheckedUpdateWithoutLogsAuditoriaInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -13594,6 +17149,102 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type OcorrenciaCreateWithoutCriadoPorInput = {
+    id?: string
+    titulo: string
+    icone?: string
+    texto: string
+    servidor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categoria: OcorrenciaCategoriaCreateNestedOneWithoutOcorrenciasInput
+    atualizadoPor?: UserCreateNestedOneWithoutOcorrenciasAlteradasInput
+  }
+
+  export type OcorrenciaUncheckedCreateWithoutCriadoPorInput = {
+    id?: string
+    titulo: string
+    categoriaId: string
+    icone?: string
+    texto: string
+    servidor: string
+    atualizadoPorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OcorrenciaCreateOrConnectWithoutCriadoPorInput = {
+    where: OcorrenciaWhereUniqueInput
+    create: XOR<OcorrenciaCreateWithoutCriadoPorInput, OcorrenciaUncheckedCreateWithoutCriadoPorInput>
+  }
+
+  export type OcorrenciaCreateManyCriadoPorInputEnvelope = {
+    data: OcorrenciaCreateManyCriadoPorInput | OcorrenciaCreateManyCriadoPorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OcorrenciaCreateWithoutAtualizadoPorInput = {
+    id?: string
+    titulo: string
+    icone?: string
+    texto: string
+    servidor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    categoria: OcorrenciaCategoriaCreateNestedOneWithoutOcorrenciasInput
+    criadoPor: UserCreateNestedOneWithoutOcorrenciasCriadasInput
+  }
+
+  export type OcorrenciaUncheckedCreateWithoutAtualizadoPorInput = {
+    id?: string
+    titulo: string
+    categoriaId: string
+    icone?: string
+    texto: string
+    servidor: string
+    criadoPorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OcorrenciaCreateOrConnectWithoutAtualizadoPorInput = {
+    where: OcorrenciaWhereUniqueInput
+    create: XOR<OcorrenciaCreateWithoutAtualizadoPorInput, OcorrenciaUncheckedCreateWithoutAtualizadoPorInput>
+  }
+
+  export type OcorrenciaCreateManyAtualizadoPorInputEnvelope = {
+    data: OcorrenciaCreateManyAtualizadoPorInput | OcorrenciaCreateManyAtualizadoPorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AuditLogCreateWithoutUserInput = {
+    id?: string
+    acao: string
+    modulo: string
+    detalhes: string
+    ipAddress?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AuditLogUncheckedCreateWithoutUserInput = {
+    id?: string
+    acao: string
+    modulo: string
+    detalhes: string
+    ipAddress?: string | null
+    createdAt?: Date | string
+  }
+
+  export type AuditLogCreateOrConnectWithoutUserInput = {
+    where: AuditLogWhereUniqueInput
+    create: XOR<AuditLogCreateWithoutUserInput, AuditLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type AuditLogCreateManyUserInputEnvelope = {
+    data: AuditLogCreateManyUserInput | AuditLogCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
     where: AccountWhereUniqueInput
     update: XOR<AccountUpdateWithoutUserInput, AccountUncheckedUpdateWithoutUserInput>
@@ -13654,6 +17305,83 @@ export namespace Prisma {
     expires?: DateTimeFilter<"Session"> | Date | string
   }
 
+  export type OcorrenciaUpsertWithWhereUniqueWithoutCriadoPorInput = {
+    where: OcorrenciaWhereUniqueInput
+    update: XOR<OcorrenciaUpdateWithoutCriadoPorInput, OcorrenciaUncheckedUpdateWithoutCriadoPorInput>
+    create: XOR<OcorrenciaCreateWithoutCriadoPorInput, OcorrenciaUncheckedCreateWithoutCriadoPorInput>
+  }
+
+  export type OcorrenciaUpdateWithWhereUniqueWithoutCriadoPorInput = {
+    where: OcorrenciaWhereUniqueInput
+    data: XOR<OcorrenciaUpdateWithoutCriadoPorInput, OcorrenciaUncheckedUpdateWithoutCriadoPorInput>
+  }
+
+  export type OcorrenciaUpdateManyWithWhereWithoutCriadoPorInput = {
+    where: OcorrenciaScalarWhereInput
+    data: XOR<OcorrenciaUpdateManyMutationInput, OcorrenciaUncheckedUpdateManyWithoutCriadoPorInput>
+  }
+
+  export type OcorrenciaScalarWhereInput = {
+    AND?: OcorrenciaScalarWhereInput | OcorrenciaScalarWhereInput[]
+    OR?: OcorrenciaScalarWhereInput[]
+    NOT?: OcorrenciaScalarWhereInput | OcorrenciaScalarWhereInput[]
+    id?: StringFilter<"Ocorrencia"> | string
+    titulo?: StringFilter<"Ocorrencia"> | string
+    categoriaId?: StringFilter<"Ocorrencia"> | string
+    icone?: StringFilter<"Ocorrencia"> | string
+    texto?: StringFilter<"Ocorrencia"> | string
+    servidor?: StringFilter<"Ocorrencia"> | string
+    criadoPorId?: StringFilter<"Ocorrencia"> | string
+    atualizadoPorId?: StringNullableFilter<"Ocorrencia"> | string | null
+    createdAt?: DateTimeFilter<"Ocorrencia"> | Date | string
+    updatedAt?: DateTimeFilter<"Ocorrencia"> | Date | string
+  }
+
+  export type OcorrenciaUpsertWithWhereUniqueWithoutAtualizadoPorInput = {
+    where: OcorrenciaWhereUniqueInput
+    update: XOR<OcorrenciaUpdateWithoutAtualizadoPorInput, OcorrenciaUncheckedUpdateWithoutAtualizadoPorInput>
+    create: XOR<OcorrenciaCreateWithoutAtualizadoPorInput, OcorrenciaUncheckedCreateWithoutAtualizadoPorInput>
+  }
+
+  export type OcorrenciaUpdateWithWhereUniqueWithoutAtualizadoPorInput = {
+    where: OcorrenciaWhereUniqueInput
+    data: XOR<OcorrenciaUpdateWithoutAtualizadoPorInput, OcorrenciaUncheckedUpdateWithoutAtualizadoPorInput>
+  }
+
+  export type OcorrenciaUpdateManyWithWhereWithoutAtualizadoPorInput = {
+    where: OcorrenciaScalarWhereInput
+    data: XOR<OcorrenciaUpdateManyMutationInput, OcorrenciaUncheckedUpdateManyWithoutAtualizadoPorInput>
+  }
+
+  export type AuditLogUpsertWithWhereUniqueWithoutUserInput = {
+    where: AuditLogWhereUniqueInput
+    update: XOR<AuditLogUpdateWithoutUserInput, AuditLogUncheckedUpdateWithoutUserInput>
+    create: XOR<AuditLogCreateWithoutUserInput, AuditLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type AuditLogUpdateWithWhereUniqueWithoutUserInput = {
+    where: AuditLogWhereUniqueInput
+    data: XOR<AuditLogUpdateWithoutUserInput, AuditLogUncheckedUpdateWithoutUserInput>
+  }
+
+  export type AuditLogUpdateManyWithWhereWithoutUserInput = {
+    where: AuditLogScalarWhereInput
+    data: XOR<AuditLogUpdateManyMutationInput, AuditLogUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type AuditLogScalarWhereInput = {
+    AND?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+    OR?: AuditLogScalarWhereInput[]
+    NOT?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+    id?: StringFilter<"AuditLog"> | string
+    userId?: StringFilter<"AuditLog"> | string
+    acao?: StringFilter<"AuditLog"> | string
+    modulo?: StringFilter<"AuditLog"> | string
+    detalhes?: StringFilter<"AuditLog"> | string
+    ipAddress?: StringNullableFilter<"AuditLog"> | string | null
+    createdAt?: DateTimeFilter<"AuditLog"> | Date | string
+  }
+
   export type UserCreateWithoutAccountsInput = {
     id?: string
     username: string
@@ -13664,6 +17392,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     sessions?: SessionCreateNestedManyWithoutUserInput
+    ocorrenciasCriadas?: OcorrenciaCreateNestedManyWithoutCriadoPorInput
+    ocorrenciasAlteradas?: OcorrenciaCreateNestedManyWithoutAtualizadoPorInput
+    logsAuditoria?: AuditLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -13676,6 +17407,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    ocorrenciasCriadas?: OcorrenciaUncheckedCreateNestedManyWithoutCriadoPorInput
+    ocorrenciasAlteradas?: OcorrenciaUncheckedCreateNestedManyWithoutAtualizadoPorInput
+    logsAuditoria?: AuditLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -13704,6 +17438,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUpdateManyWithoutUserNestedInput
+    ocorrenciasCriadas?: OcorrenciaUpdateManyWithoutCriadoPorNestedInput
+    ocorrenciasAlteradas?: OcorrenciaUpdateManyWithoutAtualizadoPorNestedInput
+    logsAuditoria?: AuditLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -13716,6 +17453,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    ocorrenciasCriadas?: OcorrenciaUncheckedUpdateManyWithoutCriadoPorNestedInput
+    ocorrenciasAlteradas?: OcorrenciaUncheckedUpdateManyWithoutAtualizadoPorNestedInput
+    logsAuditoria?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -13728,6 +17468,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
+    ocorrenciasCriadas?: OcorrenciaCreateNestedManyWithoutCriadoPorInput
+    ocorrenciasAlteradas?: OcorrenciaCreateNestedManyWithoutAtualizadoPorInput
+    logsAuditoria?: AuditLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -13740,6 +17483,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    ocorrenciasCriadas?: OcorrenciaUncheckedCreateNestedManyWithoutCriadoPorInput
+    ocorrenciasAlteradas?: OcorrenciaUncheckedCreateNestedManyWithoutAtualizadoPorInput
+    logsAuditoria?: AuditLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -13768,6 +17514,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
+    ocorrenciasCriadas?: OcorrenciaUpdateManyWithoutCriadoPorNestedInput
+    ocorrenciasAlteradas?: OcorrenciaUpdateManyWithoutAtualizadoPorNestedInput
+    logsAuditoria?: AuditLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -13780,6 +17529,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    ocorrenciasCriadas?: OcorrenciaUncheckedUpdateManyWithoutCriadoPorNestedInput
+    ocorrenciasAlteradas?: OcorrenciaUncheckedUpdateManyWithoutAtualizadoPorNestedInput
+    logsAuditoria?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DistribAlaCreateWithoutAlaInput = {
@@ -13884,6 +17636,324 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OcorrenciaCategoriaCreateWithoutOcorrenciasInput = {
+    id?: string
+    nome: string
+    createdAt?: Date | string
+  }
+
+  export type OcorrenciaCategoriaUncheckedCreateWithoutOcorrenciasInput = {
+    id?: string
+    nome: string
+    createdAt?: Date | string
+  }
+
+  export type OcorrenciaCategoriaCreateOrConnectWithoutOcorrenciasInput = {
+    where: OcorrenciaCategoriaWhereUniqueInput
+    create: XOR<OcorrenciaCategoriaCreateWithoutOcorrenciasInput, OcorrenciaCategoriaUncheckedCreateWithoutOcorrenciasInput>
+  }
+
+  export type UserCreateWithoutOcorrenciasCriadasInput = {
+    id?: string
+    username: string
+    passwordHash: string
+    name: string
+    role?: $Enums.Role
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    ocorrenciasAlteradas?: OcorrenciaCreateNestedManyWithoutAtualizadoPorInput
+    logsAuditoria?: AuditLogCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOcorrenciasCriadasInput = {
+    id?: string
+    username: string
+    passwordHash: string
+    name: string
+    role?: $Enums.Role
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    ocorrenciasAlteradas?: OcorrenciaUncheckedCreateNestedManyWithoutAtualizadoPorInput
+    logsAuditoria?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOcorrenciasCriadasInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOcorrenciasCriadasInput, UserUncheckedCreateWithoutOcorrenciasCriadasInput>
+  }
+
+  export type UserCreateWithoutOcorrenciasAlteradasInput = {
+    id?: string
+    username: string
+    passwordHash: string
+    name: string
+    role?: $Enums.Role
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    ocorrenciasCriadas?: OcorrenciaCreateNestedManyWithoutCriadoPorInput
+    logsAuditoria?: AuditLogCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOcorrenciasAlteradasInput = {
+    id?: string
+    username: string
+    passwordHash: string
+    name: string
+    role?: $Enums.Role
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    ocorrenciasCriadas?: OcorrenciaUncheckedCreateNestedManyWithoutCriadoPorInput
+    logsAuditoria?: AuditLogUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOcorrenciasAlteradasInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOcorrenciasAlteradasInput, UserUncheckedCreateWithoutOcorrenciasAlteradasInput>
+  }
+
+  export type OcorrenciaCategoriaUpsertWithoutOcorrenciasInput = {
+    update: XOR<OcorrenciaCategoriaUpdateWithoutOcorrenciasInput, OcorrenciaCategoriaUncheckedUpdateWithoutOcorrenciasInput>
+    create: XOR<OcorrenciaCategoriaCreateWithoutOcorrenciasInput, OcorrenciaCategoriaUncheckedCreateWithoutOcorrenciasInput>
+    where?: OcorrenciaCategoriaWhereInput
+  }
+
+  export type OcorrenciaCategoriaUpdateToOneWithWhereWithoutOcorrenciasInput = {
+    where?: OcorrenciaCategoriaWhereInput
+    data: XOR<OcorrenciaCategoriaUpdateWithoutOcorrenciasInput, OcorrenciaCategoriaUncheckedUpdateWithoutOcorrenciasInput>
+  }
+
+  export type OcorrenciaCategoriaUpdateWithoutOcorrenciasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OcorrenciaCategoriaUncheckedUpdateWithoutOcorrenciasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    nome?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserUpsertWithoutOcorrenciasCriadasInput = {
+    update: XOR<UserUpdateWithoutOcorrenciasCriadasInput, UserUncheckedUpdateWithoutOcorrenciasCriadasInput>
+    create: XOR<UserCreateWithoutOcorrenciasCriadasInput, UserUncheckedCreateWithoutOcorrenciasCriadasInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOcorrenciasCriadasInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOcorrenciasCriadasInput, UserUncheckedUpdateWithoutOcorrenciasCriadasInput>
+  }
+
+  export type UserUpdateWithoutOcorrenciasCriadasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    ocorrenciasAlteradas?: OcorrenciaUpdateManyWithoutAtualizadoPorNestedInput
+    logsAuditoria?: AuditLogUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOcorrenciasCriadasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    ocorrenciasAlteradas?: OcorrenciaUncheckedUpdateManyWithoutAtualizadoPorNestedInput
+    logsAuditoria?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUpsertWithoutOcorrenciasAlteradasInput = {
+    update: XOR<UserUpdateWithoutOcorrenciasAlteradasInput, UserUncheckedUpdateWithoutOcorrenciasAlteradasInput>
+    create: XOR<UserCreateWithoutOcorrenciasAlteradasInput, UserUncheckedCreateWithoutOcorrenciasAlteradasInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOcorrenciasAlteradasInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOcorrenciasAlteradasInput, UserUncheckedUpdateWithoutOcorrenciasAlteradasInput>
+  }
+
+  export type UserUpdateWithoutOcorrenciasAlteradasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    ocorrenciasCriadas?: OcorrenciaUpdateManyWithoutCriadoPorNestedInput
+    logsAuditoria?: AuditLogUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOcorrenciasAlteradasInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    ocorrenciasCriadas?: OcorrenciaUncheckedUpdateManyWithoutCriadoPorNestedInput
+    logsAuditoria?: AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type OcorrenciaCreateWithoutCategoriaInput = {
+    id?: string
+    titulo: string
+    icone?: string
+    texto: string
+    servidor: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    criadoPor: UserCreateNestedOneWithoutOcorrenciasCriadasInput
+    atualizadoPor?: UserCreateNestedOneWithoutOcorrenciasAlteradasInput
+  }
+
+  export type OcorrenciaUncheckedCreateWithoutCategoriaInput = {
+    id?: string
+    titulo: string
+    icone?: string
+    texto: string
+    servidor: string
+    criadoPorId: string
+    atualizadoPorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OcorrenciaCreateOrConnectWithoutCategoriaInput = {
+    where: OcorrenciaWhereUniqueInput
+    create: XOR<OcorrenciaCreateWithoutCategoriaInput, OcorrenciaUncheckedCreateWithoutCategoriaInput>
+  }
+
+  export type OcorrenciaCreateManyCategoriaInputEnvelope = {
+    data: OcorrenciaCreateManyCategoriaInput | OcorrenciaCreateManyCategoriaInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OcorrenciaUpsertWithWhereUniqueWithoutCategoriaInput = {
+    where: OcorrenciaWhereUniqueInput
+    update: XOR<OcorrenciaUpdateWithoutCategoriaInput, OcorrenciaUncheckedUpdateWithoutCategoriaInput>
+    create: XOR<OcorrenciaCreateWithoutCategoriaInput, OcorrenciaUncheckedCreateWithoutCategoriaInput>
+  }
+
+  export type OcorrenciaUpdateWithWhereUniqueWithoutCategoriaInput = {
+    where: OcorrenciaWhereUniqueInput
+    data: XOR<OcorrenciaUpdateWithoutCategoriaInput, OcorrenciaUncheckedUpdateWithoutCategoriaInput>
+  }
+
+  export type OcorrenciaUpdateManyWithWhereWithoutCategoriaInput = {
+    where: OcorrenciaScalarWhereInput
+    data: XOR<OcorrenciaUpdateManyMutationInput, OcorrenciaUncheckedUpdateManyWithoutCategoriaInput>
+  }
+
+  export type UserCreateWithoutLogsAuditoriaInput = {
+    id?: string
+    username: string
+    passwordHash: string
+    name: string
+    role?: $Enums.Role
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    ocorrenciasCriadas?: OcorrenciaCreateNestedManyWithoutCriadoPorInput
+    ocorrenciasAlteradas?: OcorrenciaCreateNestedManyWithoutAtualizadoPorInput
+  }
+
+  export type UserUncheckedCreateWithoutLogsAuditoriaInput = {
+    id?: string
+    username: string
+    passwordHash: string
+    name: string
+    role?: $Enums.Role
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    ocorrenciasCriadas?: OcorrenciaUncheckedCreateNestedManyWithoutCriadoPorInput
+    ocorrenciasAlteradas?: OcorrenciaUncheckedCreateNestedManyWithoutAtualizadoPorInput
+  }
+
+  export type UserCreateOrConnectWithoutLogsAuditoriaInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLogsAuditoriaInput, UserUncheckedCreateWithoutLogsAuditoriaInput>
+  }
+
+  export type UserUpsertWithoutLogsAuditoriaInput = {
+    update: XOR<UserUpdateWithoutLogsAuditoriaInput, UserUncheckedUpdateWithoutLogsAuditoriaInput>
+    create: XOR<UserCreateWithoutLogsAuditoriaInput, UserUncheckedCreateWithoutLogsAuditoriaInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLogsAuditoriaInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLogsAuditoriaInput, UserUncheckedUpdateWithoutLogsAuditoriaInput>
+  }
+
+  export type UserUpdateWithoutLogsAuditoriaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    ocorrenciasCriadas?: OcorrenciaUpdateManyWithoutCriadoPorNestedInput
+    ocorrenciasAlteradas?: OcorrenciaUpdateManyWithoutAtualizadoPorNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLogsAuditoriaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    ocorrenciasCriadas?: OcorrenciaUncheckedUpdateManyWithoutCriadoPorNestedInput
+    ocorrenciasAlteradas?: OcorrenciaUncheckedUpdateManyWithoutAtualizadoPorNestedInput
+  }
+
   export type AccountCreateManyUserInput = {
     id?: string
     type: string
@@ -13902,6 +17972,39 @@ export namespace Prisma {
     id?: string
     sessionToken: string
     expires: Date | string
+  }
+
+  export type OcorrenciaCreateManyCriadoPorInput = {
+    id?: string
+    titulo: string
+    categoriaId: string
+    icone?: string
+    texto: string
+    servidor: string
+    atualizadoPorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OcorrenciaCreateManyAtualizadoPorInput = {
+    id?: string
+    titulo: string
+    categoriaId: string
+    icone?: string
+    texto: string
+    servidor: string
+    criadoPorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AuditLogCreateManyUserInput = {
+    id?: string
+    acao: string
+    modulo: string
+    detalhes: string
+    ipAddress?: string | null
+    createdAt?: Date | string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -13964,6 +18067,105 @@ export namespace Prisma {
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type OcorrenciaUpdateWithoutCriadoPorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    icone?: StringFieldUpdateOperationsInput | string
+    texto?: StringFieldUpdateOperationsInput | string
+    servidor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoria?: OcorrenciaCategoriaUpdateOneRequiredWithoutOcorrenciasNestedInput
+    atualizadoPor?: UserUpdateOneWithoutOcorrenciasAlteradasNestedInput
+  }
+
+  export type OcorrenciaUncheckedUpdateWithoutCriadoPorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    categoriaId?: StringFieldUpdateOperationsInput | string
+    icone?: StringFieldUpdateOperationsInput | string
+    texto?: StringFieldUpdateOperationsInput | string
+    servidor?: StringFieldUpdateOperationsInput | string
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OcorrenciaUncheckedUpdateManyWithoutCriadoPorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    categoriaId?: StringFieldUpdateOperationsInput | string
+    icone?: StringFieldUpdateOperationsInput | string
+    texto?: StringFieldUpdateOperationsInput | string
+    servidor?: StringFieldUpdateOperationsInput | string
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OcorrenciaUpdateWithoutAtualizadoPorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    icone?: StringFieldUpdateOperationsInput | string
+    texto?: StringFieldUpdateOperationsInput | string
+    servidor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    categoria?: OcorrenciaCategoriaUpdateOneRequiredWithoutOcorrenciasNestedInput
+    criadoPor?: UserUpdateOneRequiredWithoutOcorrenciasCriadasNestedInput
+  }
+
+  export type OcorrenciaUncheckedUpdateWithoutAtualizadoPorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    categoriaId?: StringFieldUpdateOperationsInput | string
+    icone?: StringFieldUpdateOperationsInput | string
+    texto?: StringFieldUpdateOperationsInput | string
+    servidor?: StringFieldUpdateOperationsInput | string
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OcorrenciaUncheckedUpdateManyWithoutAtualizadoPorInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    categoriaId?: StringFieldUpdateOperationsInput | string
+    icone?: StringFieldUpdateOperationsInput | string
+    texto?: StringFieldUpdateOperationsInput | string
+    servidor?: StringFieldUpdateOperationsInput | string
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    modulo?: StringFieldUpdateOperationsInput | string
+    detalhes?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    modulo?: StringFieldUpdateOperationsInput | string
+    detalhes?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AuditLogUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    acao?: StringFieldUpdateOperationsInput | string
+    modulo?: StringFieldUpdateOperationsInput | string
+    detalhes?: StringFieldUpdateOperationsInput | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type DistribAlaCreateManyAlaInput = {
     id?: string
     modulo: $Enums.Modulo
@@ -13993,6 +18195,54 @@ export namespace Prisma {
     modulo?: EnumModuloFieldUpdateOperationsInput | $Enums.Modulo
     internos?: IntFieldUpdateOperationsInput | number
     dietas?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OcorrenciaCreateManyCategoriaInput = {
+    id?: string
+    titulo: string
+    icone?: string
+    texto: string
+    servidor: string
+    criadoPorId: string
+    atualizadoPorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type OcorrenciaUpdateWithoutCategoriaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    icone?: StringFieldUpdateOperationsInput | string
+    texto?: StringFieldUpdateOperationsInput | string
+    servidor?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    criadoPor?: UserUpdateOneRequiredWithoutOcorrenciasCriadasNestedInput
+    atualizadoPor?: UserUpdateOneWithoutOcorrenciasAlteradasNestedInput
+  }
+
+  export type OcorrenciaUncheckedUpdateWithoutCategoriaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    icone?: StringFieldUpdateOperationsInput | string
+    texto?: StringFieldUpdateOperationsInput | string
+    servidor?: StringFieldUpdateOperationsInput | string
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type OcorrenciaUncheckedUpdateManyWithoutCategoriaInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    titulo?: StringFieldUpdateOperationsInput | string
+    icone?: StringFieldUpdateOperationsInput | string
+    texto?: StringFieldUpdateOperationsInput | string
+    servidor?: StringFieldUpdateOperationsInput | string
+    criadoPorId?: StringFieldUpdateOperationsInput | string
+    atualizadoPorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
