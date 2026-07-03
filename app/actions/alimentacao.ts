@@ -13,7 +13,7 @@ export interface AlaDistribData {
 }
 
 // Fetch all active Alas and their corresponding DistribAla for a modulo
-export async function getDistribuicaoData(modulo: Modulo): Promise<AlaDistribData[]> {
+export async function getAlimentacaoData(modulo: Modulo): Promise<AlaDistribData[]> {
   try {
     const alas = await prisma.ala.findMany({
       where: { ativa: true },
@@ -41,7 +41,7 @@ export async function getDistribuicaoData(modulo: Modulo): Promise<AlaDistribDat
 }
 
 // Save all distribution entries for a modulo
-export async function saveDistribuicaoData(
+export async function saveAlimentacaoData(
   modulo: Modulo,
   data: { id: string; internos: number; dietas: number }[]
 ) {
@@ -88,7 +88,7 @@ export async function saveDistribuicaoData(
 }
 
 // Reset all distribution entries for a modulo to 0
-export async function clearDistribuicaoData(modulo: Modulo) {
+export async function clearAlimentacaoData(modulo: Modulo) {
   try {
     await prisma.distribAla.updateMany({
       where: { modulo },

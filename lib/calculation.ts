@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import { unstable_cache } from "next/cache"
 
 export interface Ala {
   id: string
@@ -20,7 +21,7 @@ export interface ColunaDef {
   unit?: string
 }
 
-export interface DistribuicaoConfig {
+export interface AlimentacaoConfig {
   titulo: string
   emoji: string
   storageKey: string
@@ -140,7 +141,7 @@ export function arredondarGarrafas(valor: number): number {
 // CONFIGS DOS 3 MÓDULOS
 // ============================================
 
-export const alimentacaoConfig: DistribuicaoConfig = {
+export const alimentacaoConfig: AlimentacaoConfig = {
   titulo: "Controle de Distribuição de Alimentação",
   emoji: "🍽️",
   storageKey: "controleAlimentacaoUPI4",
@@ -180,7 +181,7 @@ export const alimentacaoConfig: DistribuicaoConfig = {
   },
 }
 
-export const cafeConfig: DistribuicaoConfig = {
+export const cafeConfig: AlimentacaoConfig = {
   titulo: "Controle de Distribuição de Café",
   emoji: "☕",
   storageKey: "controleCafeUPI4",
@@ -223,7 +224,7 @@ export const cafeConfig: DistribuicaoConfig = {
   },
 }
 
-export const biscoitoConfig: DistribuicaoConfig = {
+export const biscoitoConfig: AlimentacaoConfig = {
   titulo: "Controle de Distribuição de Biscoitos",
   emoji: "🍪",
   storageKey: "controleBiscoitosUPI4",
@@ -275,7 +276,7 @@ interface ConfiguracaoGlobalRecord {
   valor: string | number | null
 }
 
-export async function getConfigValues(): Promise<ConfigValues> {
+const _fetchConfigValues = async (): Promise<ConfigValues> => {
   try {
     const configs = await prisma.configuracaoGlobal.findMany()
     const map = Object.fromEntries(configs.map((c: ConfiguracaoGlobalRecord) => [c.chave, c.valor])) as Record<string, string | number | null>
@@ -330,6 +331,12 @@ export async function getConfigValues(): Promise<ConfigValues> {
     return DEFAULT_CONFIG
   }
 }
+
+export const getConfigValues = unstable_cache(
+  _fetchConfigValues,
+  ["config-global"],
+  { tags: ["config-global"] }
+)
 
 // Helper to get dynamic header names based on globalConfig settings
 export function getDynamicHeader(

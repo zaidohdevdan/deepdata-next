@@ -16,228 +16,10 @@ import {
   generateOccurrenceTextAction
 } from "@/app/actions/ocorrencias"
 
-interface Template {
-  id: string
-  title: string
-  icon: string
-  category: "Saúde" | "Jurídico/Atendimento" | "Operação/Rotina" | "Escoltas" | "Alimentação"
-  text: string
-}
-
-const TEMPLATES: Template[] = [
-  // SAÚDE
-  {
-    id: "atend-medico",
-    title: "Atend. Médico",
-    icon: "👨‍⚕️",
-    category: "Saúde",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, os internos relacionados na seção \"CUSTODIADOS\" desta ocorrência foram conduzidos de suas respectivas celas para atendimento Médico no setor de saúde desta unidade, conforme programação previamente estabelecida. Todo o procedimento foi supervisionado pelo Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "atend-odonto",
-    title: "Atend. Odonto",
-    icon: "🦷",
-    category: "Saúde",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, os internos relacionados na seção \"CUSTODIADOS\" desta ocorrência foram conduzidos de suas respectivas celas para atendimento Odontológico no setor de saúde desta unidade, conforme programação previamente estabelecida. Todo o procedimento foi supervisionado pelo Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "atend-psiquiatrico",
-    title: "Atend. Psiquiátrico",
-    icon: "🤪",
-    category: "Saúde",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, os internos relacionados na seção \"CUSTODIADOS\" desta ocorrência foram conduzidos de suas respectivas celas para atendimento Psiquiátrico no setor de saúde desta unidade, conforme programação previamente estabelecida. Todo o procedimento foi supervisionado pelo Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "atend-fisio",
-    title: "Atend. Fisio",
-    icon: "🦽",
-    category: "Saúde",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, os internos relacionados na seção \"CUSTODIADOS\" desta ocorrência foram conduzidos de suas respectivas celas para atendimento Fisioterapeuta no setor de saúde desta unidade, conforme programação previamente estabelecida. Todo o procedimento foi supervisionado pelo Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "atend-psicologico",
-    title: "Atend. Psicológico",
-    icon: "🧠",
-    category: "Saúde",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, os internos relacionados na seção \"CUSTODIADOS\" desta ocorrência foram conduzidos de suas respectivas celas para atendimento Psicológico no setor de saúde desta unidade, conforme programação previamente estabelecida. Todo o procedimento foi supervisionado pelo Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "atend-enfermagem",
-    title: "Atend. Enfermagem",
-    icon: "💉",
-    category: "Saúde",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, os internos relacionados na seção \"CUSTODIADOS\" desta ocorrência foram conduzidos de suas respectivas celas para atendimento de enfermaria no setor de saúde desta unidade, conforme programação previamente estabelecida. Todo o procedimento foi supervisionado pelo Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "triagem",
-    title: "Triagem de Saúde",
-    icon: "🔎",
-    category: "Saúde",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, os internos da ala [ALA] foram submetidos a uma triagem no interior da referida ala. A equipe de triagem composta pela enfermeira [ENFERMEIRA], acompanhada dos demais profissionais de saúde, conforme programação previamente estabelecida, realizaram a triagem para agendamentos de atendimentos médicos, odontológicos, entre outros. Todo o procedimento foi supervisionado pelo Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "medicao-17h",
-    title: "Entrega Medicação (17h)",
-    icon: "💊",
-    category: "Saúde",
-    text: "Comunico a vossa senhoria que, por volta das 17:00, a técnica de enfermagem [TECNICA] realizou com sucesso a entrega das medicações em todas as alas, conforme a programação estabelecida. Durante o referido procedimento os policiais penais listados na secção SERVIDORES acompanharam a profissional durante a entrega das medicações."
-  },
-  {
-    id: "medicao-05h",
-    title: "Entrega Medicação (05h)",
-    icon: "💊",
-    category: "Saúde",
-    text: "Comunico a vossa senhoria que, por volta das 05:00, a técnica de enfermagem [TECNICA] realizou com sucesso a entrega das medicações em todas as alas, conforme a programação estabelecida. Durante o referido procedimento os policiais penais listados na secção SERVIDORES acompanharam a profissional durante a entrega das medicações."
-  },
-
-  // JURÍDICO / ATENDIMENTO
-  {
-    id: "atend-videoconf",
-    title: "Atend. Videoconf",
-    icon: "📹",
-    category: "Jurídico/Atendimento",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, das 08h00 às 17h00, ocorrerão os atendimentos de natureza jurídica por videoconferência com os internos relacionados na seção “CUSTODIADOS” desta ocorrência, setor de SALAS DE VIDEOCONFERÊNCIA. Todo o procedimento foi supervisionado pelo(a) Policial Penal discriminado(a) na seção “SERVIDORES” e transcorreu sem alterações."
-  },
-  {
-    id: "atend-adv-casa",
-    title: "Atend. Adv. da Casa",
-    icon: "👨‍💼",
-    category: "Jurídico/Atendimento",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, no período da manhã/tarde, os internos relacionados na seção \"CUSTODIADOS\" desta ocorrência foram conduzidos de suas respectivas celas para atendimento com o defensor público no auditório da videira, conforme programação previamente estabelecida. Todo o procedimento foi supervisionado pelo Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "atend-adv",
-    title: "Atend. Advogados",
-    icon: "👨‍💼",
-    category: "Jurídico/Atendimento",
-    text: "Comunico a Vossa Senhoria que, nos períodos da manhã e tarde, foram realizados os atendimentos jurídicos conforme a programação estabelecida. Os detalhes da operação constam no protocolo SIGEPEN nº [PROTOCOLO], que contém a relação nominal de internos e advogados. A consulta detalhada pode ser realizada através do Sistema SIGEPEN, na aba Relatório Agendamento Jurídico. Todo o procedimento foi supervisionado pelo Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "oficial-justica",
-    title: "Oficial de Justiça",
-    icon: "👨‍⚖️",
-    category: "Jurídico/Atendimento",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, no período da manhã/tarde, os internos relacionados na seção \"CUSTODIADOS\" desta ocorrência foram conduzidos de suas respectivas celas para atendimento com o oficial de justiça, Dr [OFICIAL], nas salas de esperas desta unidade, conforme programação previamente estabelecida. Todo o procedimento foi supervisionado pelo Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "recusa-atend",
-    title: "Termo de Recusa",
-    icon: "❌",
-    category: "Jurídico/Atendimento",
-    text: "Comunico a vossa senhoria que, nesta presente data, no turno da manhã/tarde, durante a chamada dos internos para atendimento [TIPO_ATENDIMENTO], os internos listados na seção \"CUSTODIADOS\" recusaram o referido atendimento e assinaram os seus respectivos termos de recusa, conforme consta em anexo. Todo o procedimento foi supervisionado pelo(a) Policial Penal discriminado(a) na seção “SERVIDORES” e transcorreu sem outras alterações."
-  },
-
-  // OPERAÇÃO / ROTINA
-  {
-    id: "banho-sol",
-    title: "Banho de Sol",
-    icon: "☀️",
-    category: "Operação/Rotina",
-    text: "Comunico a Vossa Senhoria que, no período da manhã, por volta das 07h30 às 09:30, foi realizado o banho de sol dos internos da Ala [ALA], sob a vigilância aproximada dos Policiais Penais discriminados na seção “SERVIDORES” desta ocorrência. Foi realizada a vistoria estrutural em todas as celas."
-  },
-  {
-    id: "corte-cabelo",
-    title: "Corte de Cabelo",
-    icon: "✂️",
-    category: "Operação/Rotina",
-    text: "Comunico a vossa senhoria que, nesta presente data, no período da manhã/tarde, por volta das 08:00, foi iniciado o corte de cabelo dos internos da ALA [ALA], sob a vigilância aproximada dos Policiais Penais discriminados na seção “SERVIDORES” desta ocorrência."
-  },
-  {
-    id: "entrega-kits",
-    title: "Entrega Kits SAP",
-    icon: "📦",
-    category: "Operação/Rotina",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, foi realizada a entrega dos kits fornecidos pela SAP-CE aos internos das Alas [ALAS], no período compreendido entre 08h00 e 17h00. A entrega foi devidamente acompanhada e registrada para fins de controle e prestação de contas junto à administração da unidade."
-  },
-  {
-    id: "barbeadores",
-    title: "Barbeadores Descartáveis",
-    icon: "🪒",
-    category: "Operação/Rotina",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, foi realizada a entrega dos barbeadores descartáveis aos internos das Alas [ALAS], durante o(s) período(s) manhã/tarde. A entrega transcorreu sem alterações e foi devidamente registrada para fins de controle institucional."
-  },
-  {
-    id: "agua-potavel",
-    title: "Água Potável",
-    icon: "🚰",
-    category: "Operação/Rotina",
-    text: "Comunico a Vossa Senhoria que, durante este plantão, foi realizada a distribuição de água potável conforme o cronograma de distribuição para as ALAS desta unidade. O policial penal responsável pelo procedimento foi discriminado na seção “SERVIDORES” desta ocorrência."
-  },
-  {
-    id: "prontidao",
-    title: "Escala Prontidão",
-    icon: "👮",
-    category: "Operação/Rotina",
-    text: "Comunico a Vossa Senhoria que os Policiais Penais discriminados na seção “SERVIDORES” desta ocorrência encontram-se de prontidão no período compreendido entre 08h00 do dia corrente e 08h00 do dia subsequente, conforme estabelece a escala de serviço vigente."
-  },
-  {
-    id: "viatura",
-    title: "Entrega de Viatura",
-    icon: "🚓",
-    category: "Operação/Rotina",
-    text: "Comunico a Vossa Senhoria que o policial penal [POLICIAL] é o responsável pela VIATURA POLICIAL neste plantão. O referido veículo foi recebido pelo policial penal supracitado sem alterações."
-  },
-  {
-    id: "reserva-armas",
-    title: "Reserva de Armamento",
-    icon: "🔫",
-    category: "Operação/Rotina",
-    text: "Comunico a Vossa Senhoria que o Policial Penal [SAINDO], responsável pela reserva de armamento da Equipe [EQUIPE], recebeu do Policial Penal [ENTRANDO], responsável pela reserva de armamento da Equipe [EQUIPE], este posto e todo o material bélico sem qualquer alteração."
-  },
-  {
-    id: "bate-grade",
-    title: "Bate Grade / Conf.",
-    icon: "🔒",
-    category: "Operação/Rotina",
-    text: "Comunico a vossa senhoria que a conferência nominal dos internos e o procedimento de bate grade realizado nesta unidade prisional no período das 17:00 às 19h00 estão fundamentados nas normas de segurança, disciplina e fiscalização da execução penal, visando a prevenção de fugas e a manutenção da ordem no ambiente prisional. Ao término da inspeção, não foram detectadas irregularidades ou alterações na estrutura das celas, garantindo a integridade da segurança da unidade."
-  },
-
-  // ESCOLTAS
-  {
-    id: "esc-audiencia",
-    title: "Escolta Audiência",
-    icon: "⚖️",
-    category: "Escoltas",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, por volta das 08h00, o interno listado na seção \"CUSTODIADOS\", foi encaminhado sob escolta para a [VARA] VARA CRIMINAL DA COMARCA DE FORTALEZA para participação em AUDIÊNCIA PRESENCIAL. A escolta foi realizada pelos Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "esc-hospital",
-    title: "Escolta Hospital",
-    icon: "🏥",
-    category: "Escoltas",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, por volta das 08h00, o interno listado na seção \"CUSTODIADOS\", foi encaminhado sob escolta para o [HOSPITAL], a fim de realização de atendimento médico. A escolta foi realizada pelos Policiais Penais discriminados na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-  {
-    id: "esc-pefoce",
-    title: "Escolta PEFOCE",
-    icon: "🔬",
-    category: "Escoltas",
-    text: "Comunico a Vossa Senhoria que, nesta presente data, por volta das 08h00, o interno listado na seção \"CUSTODIADOS\", foi encaminhado sob escolta para PEFOCE - PERÍCIA FORENSE para exame pericial. A escolta foi realizada pelos Policial Penal discriminado na seção \"SERVIDORES\" desta ocorrência e transcorreu sem alterações."
-  },
-
-  // ALIMENTAÇÃO
-  {
-    id: "alim-cafe",
-    title: "Chegada Café da Manhã",
-    icon: "☕",
-    category: "Alimentação",
-    text: "Comunico a Vossa Senhoria que a alimentação destinada ao café da manhã chegou à unidade às 05h30min. O recebimento, separação e vistoria dos gêneros alimentícios foram realizados pelos Policiais Penais discriminados na seção \"SERVIDORES\" desta ocorrência, seguindo todos os protocolos operacionais e normas institucionais estabelecidas. A entrega do café da manhã aos internos ocorreu normalmente, sem o registro de intercorrências durante o processo."
-  },
-  {
-    id: "alim-almoco",
-    title: "Chegada Almoço",
-    icon: "🍽️",
-    category: "Alimentação",
-    text: "Comunico a Vossa Senhoria que a alimentação destinada ao almoço chegou à unidade às 10h30min. O recebimento, separação e vistoria dos gêneros alimentícios foram realizados pelos Policiais Penais discriminados na seção \"SERVIDORES\" desta ocorrência, seguindo todos os protocolos operacionais e normas institucionais estabelecidas. A entrega do almoço aos internos ocorreu normalmente, sem o registro de intercorrências durante o processo."
-  },
-  {
-    id: "alim-jantar",
-    title: "Chegada Jantar",
-    icon: "🍲",
-    category: "Alimentação",
-    text: "Comunico a Vossa Senhoria que a alimentação destinada ao jantar chegou à unidade às 16h30min. O recebimento, separação e vistoria dos gêneros alimentícios foram realizados pelos Policiais Penais discriminados na seção \"SERVIDORES\" desta ocorrência, seguindo todos os protocolos operacionais e normas institucionais estabelecidas. A entrega do jantar aos internos ocorreu normalmente, sem o registro de intercorrências durante o processo."
-  }
-]
+import OcorrenciaFormModal from "./modals/OcorrenciaFormModal"
+import OcorrenciaDeleteModal from "./modals/OcorrenciaDeleteModal"
+import OcorrenciaCategoryModal from "./modals/OcorrenciaCategoryModal"
+import { TEMPLATES, Template } from "./ocorrencias-templates"
 
 interface DBInstance {
   id: string
@@ -663,251 +445,46 @@ export default function OcorrenciasContainer({
       )}
 
       {/* CRUD DIALOG FORM */}
-      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="font-bold text-lg">
-              {editingId ? "Editar Ocorrência" : "Nova Ocorrência Personalizada"}
-            </DialogTitle>
-            <DialogDescription className="text-slate-500 text-xs">
-              Preencha as informações da ocorrência para salvar e reutilizar depois.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-5 my-2">
-            {/* EMOJI PICKER */}
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Ícone da Ocorrência</label>
-              <div className="flex items-center gap-3">
-                {/* Preview */}
-                <div className="flex-shrink-0 w-14 h-14 rounded-2xl border-2 border-slate-200 bg-slate-50 flex items-center justify-center text-3xl">
-                  {formIcone}
-                </div>
-                {/* Text input to type/paste emoji */}
-                <input
-                  type="text"
-                  value={formIcone}
-                  onChange={(e) => setFormIcone(e.target.value.slice(0, 4))}
-                  placeholder="Digite ou cole"
-                  className="w-28 text-center text-2xl border border-slate-200 rounded-xl py-2 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none bg-white"
-                />
-                <p className="text-[10px] text-slate-400 leading-tight">
-                  Digite, cole ou<br/>selecione abaixo
-                </p>
-              </div>
-              {/* Emoji grid */}
-              <div className="flex flex-wrap gap-1.5 p-3 bg-slate-50 rounded-2xl border border-slate-100">
-                {[
-                  // SAÚDE & MÉDICO
-                  "👨‍⚕️","🦷","🤪","🦽","🧠","💉","🔎","💊","🩺","🩹","🤒","🚑","🏥",
-                  // OPERAÇÃO & SEGURANÇA
-                  "🔒","🔓","🔏","🔑","👮","🛡️","🚨","🚔","🚐","👀","🔍","📢","🗂️",
-                  "🚪","🔗","⛓️","🛃","🛂","🔫","🏹","⚔️","⛺","🔥","🧯","🧹","🧺",
-                  // ROTINA & CONTATO
-                  "☀️","🌙","📞","📱","💻","🔋","🔌","💡","🔧","🛠️","🔨","⚙️",
-                  "🛁","🚿","🧼","🧻","🧴","✂️","🪒","📦","💧","♻️",
-                  // ATENDIMENTO & LEGAIS
-                  "💁","👨‍💼","👨‍⚖️","⚖️","🖋️","📝","📋","✅","⚠️","ℹ️",
-                  // ALIMENTAÇÃO & REFEIÇÃO
-                  "🍽️","🥤","☕","🍕","🥘","🍞","🥪","🍎","🍌","🥛","🍵"
-                ].map((emoji) => (
-                  <button
-                    key={emoji}
-                    type="button"
-                    onClick={() => setFormIcone(emoji)}
-                    className={`text-xl p-1.5 rounded-lg transition-all hover:scale-110 ${
-                      formIcone === emoji
-                        ? "bg-indigo-100 ring-2 ring-indigo-400 scale-110"
-                        : "hover:bg-slate-200"
-                    }`}
-                    title={emoji}
-                  >
-                    {emoji}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* TÍTULO */}
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Título</label>
-              <Input
-                value={formTitulo}
-                onChange={(e) => setFormTitulo(e.target.value)}
-                placeholder="Ex: Atendimento Psicológico Ala A"
-                className="w-full text-xs font-semibold text-slate-700 rounded-xl border-slate-200 focus:ring-slate-900 focus:border-slate-900 shadow-sm"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Categoria</label>
-                <Select value={formCategoria} onValueChange={(val) => setFormCategoria(val || "")}>
-                  <SelectTrigger className="w-full text-xs font-semibold text-slate-700 rounded-xl border-slate-200 focus:ring-slate-900 focus:border-slate-900 shadow-sm h-8 bg-white">
-                    <SelectValue placeholder="Selecione a categoria" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white border border-slate-200">
-                    {formCategories.map(c => (
-                      <SelectItem key={c} value={c}>{c}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Servidor Responsável</label>
-                <Input
-                  value={formServidor}
-                  onChange={(e) => setFormServidor(e.target.value)}
-                  placeholder="Nome do Policial Penal"
-                  className="w-full text-xs font-semibold text-slate-700 rounded-xl border-slate-200 focus:ring-slate-900 focus:border-slate-900 shadow-sm"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide font-semibold">Texto da Ocorrência</label>
-                <button
-                  type="button"
-                  onClick={() => setShowAiHelper(!showAiHelper)}
-                  className="inline-flex items-center gap-1 text-[10px] font-extrabold text-indigo-650 hover:text-indigo-800 transition cursor-pointer"
-                >
-                  <Sparkles size={12} /> {showAiHelper ? "Fechar Assistente de IA" : "Elaborar com IA (Gemini)"}
-                </button>
-              </div>
-
-              {showAiHelper && (
-                <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100/80 space-y-3">
-                  <div className="space-y-1">
-                    <label className="block text-[9px] font-bold text-indigo-500 uppercase">Resuma o que aconteceu de forma simples:</label>
-                    <textarea
-                      value={aiPrompt}
-                      onChange={(e) => setAiPrompt(e.target.value)}
-                      rows={3}
-                      placeholder="Ex: Condução do preso João Silva (matrícula 123456) da ala A cela 2 para atendimento odontológico às 14:00 por dor de dente, conduzido pelo PP Bezerra, sem novidades."
-                      className="w-full p-2 text-xs border border-indigo-200 rounded-xl focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none bg-white font-semibold text-slate-700 leading-normal"
-                    />
-                  </div>
-                  <div className="flex justify-end">
-                    <Button
-                      type="button"
-                      disabled={isGeneratingAi}
-                      onClick={async () => {
-                        if (!aiPrompt.trim()) {
-                          toast.error("Por favor, digite o resumo do fato.")
-                          return
-                        }
-                        setIsGeneratingAi(true)
-                        try {
-                          const res = await generateOccurrenceTextAction(aiPrompt)
-                          if (res.success && res.text) {
-                            setFormTexto(res.text)
-                            toast.success("Texto oficial gerado pela IA!")
-                            setShowAiHelper(false)
-                          } else {
-                            toast.error(res.error || "Erro ao gerar redação.")
-                          }
-                        } catch (e: unknown) {
-                          const message = e instanceof Error ? e.message : "Erro de conexão."
-                          toast.error(message)
-                        } finally {
-                          setIsGeneratingAi(false)
-                        }
-                      }}
-                      className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold gap-1"
-                    >
-                      {isGeneratingAi ? (
-                        <>
-                          <Loader2 size={12} className="animate-spin" /> Gerando Redação...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles size={12} /> Gerar Texto Oficial
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              <textarea
-                value={formTexto}
-                onChange={(e) => setFormTexto(e.target.value)}
-                rows={12}
-                placeholder="Insira o texto completo da ocorrência..."
-                className="w-full px-3 py-2 text-xs border border-slate-200 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 rounded-xl outline-none font-semibold text-slate-700 font-mono leading-relaxed shadow-sm bg-white"
-              />
-            </div>
-          </div>
-
-          <DialogFooter>
-            <DialogClose render={<Button variant="outline" className="rounded-xl text-xs font-bold">Cancelar</Button>} />
-            <Button
-              onClick={handleSave}
-              disabled={isPending}
-              className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold"
-            >
-              {isPending ? "Salvando..." : "Salvar Ocorrência"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <OcorrenciaFormModal
+        isOpen={isFormOpen}
+        onOpenChange={setIsFormOpen}
+        editingId={editingId}
+        formTitulo={formTitulo}
+        setFormTitulo={setFormTitulo}
+        formCategoria={formCategoria}
+        setFormCategoria={setFormCategoria}
+        formIcone={formIcone}
+        setFormIcone={setFormIcone}
+        formTexto={formTexto}
+        setFormTexto={setFormTexto}
+        formServidor={formServidor}
+        setFormServidor={setFormServidor}
+        formCategories={formCategories}
+        isPending={isPending}
+        handleSave={handleSave}
+        aiPrompt={aiPrompt}
+        setAiPrompt={setAiPrompt}
+        showAiHelper={showAiHelper}
+        setShowAiHelper={setShowAiHelper}
+      />
 
       {/* CONFIRM DELETE DIALOG */}
-      <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-bold text-lg text-rose-600">Confirmar Exclusão</DialogTitle>
-            <DialogDescription className="text-slate-500 text-xs">
-              Tem certeza que deseja excluir esta ocorrência permanentemente? Esta ação não pode ser desfeita.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose render={<Button variant="outline" className="rounded-xl text-xs font-bold">Cancelar</Button>} />
-            <Button
-              onClick={handleDelete}
-              disabled={isPending}
-              className="bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold"
-            >
-              {isPending ? "Excluindo..." : "Excluir Ocorrência"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <OcorrenciaDeleteModal
+        isOpen={isDeleteOpen}
+        onOpenChange={setIsDeleteOpen}
+        handleDelete={handleDelete}
+        isPending={isPending}
+      />
 
       {/* NEW CATEGORY DIALOG */}
-      <Dialog open={isCategoryOpen} onOpenChange={setIsCategoryOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="font-bold text-lg">Nova Categoria</DialogTitle>
-            <DialogDescription className="text-slate-500 text-xs">
-              Insira o nome da nova categoria de ocorrências.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 my-2">
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Nome da Categoria</label>
-              <Input
-                value={newCategoryName}
-                onChange={(e) => setNewCategoryName(e.target.value)}
-                placeholder="Ex: Infraestrutura, Disciplinar"
-                className="w-full text-xs font-semibold text-slate-700 rounded-xl border-slate-200 focus:ring-slate-900 focus:border-slate-900 shadow-sm"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <DialogClose render={<Button variant="outline" className="rounded-xl text-xs font-bold">Cancelar</Button>} />
-            <Button
-              onClick={handleCreateCategory}
-              disabled={isPending}
-              className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold"
-            >
-              {isPending ? "Criando..." : "Criar Categoria"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <OcorrenciaCategoryModal
+        isOpen={isCategoryOpen}
+        onOpenChange={setIsCategoryOpen}
+        newCategoryName={newCategoryName}
+        setNewCategoryName={setNewCategoryName}
+        handleCreateCategory={handleCreateCategory}
+        isPending={isPending}
+      />
     </div>
   )
 }

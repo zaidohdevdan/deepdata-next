@@ -1,16 +1,16 @@
 import { useRef } from "react"
 import { Upload, Download, Printer, RefreshCw } from "lucide-react"
-import { DistribuicaoConfig, ConfigValues } from "@/lib/calculation"
+import { AlimentacaoConfig, ConfigValues } from "@/lib/calculation"
 
-interface DistribuicaoHeaderProps {
-  config: DistribuicaoConfig
+interface AlimentacaoHeaderProps {
+  config: AlimentacaoConfig
   globalConfig: ConfigValues
   onImport: (e: React.ChangeEvent<HTMLInputElement>) => void
   onExport: () => void
   onClearClick: () => void
 }
 
-export function DistribuicaoHeader({ config, globalConfig, onImport, onExport, onClearClick }: DistribuicaoHeaderProps) {
+export function AlimentacaoHeader({ config, globalConfig, onImport, onExport, onClearClick }: AlimentacaoHeaderProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   return (
