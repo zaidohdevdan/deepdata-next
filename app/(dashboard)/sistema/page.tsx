@@ -1,46 +1,28 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Download, AlertCircle, RefreshCw, Search, FileText } from "lucide-react"
 import { toast } from "sonner"
-import * as XLSX from "xlsx"
 
 import { UploadArea } from "@/components/sistema/UploadArea"
 import { VisitasSidebar } from "@/components/sistema/VisitasSidebar"
 import { VisitasTable } from "@/components/sistema/VisitasTable"
-import { ExtractedVisitor, parsePDFText, isAlaValida, ALAS_VALIDAS_UPI4 } from "@/lib/pdf-parser"
-import { getVisitasAction, saveVisitasAction, clearVisitasAction } from "@/app/actions/visitas"
+import { ExtractedVisitor, ALAS_VALIDAS_UPI4 } from "@/lib/pdf-parser"
+import { getVisitasAction, clearVisitasAction } from "@/app/actions/visitas"
 
-interface PDFTextItem { str: string }
-interface PDFTextContent { items: PDFTextItem[] }
-interface PDFPage { getTextContent: () => Promise<PDFTextContent> }
-interface PDFDocument { numPages: number; getPage: (n: number) => Promise<PDFPage> }
-interface PDFJSStatic {
-  GlobalWorkerOptions: { workerSrc: string }
-  getDocument: (src: Uint8Array) => { promise: Promise<PDFDocument> }
-}
-interface CustomWindow extends Window { pdfjsLib?: PDFJSStatic }
+import { handleExportExcel, handleGeneratePDF } from "@/components/sistema/utils/export-visitas"
+import { useVisitasFileProcessor } from "@/components/sistema/hooks/useVisitasFileProcessor"
+import { useVisitasFiltros } from "@/components/sistema/hooks/useVisitasFiltros"
 
 export default function VisitasPage() {
-  // Lazy initializers: read localStorage once on mount without setState-in-effect
   const [data, setData] = useState<ExtractedVisitor[]>([])
   const [totalVisits, setTotalVisits] = useState<number>(0)
   const [isLoadingVisits, setIsLoadingVisits] = useState(true)
-
-  // Filtros
-  const [searchInterno, setSearchInterno] = useState("")
-  const [searchVisitante, setSearchVisitante] = useState("")
-  const [selectedAla, setSelectedAla] = useState("Todos")
-  const [selectedCela, setSelectedCela] = useState("Todas")
-  const [selectedPrioridade, setSelectedPrioridade] = useState("Todas")
-  const [sortOption, setSortOption] = useState<"senha" | "custodiado" | "localizacao">("senha")
-  const [viewMode, setViewMode] = useState<"visitas" | "internos">("visitas")
-  const [selectedParidadeCela, setSelectedParidadeCela] = useState("Todas")
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [showStats, setShowStats] = useState(false)
 
   const [pdfjsLoaded, setPdfjsLoaded] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [showStats, setShowStats] = useState(false)
 
   // Load from DB on mount
   useEffect(() => {
@@ -84,7 +66,7 @@ export default function VisitasPage() {
     script.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"
     script.async = true
     script.onload = () => {
-      const w = window as unknown as CustomWindow
+      const w = window as any
       if (w.pdfjsLib) {
         w.pdfjsLib.GlobalWorkerOptions.workerSrc =
           "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js"
@@ -95,385 +77,56 @@ export default function VisitasPage() {
     return () => { document.body.removeChild(script) }
   }, [])
 
-  // Parse Excel — lê TODAS as linhas, sem deduplicação
-  const processExcelFile = (file: File) => {
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      try {
-        const result = e.target?.result
-        if (!result) return
-        const arrayData = new Uint8Array(result as ArrayBuffer)
-        const workbook = XLSX.read(arrayData, { type: "array" })
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]]
-        const jsonData = XLSX.utils.sheet_to_json<Record<string, string | number | undefined>>(worksheet)
+  // Processor Hook
+  const { handleFileChange } = useVisitasFileProcessor({ pdfjsLoaded, setData, setTotalVisits })
 
-        setTotalVisits(jsonData.length)
-
-        const extracted: ExtractedVisitor[] = []
-        let rejected = 0
-
-        jsonData.forEach((row) => {
-          const situacao = String(row["Situação Visita"] || row["Situacao Visita"] || "Agendada").trim()
-          if (/Cancelada/i.test(situacao)) return
-
-          const prontuarioRaw = row["Prontuário"] || row["Prontuario"]
-          const prontuario = prontuarioRaw ? parseInt(String(prontuarioRaw), 10) : 0
-          const senha = parseInt(String(row["Senha Visita"] || row["Senha"] || 0), 10)
-          const custodiado = String(row["Nome Custodiado"] || row["Custodiado"] || "").trim()
-
-          // Fallbacks para a string de localização
-          let localizacao = String(
-            row["Localização ATUAL(BLOCO - ALA - CELA)"] ||
-            row["Localização AGENDAMENTO(BLOCO - ALA - CELA)"] ||
-            row["Localizacao"] ||
-            ""
-          ).trim()
-
-          if (!localizacao) {
-            const blocoCol = String(row["Localização Atual(BLOCO)"] || row["Localização Agendamento(BLOCO)"] || "").trim()
-            const alaCol = String(row["Localização Atual(ALA)"] || row["Localização Agendamento(ALA)"] || "").trim()
-            const celaCol = String(row["Localização Atual(CELA)"] || row["Localização Agendamento(CELA)"] || "").trim()
-            if (blocoCol || alaCol || celaCol) {
-              localizacao = `Bloco ${blocoCol || "00"} - Ala ${alaCol || "X"} - Cela ${celaCol || "00"}`
-            }
-          }
-
-          // Dados do visitante
-          const cpfVisitante = String(row["CPF Visitante"] || "").trim()
-          const nomeVisitante = String(row["Nome Visitante"] || "").trim()
-          const relacao = String(row["Relação"] || row["Relacao"] || "").trim()
-
-          const prioridadeRaw = row["Priorid. Visita"] || row["Prioridade Visita"] || row["Prioridade"] || ""
-          const prioridade = String(prioridadeRaw).trim().toLowerCase() === "sim" ? "sim" : "não"
-
-          if (!custodiado || !localizacao) return
-
-          // Extrair Ala e Cela da string de localização
-          const match = String(localizacao).match(/Ala[:\s]+(.+?)\s*-\s*Cela\s+([A-Z0-9]+)/i)
-          let alaStr = match ? match[1].trim() : ""
-          let celaFormatted = ""
-          if (match) {
-            const celaRaw = match[2].trim()
-            if (/SEGURAN[CÇ]A/i.test(alaStr)) {
-              celaFormatted = `SEG-${celaRaw}`
-            } else {
-              celaFormatted = `${alaStr.trim().charAt(0).toUpperCase()}-${celaRaw}`
-            }
-          } else {
-            // Se falhar o regex, tenta obter das colunas individuais
-            const alaCol = String(row["Localização Atual(ALA)"] || row["Localização Agendamento(ALA)"] || "").trim()
-            const celaCol = String(row["Localização Atual(CELA)"] || row["Localização Agendamento(CELA)"] || "").trim()
-            alaStr = alaCol
-            if (alaCol && celaCol) {
-              if (/SEGURAN[CÇ]A/i.test(alaCol)) {
-                celaFormatted = `SEG-${celaCol}`
-              } else {
-                celaFormatted = `${alaCol.trim().charAt(0).toUpperCase()}-${celaCol}`
-              }
-            }
-          }
-
-          if (!isAlaValida(alaStr)) {
-            rejected++
-            return
-          }
-
-          extracted.push({
-            prontuario,
-            senha,
-            custodiado,
-            localizacao,
-            ala: alaStr.toUpperCase(),
-            prioridade,
-            cela: celaFormatted,
-            cpfVisitante,
-            nomeVisitante,
-            relacao,
-            situacao,
-            visitantes: [],
-          })
-        })
-
-      const loadId = toast.loading("Gravando dados no banco de dados...")
-      saveVisitasAction(extracted).then((res) => {
-        toast.dismiss(loadId)
-        if (res.success) {
-          setData(extracted)
-          setTotalVisits(extracted.length)
-          toast.success("Planilha importada com sucesso!", {
-            description: `${extracted.length} visitas válidas salvas no banco. ${rejected} rejeitadas por ala inválida.`,
-          })
-        } else {
-          toast.error(res.error || "Erro ao salvar visitas no banco de dados.")
-        }
-      }).catch((err) => {
-        toast.dismiss(loadId)
-        console.error(err)
-        toast.error("Erro de conexão ao salvar.")
-      })
-    } catch (err) {
-      console.error(err)
-      toast.error("Erro ao ler a planilha.")
-    }
-  }
-  reader.readAsArrayBuffer(file)
-}
-
-  // Parse PDF
-  const processPDFFile = (file: File) => {
-    if (!pdfjsLoaded) {
-      toast.error("Biblioteca PDF.js ainda está carregando. Tente novamente.")
-      return
-    }
-    const w = window as unknown as CustomWindow
-    const pdfjsLib = w.pdfjsLib
-    if (!pdfjsLib) { toast.error("Erro ao inicializar PDF.js."); return }
-
-    const reader = new FileReader()
-    reader.onload = function () {
-      const typedarray = new Uint8Array(this.result as ArrayBuffer)
-      pdfjsLib.getDocument(typedarray).promise.then((pdf) => {
-        const pages: Promise<PDFTextContent>[] = []
-        for (let i = 1; i <= pdf.numPages; i++) {
-          pages.push(pdf.getPage(i).then((p) => p.getTextContent()))
-        }
-        Promise.all(pages).then((contents) => {
-          let textContent = ""
-          contents.forEach((c) => { textContent += c.items.map((i) => i.str).join(" ") + " " })
-          const { tempData, rejected } = parsePDFText(textContent)
-          const loadId = toast.loading("Gravando dados no banco de dados...")
-          saveVisitasAction(tempData).then((res) => {
-            toast.dismiss(loadId)
-            if (res.success) {
-              setData(tempData)
-              setTotalVisits(tempData.length)
-              toast.success("PDF processado!", { description: `${tempData.length} visitas salvas no banco. ${rejected} rejeitadas.` })
-            } else {
-              toast.error(res.error || "Erro ao salvar visitas no banco.")
-            }
-          }).catch((err) => {
-            toast.dismiss(loadId)
-            console.error(err)
-            toast.error("Erro de conexão ao salvar.")
-          })
-        }).catch((err) => { console.error(err); toast.error("Erro ao ler PDF.") })
-      }).catch((err) => { console.error(err); toast.error("Erro ao decodificar PDF.") })
-    }
-    reader.readAsArrayBuffer(file)
-  }
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const name = file.name.toLowerCase()
-    if (name.endsWith(".xlsx") || name.endsWith(".xls")) processExcelFile(file)
-    else if (name.endsWith(".pdf")) processPDFFile(file)
-    else toast.error("Formato não suportado. Envie .xlsx, .xls ou .pdf")
-    if (fileInputRef.current) fileInputRef.current.value = ""
-  }
-
-  // Celas disponíveis para o dropdown (baseado nos dados filtrados por Ala)
-  const celasDisponiveis = Array.from(
-    new Set(
-      data
-        .filter((d) => selectedAla === "Todos" || d.ala === selectedAla)
-        .map((d) => d.cela)
-        .filter(Boolean)
-    )
-  ).sort()
-
-  // Filtros + ordenação
-  const sortedAndFiltered = data
-    .filter((item) => {
-      const matchInterno = item.custodiado.toLowerCase().includes(searchInterno.toLowerCase()) ||
-        String(item.prontuario).includes(searchInterno)
-      const matchVisitante = item.nomeVisitante.toLowerCase().includes(searchVisitante.toLowerCase()) ||
-        item.cpfVisitante.includes(searchVisitante)
-      const matchAla = selectedAla === "Todos" || item.ala.toUpperCase() === selectedAla.toUpperCase()
-      const matchCela = selectedCela === "Todas" || item.cela === selectedCela
-      const matchPrioridade = selectedPrioridade === "Todas" || item.prioridade === selectedPrioridade
-
-      const matchParidadeCela = (() => {
-        if (selectedParidadeCela === "Todas") return true
-        if (!item.cela) return false
-        const cellNumMatch = item.cela.match(/\d+$/)
-        if (!cellNumMatch) return false
-        const num = parseInt(cellNumMatch[0], 10)
-        return selectedParidadeCela === "pares" ? num % 2 === 0 : num % 2 !== 0
-      })()
-
-      return matchInterno && matchVisitante && matchAla && matchCela && matchPrioridade && matchParidadeCela
-    })
-    .sort((a, b) => {
-      if (sortOption === "senha") return a.senha - b.senha
-      if (sortOption === "custodiado") return a.custodiado.localeCompare(b.custodiado)
-      return a.localizacao.localeCompare(b.localizacao)
-    })
-
-  // Agrupamento das linhas para exibição (Visitas vs Internos)
-  const displayRows = (() => {
-    if (viewMode === "visitas") {
-      return sortedAndFiltered.map((item) => ({
-        senhaDisplay: String(item.senha),
-        custodiado: item.custodiado,
-        prontuario: item.prontuario,
-        cela: item.cela,
-        ala: item.ala,
-        nomeVisitante: item.nomeVisitante,
-        cpfVisitante: item.cpfVisitante,
-        relacao: item.relacao,
-        prioridade: item.prioridade,
-        situacao: item.situacao,
-      }))
-    } else {
-      const groups = new Map<string, ExtractedVisitor[]>()
-      sortedAndFiltered.forEach((item) => {
-        const key = item.prontuario > 0 ? String(item.prontuario) : item.custodiado.toUpperCase()
-        if (!groups.has(key)) {
-          groups.set(key, [])
-        }
-        groups.get(key)!.push(item)
-      })
-
-      return Array.from(groups.values()).map((items) => {
-        const sortedItems = [...items].sort((a, b) => a.senha - b.senha)
-        const senhas = sortedItems.map((i) => i.senha).join(", ")
-        const nomes = Array.from(new Set(sortedItems.map((i) => i.nomeVisitante).filter(Boolean))).join(", ")
-        const cpfs = Array.from(new Set(sortedItems.map((i) => i.cpfVisitante).filter(Boolean))).join(", ")
-        const relacoes = Array.from(new Set(sortedItems.map((i) => i.relacao).filter(Boolean))).join(", ")
-        const situacoes = Array.from(new Set(sortedItems.map((i) => i.situacao).filter(Boolean))).join(", ")
-        const prioridades = sortedItems.some((i) => i.prioridade === "sim") ? "sim" : "não"
-        const first = sortedItems[0]
-
-        return {
-          senhaDisplay: senhas || "—",
-          custodiado: first.custodiado,
-          prontuario: first.prontuario,
-          cela: first.cela,
-          ala: first.ala,
-          nomeVisitante: nomes || "—",
-          cpfVisitante: cpfs || "—",
-          relacao: relacoes || "—",
-          prioridade: prioridades,
-          situacao: situacoes || "—",
-        }
-      })
-    }
-  })()
+  // Filters Hook
+  const {
+    searchInterno, setSearchInterno,
+    searchVisitante, setSearchVisitante,
+    selectedAla, setSelectedAla,
+    selectedCela, setSelectedCela,
+    selectedPrioridade, setSelectedPrioridade,
+    sortOption, setSortOption,
+    viewMode, setViewMode,
+    selectedParidadeCela, setSelectedParidadeCela,
+    celasDisponiveis,
+    displayRows
+  } = useVisitasFiltros(data)
 
   const uniqueInternos = new Set(data.filter((d) => d.prontuario > 0).map((d) => d.prontuario)).size
 
-  const handleExportExcel = () => {
-    if (displayRows.length === 0) return
-    const exportData = displayRows.map((r, idx) => {
-      if (viewMode === "visitas") {
-        return {
-          Ordem: idx + 1,
-          Senha: r.senhaDisplay,
-          "Nome Visitante": r.nomeVisitante,
-          "CPF Visitante": r.cpfVisitante,
-          Relação: r.relacao,
-          Situação: r.situacao,
-          Prontuário: r.prontuario,
-          Custodiado: r.custodiado,
-          Ala: r.ala,
-          Cela: r.cela,
-          Prioridade: r.prioridade,
-        }
-      } else {
-        return {
-          Ordem: idx + 1,
-          Prontuário: r.prontuario,
-          Custodiado: r.custodiado,
-          Ala: r.ala,
-          Cela: r.cela,
-        }
-      }
+  const generateReport = () => {
+    const wings = Array.from(new Set(data.map(d => d.ala.toUpperCase()))).sort()
+    let reportText = "RELATÓRIO DE CONTROLE DE VISITAS - UPI-4\n"
+    reportText += "========================================\n\n"
+
+    let totalGeralVisitantes = 0
+    const totalGeralInternosSet = new Set<number>()
+
+    wings.forEach(wingName => {
+      const wingData = data.filter(d => d.ala.toUpperCase() === wingName)
+      const comPrioridade = wingData.filter(d => d.prioridade === "sim").length
+      const semPrioridade = wingData.filter(d => d.prioridade === "não").length
+      const totalVisitantes = wingData.length
+      const internos = new Set(wingData.map(d => d.prontuario))
+
+      totalGeralVisitantes += totalVisitantes
+      wingData.forEach(d => totalGeralInternosSet.add(d.prontuario))
+
+      reportText += `${wingName}:\n`
+      reportText += `  - COM PRIORIDADE: ${comPrioridade}\n`
+      reportText += `  - SEM PRIORIDADE: ${semPrioridade}\n`
+      reportText += `  - QUANTIDADE DE INTERNOS: ${internos.size}\n`
+      reportText += `  - TOTAL DE VISITANTES: ${totalVisitantes}\n`
+      reportText += `  - SÍNTESE: ${wingName}: COM PRIORIDADE: ${comPrioridade}, SEM PRIORIDADE: ${semPrioridade}, TOTAL: ${totalVisitantes}\n\n`
     })
-    const ws = XLSX.utils.json_to_sheet(exportData)
-    const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, viewMode === "visitas" ? "Visitas" : "Internos")
-    XLSX.writeFile(wb, viewMode === "visitas" ? "Visitas_UPI4.xlsx" : "Internos_UPI4.xlsx")
-    toast.success("Planilha gerada com sucesso!")
+
+    reportText += "========================================\n"
+    reportText += `TOTAL GERAL DE VISITANTES: ${totalGeralVisitantes}\n`
+    reportText += `TOTAL GERAL DE INTERNOS VISITADOS: ${totalGeralInternosSet.size}\n`
+    return reportText
   }
-
-  // Gerar PDF da tabela filtrada
-  const handleGeneratePDF = useCallback(() => {
-    if (displayRows.length === 0) return
-
-    let headers = ""
-    let rows = ""
-
-    if (viewMode === "visitas") {
-      headers = `
-        <th>Nº</th>
-        <th>Senha</th>
-        <th>Visitante</th>
-        <th>Relação</th>
-        <th>Interno</th>
-        <th>Ala/Cela</th>
-        <th>Prior.</th>`
-      rows = displayRows
-        .map(
-          (r, idx) => `
-          <tr>
-            <td>${idx + 1}</td>
-            <td>${r.senhaDisplay}</td>
-            <td>${r.nomeVisitante || "—"}</td>
-            <td>${r.relacao || "—"}</td>
-            <td>${r.custodiado}<br/><small>#${r.prontuario}</small></td>
-            <td>${r.cela || r.ala}</td>
-            <td>${r.prioridade === "sim" ? "✓ SIM" : "NÃO"}</td>
-          </tr>`
-        )
-        .join("")
-    } else {
-      headers = `
-        <th>Nº</th>
-        <th>Prontuário</th>
-        <th>Interno</th>
-        <th>Ala/Cela</th>`
-      rows = displayRows
-        .map(
-          (r, idx) => `
-          <tr>
-            <td>${idx + 1}</td>
-            <td>${r.prontuario > 0 ? r.prontuario : "—"}</td>
-            <td>${r.custodiado}</td>
-            <td>${r.cela || r.ala}</td>
-          </tr>`
-        )
-        .join("")
-    }
-
-    const html = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
-<title>${viewMode === "visitas" ? "Visitas" : "Internos"} UPI-4</title>
-<style>
-  body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; color: #111827; }
-  h1 { font-size: 18px; margin-bottom: 4px; color: #111827; }
-  p { font-size: 11px; color: #4b5563; margin-bottom: 12px; font-weight: bold; }
-  table { width: 100%; border-collapse: collapse; border: 1.5px solid #1f2937; }
-  th { background: #5b21b6; color: white; padding: 6px 8px; text-align: left; font-size: 11.5px; text-transform: uppercase; border: 1px solid #1f2937; }
-  td { padding: 6px 8px; border: 1px solid #1f2937; vertical-align: middle; font-size: 11px; }
-  tr:nth-child(even) td { background: #f9fafb; }
-  small { color: #4b5563; font-size: 9.5px; font-weight: bold; }
-  @page { margin: 15mm; }
-</style></head><body>
-<h1>Sistema de ${viewMode === "visitas" ? "Visitas" : "Internos"} UPI-4</h1>
-<p>Gerado em ${new Date().toLocaleDateString("pt-BR")} — Total: ${displayRows.length} ${viewMode === "visitas" ? "visitas" : "internos"} exibidos</p>
-<table>
-<thead><tr>${headers}</tr></thead>
-<tbody>${rows}</tbody>
-</table>
-</body></html>`
-
-    const win = window.open("", "_blank")
-    if (!win) { toast.error("Pop-up bloqueado. Permita pop-ups e tente novamente."); return }
-    win.document.write(html)
-    win.document.close()
-    win.focus()
-    setTimeout(() => win.print(), 400)
-  }, [displayRows, viewMode])
 
   if (!isLoaded) {
     return (
@@ -503,13 +156,13 @@ export default function VisitasPage() {
           {data.length > 0 && (
             <>
               <button
-                onClick={handleExportExcel}
+                onClick={() => handleExportExcel(displayRows, viewMode)}
                 className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-white text-purple-700 hover:bg-slate-100 rounded-xl shadow-sm transition"
               >
                 <Download size={14} /> Exportar Planilha
               </button>
               <button
-                onClick={handleGeneratePDF}
+                onClick={() => handleGeneratePDF(displayRows, viewMode)}
                 className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-purple-900/60 hover:bg-purple-900/80 text-white rounded-xl border border-purple-400/40 shadow-sm transition"
               >
                 <FileText size={14} /> Gerar PDF
@@ -543,7 +196,7 @@ export default function VisitasPage() {
 
       {/* Upload ou Conteúdo */}
       {data.length === 0 ? (
-        <UploadArea onFileChange={handleFileChange} fileInputRef={fileInputRef} />
+        <UploadArea onFileChange={(e) => handleFileChange(e, fileInputRef)} fileInputRef={fileInputRef} />
       ) : (
         <div className="space-y-4">
 
@@ -715,37 +368,7 @@ export default function VisitasPage() {
                     <button
                       type="button"
                       onClick={() => {
-                        const report = (() => {
-                          const wings = Array.from(new Set(data.map(d => d.ala.toUpperCase()))).sort()
-                          let reportText = "RELATÓRIO DE CONTROLE DE VISITAS - UPI-4\n"
-                          reportText += "========================================\n\n"
-
-                          let totalGeralVisitantes = 0
-                          const totalGeralInternosSet = new Set<number>()
-
-                          wings.forEach(wingName => {
-                            const wingData = data.filter(d => d.ala.toUpperCase() === wingName)
-                            const comPrioridade = wingData.filter(d => d.prioridade === "sim").length
-                            const semPrioridade = wingData.filter(d => d.prioridade === "não").length
-                            const totalVisitantes = wingData.length
-                            const internos = new Set(wingData.map(d => d.prontuario))
-
-                            totalGeralVisitantes += totalVisitantes
-                            wingData.forEach(d => totalGeralInternosSet.add(d.prontuario))
-
-                            reportText += `${wingName}:\n`
-                            reportText += `  - COM PRIORIDADE: ${comPrioridade}\n`
-                            reportText += `  - SEM PRIORIDADE: ${semPrioridade}\n`
-                            reportText += `  - QUANTIDADE DE INTERNOS: ${internos.size}\n`
-                            reportText += `  - TOTAL DE VISITANTES: ${totalVisitantes}\n`
-                            reportText += `  - SÍNTESE: ${wingName}: COM PRIORIDADE: ${comPrioridade}, SEM PRIORIDADE: ${semPrioridade}, TOTAL: ${totalVisitantes}\n\n`
-                          })
-
-                          reportText += "========================================\n"
-                          reportText += `TOTAL GERAL DE VISITANTES: ${totalGeralVisitantes}\n`
-                          reportText += `TOTAL GERAL DE INTERNOS VISITADOS: ${totalGeralInternosSet.size}\n`
-                          return reportText
-                        })()
+                        const report = generateReport()
                         navigator.clipboard.writeText(report)
                         toast.success("Relatório copiado para a área de transferência!")
                       }}
@@ -757,37 +380,7 @@ export default function VisitasPage() {
                   <textarea
                     readOnly
                     className="flex-1 w-full min-h-[300px] bg-slate-100/50 border border-slate-200 rounded-lg p-2.5 text-[10.5px] font-mono text-slate-750 outline-none"
-                    value={(() => {
-                      const wings = Array.from(new Set(data.map(d => d.ala.toUpperCase()))).sort()
-                      let reportText = "RELATÓRIO DE CONTROLE DE VISITAS - UPI-4\n"
-                      reportText += "========================================\n\n"
-
-                      let totalGeralVisitantes = 0
-                      const totalGeralInternosSet = new Set<number>()
-
-                      wings.forEach(wingName => {
-                        const wingData = data.filter(d => d.ala.toUpperCase() === wingName)
-                        const comPrioridade = wingData.filter(d => d.prioridade === "sim").length
-                        const semPrioridade = wingData.filter(d => d.prioridade === "não").length
-                        const totalVisitantes = wingData.length
-                        const internos = new Set(wingData.map(d => d.prontuario))
-
-                        totalGeralVisitantes += totalVisitantes
-                        wingData.forEach(d => totalGeralInternosSet.add(d.prontuario))
-
-                        reportText += `${wingName}:\n`
-                        reportText += `  - COM PRIORIDADE: ${comPrioridade}\n`
-                        reportText += `  - SEM PRIORIDADE: ${semPrioridade}\n`
-                        reportText += `  - QUANTIDADE DE INTERNOS: ${internos.size}\n`
-                        reportText += `  - TOTAL DE VISITANTES: ${totalVisitantes}\n`
-                        reportText += `  - SÍNTESE: ${wingName}: COM PRIORIDADE: ${comPrioridade}, SEM PRIORIDADE: ${semPrioridade}, TOTAL: ${totalVisitantes}\n\n`
-                      })
-
-                      reportText += "========================================\n"
-                      reportText += `TOTAL GERAL DE VISITANTES: ${totalGeralVisitantes}\n`
-                      reportText += `TOTAL GERAL DE INTERNOS VISITADOS: ${totalGeralInternosSet.size}\n`
-                      return reportText
-                    })()}
+                    value={generateReport()}
                   />
                 </div>
               </div>

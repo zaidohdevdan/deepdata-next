@@ -1,7 +1,7 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import { configSchema } from "@/lib/validators"
 import { auth } from "@/lib/auth"
 import { createAuditLogAction } from "./audit"
@@ -136,6 +136,7 @@ export async function saveGlobalConfigAction(formData: unknown) {
       }
     })
 
+    revalidateTag("config-global", "default")
     revalidatePath("/", "layout")
     return { success: true }
   } catch (error) {
@@ -190,6 +191,7 @@ export async function saveScaleConfigAction(
       }
     })
 
+    revalidateTag("config-global", "default")
     revalidatePath("/", "layout")
     return { success: true }
   } catch (error) {

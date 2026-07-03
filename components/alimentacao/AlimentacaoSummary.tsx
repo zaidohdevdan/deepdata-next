@@ -1,23 +1,23 @@
 import { AlertCircle } from "lucide-react"
-import { DistribuicaoConfig, ConfigValues } from "@/lib/calculation"
+import { AlimentacaoConfig, ConfigValues } from "@/lib/calculation"
 
-interface DistribuicaoSummaryProps {
+interface AlimentacaoSummaryProps {
   summaryMetrics: Record<string, string | number>
-  config: DistribuicaoConfig
+  config: AlimentacaoConfig
   globalConfig: ConfigValues
 }
 
-export function DistribuicaoSummary({ summaryMetrics, config, globalConfig }: DistribuicaoSummaryProps) {
+export function AlimentacaoSummary({ summaryMetrics, config, globalConfig }: AlimentacaoSummaryProps) {
   return (
-    <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-2xl p-6 border border-slate-800 shadow-md print:bg-none print:text-black print:border-none print:shadow-none print:p-0">
-      <h3 className="text-lg font-bold tracking-tight mb-4 border-b border-slate-800 pb-2 print:text-base">
+    <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-2xl p-6 border border-slate-800 shadow-xl print:bg-white print:text-black print:border print:border-slate-300 print:shadow-none print:p-4 print:rounded-none">
+      <h3 className="text-lg font-bold tracking-tight mb-4 border-b border-slate-800 pb-2 print:border-slate-300 print:text-base print:uppercase print:text-center">
         Resumo Geral da Entrega
       </h3>
       
       <div className="space-y-4">
         {Object.entries(summaryMetrics).map(([key, val]) => (
-          <div key={key} className="flex justify-between items-center border-b border-slate-900 pb-3 last:border-0 last:pb-0">
-            <span className="text-sm text-slate-400 font-medium print:text-slate-600">{key}</span>
+          <div key={key} className="flex justify-between items-center border-b border-slate-800/60 pb-3 last:border-0 last:pb-0 print:border-slate-200">
+            <span className="text-sm text-slate-400 font-medium print:text-slate-700">{key}</span>
             <span className="text-lg font-extrabold tracking-tight text-white font-mono print:text-black">
               {val}
             </span>

@@ -1,17 +1,17 @@
-import { DistribuicaoPage } from "@/components/distribuicao/DistribuicaoPage"
+import { AlimentacaoPage } from "@/components/alimentacao/AlimentacaoPage"
 import { getConfigValues } from "@/lib/calculation"
-import { getDistribuicaoData } from "@/app/actions/distribuicao"
+import { getAlimentacaoData } from "@/app/actions/alimentacao"
 
 export const dynamic = "force-dynamic"
 
 export default async function BiscoitoPage() {
   const [initialData, globalConfig] = await Promise.all([
-    getDistribuicaoData("BISCOITO"),
+    getAlimentacaoData("BISCOITO"),
     getConfigValues(),
   ])
 
   return (
-    <DistribuicaoPage
+    <AlimentacaoPage
       modulo="BISCOITO"
       initialData={initialData}
       globalConfig={globalConfig}
