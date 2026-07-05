@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useTransition } from "react"
-import { Plus, Search, Edit2, CheckCircle, XCircle, KeyRound, Loader2 } from "lucide-react"
+import { Plus, Search, Edit2, CheckCircle, XCircle, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { getUsersAction, createUserAction, updateUserAction, toggleUserStatusAction } from "@/app/actions/usuarios"
 import UserAddModal from "@/components/admin/usuarios/UserAddModal"

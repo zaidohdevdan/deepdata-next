@@ -10,7 +10,7 @@ A aplicação é construída sobre um ecossistema moderno, rápido e seguro:
 
 * **Framework:** [Next.js 16 (App Router)](https://nextjs.org/) — Renderização híbrida e rotas otimizadas.
 * **Interface & Estilização:** [React 19](https://react.dev/), [Tailwind CSS v4](https://tailwindcss.com/) (com efeitos customizados de *glassmorphism* e paleta de cores premium baseada em tons violeta e ardósia), e ícones por [Lucide React](https://lucide.dev/).
-* **Banco de Dados & ORM:** [Prisma ORM](https://www.prisma.io/) com suporte flexível para **SQLite** (ambiente local de desenvolvimento) e **Postgres** (produção).
+* **Banco de Dados & ORM:** [Prisma ORM](https://www.prisma.io/) com suporte exclusivo para **PostgreSQL** para garantir consistência entre os ambientes de desenvolvimento e produção.
 * **Autenticação:** [Auth.js v5 (NextAuth)](https://authjs.dev/) — Sessões seguras baseadas em JSON Web Tokens (JWT) e criptografia com `bcryptjs`.
 * **Processamento de Arquivos:** 
   * [SheetJS (XLSX)](https://sheetjs.com/) — Leitura e escrita de planilhas locais.
@@ -96,15 +96,16 @@ O sistema suporta a criação descentralizada de 5 modalidades de escala com hor
    npm install
    ```
 
-2. Configure o arquivo `.env` na raiz do projeto:
+2. Configure o arquivo `.env` na raiz do projeto (nunca cometa este arquivo):
    ```env
-   DATABASE_URL="file:./dev.db"
+   DATABASE_URL="postgresql://usuario:senha@localhost:5432/nomedobanco"
    AUTH_SECRET="seu-segredo-de-autenticacao-jwt"
+   GEMINI_API_KEY="sua-chave-gemini-aqui"
    ```
 
-3. Execute as migrações do banco de dados para criar a estrutura local do SQLite:
+3. Aplique as migrações no banco de dados PostgreSQL:
    ```bash
-   npx prisma db push
+   npx prisma migrate dev
    ```
 
 4. Execute o servidor de desenvolvimento:

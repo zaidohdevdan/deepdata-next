@@ -1,6 +1,39 @@
 import { Shield, Plus, Trash2, Edit2, Check, X } from "lucide-react"
 
-export function ConfigEquipesPanel({ configEquipes }: { configEquipes: any }) {
+interface EquipePolicial {
+  matricula: string
+  nome: string
+  qra?: string
+}
+
+interface ConfigEquipes {
+  equipeAlfa: EquipePolicial[]
+  equipeBravo: EquipePolicial[]
+  equipeEcho: EquipePolicial[]
+  equipeFox: EquipePolicial[]
+  selectedEquipeToEdit: "Alfa" | "Bravo" | "Echo" | "Fox"
+  setSelectedEquipeToEdit: (v: "Alfa" | "Bravo" | "Echo" | "Fox") => void
+  newEquipeNome: string
+  setNewEquipeNome: (v: string) => void
+  newEquipeQRA: string
+  setNewEquipeQRA: (v: string) => void
+  newEquipeMatricula: string
+  setNewEquipeMatricula: (v: string) => void
+  editingMatricula: string | null
+  setEditingMatricula: (v: string | null) => void
+  editingNome: string
+  setEditingNome: (v: string) => void
+  editingQRA: string
+  setEditingQRA: (v: string) => void
+  handleStartEdit: (matricula: string, nome: string, qra: string) => void
+  handleCancelEdit: () => void
+  handleSaveEdit: () => void
+  getActiveEquipeList: () => EquipePolicial[]
+  handleAddEquipePolicial: () => void
+  handleRemoveEquipePolicial: (matricula: string) => void
+}
+
+export function ConfigEquipesPanel({ configEquipes }: { configEquipes: ConfigEquipes }) {
   const {
     equipeAlfa,
     equipeBravo,
@@ -128,7 +161,7 @@ export function ConfigEquipesPanel({ configEquipes }: { configEquipes: any }) {
                 </td>
               </tr>
             ) : (
-              getActiveEquipeList().map((p: any, idx: number) => {
+              getActiveEquipeList().map((p: EquipePolicial, idx: number) => {
                 const isEditing = editingMatricula === p.matricula
                 return (
                   <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 transition font-semibold text-slate-700">

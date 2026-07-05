@@ -65,8 +65,6 @@ export default function EscalasConfigPanel({
   isSavingConfig,
   handleEditPost,
   handlePostReorder,
-  draggedPostName,
-  setDraggedPostName,
   dragOverPostName,
   setDragOverPostName,
   editingPostName,
@@ -149,7 +147,7 @@ export default function EscalasConfigPanel({
                     <tr
                       key={posto}
                       draggable={!isEditing}
-                      onDragStart={() => setDraggedPostName?.(posto)}
+                      onDragStart={() => {}}
                       onDragOver={(e) => {
                         e.preventDefault()
                         setDragOverPostName?.(posto)

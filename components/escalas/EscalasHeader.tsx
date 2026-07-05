@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Settings, Printer, Trash2, X, Plus, Edit2, Check, GripVertical } from "lucide-react"
+import { Settings, Printer, Trash2 } from "lucide-react"
 import { ChefeEquipe, Policial, PolicialFixo } from "./types"
 import EscalasConfigPanel from "./EscalasConfigPanel"
 import {

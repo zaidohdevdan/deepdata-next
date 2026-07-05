@@ -1,7 +1,21 @@
 import * as XLSX from "xlsx"
 import { toast } from "sonner"
 
-export const handleExportExcel = (displayRows: any[], viewMode: "visitas" | "internos") => {
+interface VisitaRow {
+  [key: string]: string | number | undefined
+  senhaDisplay?: string
+  nomeVisitante?: string
+  cpfVisitante?: string
+  relacao?: string
+  situacao?: string
+  prontuario?: number
+  custodiado?: string
+  ala?: string
+  cela?: string
+  prioridade?: string
+}
+
+export const handleExportExcel = (displayRows: VisitaRow[], viewMode: "visitas" | "internos") => {
   if (displayRows.length === 0) return
   const exportData = displayRows.map((r, idx) => {
     if (viewMode === "visitas") {
@@ -35,7 +49,7 @@ export const handleExportExcel = (displayRows: any[], viewMode: "visitas" | "int
   toast.success("Planilha gerada com sucesso!")
 }
 
-export const handleGeneratePDF = (displayRows: any[], viewMode: "visitas" | "internos") => {
+export const handleGeneratePDF = (displayRows: VisitaRow[], viewMode: "visitas" | "internos") => {
   if (displayRows.length === 0) return
 
   let headers = ""
@@ -75,7 +89,7 @@ export const handleGeneratePDF = (displayRows: any[], viewMode: "visitas" | "int
         (r, idx) => `
         <tr>
           <td>${idx + 1}</td>
-          <td>${r.prontuario > 0 ? r.prontuario : "—"}</td>
+          <td>${(r.prontuario ?? 0) > 0 ? r.prontuario : "—"}</td>
           <td>${r.custodiado}</td>
           <td>${r.cela || r.ala}</td>
         </tr>`

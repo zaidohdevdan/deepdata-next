@@ -1,8 +1,22 @@
 import React, { Fragment } from 'react';
+import type { Policial } from './types';
+
+interface EscalaState {
+  chefe?: string
+  equipe?: string
+  dataEscala?: string
+  numFaixas: number
+  faixasHorario: Record<number, { inicio: string; fim: string }>
+  postosConfig: Record<string, unknown>
+  estado: Record<number, Record<string, string[]>>
+  independentEstado: Record<string, Record<number, string[]>>
+  independentHorarios: Record<string, Record<number, string>>
+  parseToken: (tid: string) => (Policial & { slotIdx: number }) | null
+}
 
 type EscalasPrintLayoutProps = {
   tipo: string;
-  state: any; // using any to avoid strict typing issues
+  state: EscalaState;
   nomeUnidade: string;
   localidade: string;
   chefeMatricula: string;

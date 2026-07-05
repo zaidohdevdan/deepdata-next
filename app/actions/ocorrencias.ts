@@ -7,12 +7,18 @@ import { auth } from "@/lib/auth"
 
 import { createAuditLogAction } from "./audit"
 
+import { Ocorrencia, OcorrenciaCategoria } from "@prisma/client"
+
 async function ensureAuthenticated() {
   const session = await auth()
   if (!session) {
     throw new Error("Não autorizado. Você precisa estar autenticado.")
   }
   return session
+}
+
+type OcorrenciaComCategoria = Ocorrencia & {
+  categoria: OcorrenciaCategoria
 }
 
 export async function getOcorrenciasAction() {
@@ -24,7 +30,7 @@ export async function getOcorrenciasAction() {
         categoria: true
       }
     })
-    return list.map((o) => ({
+    return list.map((o: OcorrenciaComCategoria) => ({
       ...o,
       categoria: o.categoria.nome
     }))
@@ -272,12 +278,34 @@ export async function createCategoriaAction(nome: string) {
   }
 }
 
-export async function generateOccurrenceTextAction(prompt: string) {
-  await ensureAuthenticated()
+import { isGeminiRequestAllowed } from "@/middleware/geminiRateLimit"
 
+export async function generateOccurrenceTextAction(prompt: string) {
+  const session = await ensureAuthenticated()
+  const userId = session.user.id
+
+  // 1. Rate Limiting por Usuário
+  if (!isGeminiRequestAllowed(userId)) {
+    return { 
+      success: false, 
+      error: "Limite de requisições excedido. Por favor, aguarde alguns minutos antes de tentar novamente." 
+    }
+  }
+
+  // 2. Validação e Sanitização de Input (Tamanho e caracteres suspeitos)
   if (!prompt || !prompt.trim()) {
     return { success: false, error: "O resumo do fato é obrigatório." }
   }
+
+  const cleanedPrompt = prompt.trim()
+  if (cleanedPrompt.length > 1000) {
+    return { success: false, error: "O resumo do fato é muito longo (máximo de 1000 caracteres)." }
+  }
+
+  // Sanitização básica contra injeções de prompt
+  const sanitizedPrompt = cleanedPrompt
+    .replace(/[<>]/g, "") // Remove potenciais tags HTML/XML para evitar injeções
+    .substring(0, 1000)
 
   const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY
 
@@ -299,7 +327,7 @@ export async function generateOccurrenceTextAction(prompt: string) {
             {
               parts: [
                 {
-                  text: `Você é um assistente de redação oficial para policiais penais em uma unidade prisional (UPI-4). Escreva um texto formal, impessoal e detalhado em português para um livro de ocorrências com base no seguinte resumo fornecido. Escreva apenas o texto final da ocorrência, sem introduções, cumprimentos, observações ou caracteres de formatação Markdown extra (como asteriscos de negrito, a não ser que seja estritamente necessário para tabelas). Resumo: ${prompt.trim()}`,
+                  text: `Você é um assistente de redação oficial para policiais penais em uma unidade prisional (UPI-4). Escreva um texto formal, impessoal e detalhado em português para um livro de ocorrências com base no seguinte resumo fornecido. Escreva apenas o texto final da ocorrência, sem introduções, cumprimentos, observações ou caracteres de formatação Markdown extra (como asteriscos de negrito, a não ser que seja estritamente necessário para tabelas). Resumo: ${sanitizedPrompt}`,
                 },
               ],
             },
