@@ -226,7 +226,7 @@ export function useEscalaState({
                 let isAllocatedElsewhere = false
                 if (estado[sIdx]) {
                   for (const pKey of Object.keys(estado[sIdx])) {
-                    if (estado[sIdx][pKey] && estado[sIdx][pKey].includes(token)) {
+                    if (pKey !== "POOL" && estado[sIdx][pKey] && estado[sIdx][pKey].includes(token)) {
                       isAllocatedElsewhere = true
                       break
                     }
@@ -275,7 +275,7 @@ export function useEscalaState({
                 const token = tokenId(pp.matricula, f)
                 let isAllocatedElsewhere = false
                 for (const pKey of Object.keys(novo[f])) {
-                  if (pKey !== fixed.posto && novo[f][pKey] && novo[f][pKey].includes(token)) {
+                  if (pKey !== "POOL" && pKey !== fixed.posto && novo[f][pKey] && novo[f][pKey].includes(token)) {
                     isAllocatedElsewhere = true
                     break
                   }
