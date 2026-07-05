@@ -13,8 +13,6 @@ export const metadata: Metadata = {
 export default async function OcorrenciasPage() {
   const session = await auth()
   const userName = session?.user?.name || "Policial Penal"
-  const userRole = session?.user?.role || "USER"
-
   const dbOcorrencias = await getOcorrenciasAction()
   const dbCategorias = await getCategoriasAction()
 
@@ -23,7 +21,6 @@ export default async function OcorrenciasPage() {
       initialOcorrencias={dbOcorrencias}
       initialCategorias={dbCategorias.map(c => c.nome)}
       currentUserName={userName}
-      userRole={userRole}
     />
   )
 }

@@ -152,8 +152,7 @@ export default function EscalasContainer({
               handleDropIntoGlobalPool={state.handleDropIntoGlobalPool}
               handleDuplicateToken={state.handleDuplicateToken}
               handleRemoveToken={state.handleRemoveToken}
-              parseToken={state.parseToken}
-              tipo={tipo} />
+              parseToken={state.parseToken} />
 
             <IndependentPostsGrid
               tipo={tipo}
