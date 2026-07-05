@@ -75,6 +75,7 @@ export function useEscalaState({
   initialNumFaixas = ""
 }: UseEscalaStateProps) {
   const LS_KEY = `escalaUPI4_${tipo}_v2`
+  const SHARED_PRESENCE_KEY = "escalaUPI4_shared_presence_v2"
 
   // ============================
   // ESTADO RAIZ (TOP-LEVEL)
@@ -184,19 +185,23 @@ export function useEscalaState({
     
     if (uname === "alfa") { selectedTeamList = equipeAlfa; teamName = "ALFA" }
     else if (uname === "bravo") { selectedTeamList = equipeBravo; teamName = "BRAVO" }
-    else if (uname === "charlie") { selectedTeamList = equipeEcho; teamName = "ECHO" }
-    else if (uname === "delta") { selectedTeamList = equipeFox; teamName = "FOX" }
+    else if (uname === "echo" || uname === "charlie") { selectedTeamList = equipeEcho; teamName = "ECHO" }
+    else if (uname === "fox" || uname === "delta") { selectedTeamList = equipeFox; teamName = "FOX" }
     
     if (selectedTeamList.length > 0) {
       didAutoLoadTeam.current = true
       const timer = setTimeout(() => {
         setEquipe(teamName)
-        const localData = localStorage.getItem(LS_KEY)
-        if (!localData) {
+        const rawShared = localStorage.getItem(SHARED_PRESENCE_KEY)
+        if (!rawShared) {
           setBasePoliciais(selectedTeamList)
           const initPresence: Record<string, boolean> = {}
           selectedTeamList.forEach(p => { initPresence[p.matricula] = true })
           setPresenceMap(initPresence)
+          localStorage.setItem(SHARED_PRESENCE_KEY, JSON.stringify({
+            basePoliciais: selectedTeamList,
+            presenceMap: initPresence
+          }))
         }
       }, 0)
       return () => clearTimeout(timer)
@@ -259,117 +264,103 @@ export function useEscalaState({
     return () => clearTimeout(timer)
   }, [basePoliciais, policiaisFixos, tipo, removedFixedTokens, estado, unlockedFixedTokens])
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setEstado((prev) => {
-        const novo: Record<number, Record<string, string[]>> = {}
-        for (let f = 0; f < numFaixas; f++) {
-          novo[f] = { POOL: [] }
-          for (const posto of Object.keys(postosLogic.postosConfig)) {
-            novo[f][posto] = prev[f]?.[posto] || []
-          }
+  // Lógica para preencher o POOL sob demanda (sem efeito reativo que causa reset)
+  const getPoolForFaixa = useCallback((f: number) => {
+    const novo: Record<string, string[]> = {}
+    for (const posto of Object.keys(postosLogic.postosConfig)) {
+      novo[posto] = estado[f]?.[posto] || []
+    }
 
-          const faixaName = `Faixa ${f + 1}`
-          policiaisFixos.forEach((fixed) => {
-            if (fixed.faixa === faixaName) {
-              const pp = basePoliciais.find((p) => p.matricula === fixed.matricula)
-              if (pp) {
-                const token = tokenId(pp.matricula, f)
-                let isAllocatedElsewhere = false
-                for (const pKey of Object.keys(novo[f])) {
-                  if (pKey !== "POOL" && pKey !== fixed.posto && novo[f][pKey] && novo[f][pKey].includes(token)) {
-                    isAllocatedElsewhere = true
-                    break
-                  }
-                }
-                if (tipo === "noturna") {
-                  for (const otherGId of INDEPENDENT_POSTS) {
-                    if (independentEstado[otherGId]?.[f] && independentEstado[otherGId][f].includes(token)) {
-                      isAllocatedElsewhere = true
-                      break
-                    }
-                  }
-                }
-
-                if (!isAllocatedElsewhere && !removedFixedTokens.includes(token) && !unlockedFixedTokens.includes(token) && !novo[f][fixed.posto].includes(token)) {
-                  novo[f][fixed.posto].push(token)
-                }
-              }
-            }
-          })
-
-          const allocatedMatriculas = new Set<string>()
-          Object.keys(novo[f]).forEach((posto) => {
-            if (posto === "POOL") return
-            const list = novo[f][posto] || []
-            list.forEach((tok) => {
-              const p = parseToken(tok)
-              if (p) allocatedMatriculas.add(p.matricula)
-            })
-          })
-
-          if (tipo === "noturna") {
-            INDEPENDENT_POSTS.forEach((gId) => {
-              const list = independentEstado[gId]?.[f] || []
-              list.forEach((tok) => {
-                const p = parseToken(tok)
-                if (p) allocatedMatriculas.add(p.matricula)
-              })
-            })
-          }
-
-          const slotPool: string[] = []
-          basePoliciais.forEach((pp) => {
-            const isPresent = presenceMap[pp.matricula] !== false
-            if (isPresent && !allocatedMatriculas.has(pp.matricula)) {
-              slotPool.push(tokenId(pp.matricula, f))
-            }
-          })
-          novo[f].POOL = slotPool
-        }
-        return novo
+    const allocatedMatriculas = new Set<string>()
+    Object.keys(novo).forEach((posto) => {
+      const list = novo[posto] || []
+      list.forEach((tok) => {
+        const p = parseToken(tok)
+        if (p) allocatedMatriculas.add(p.matricula)
       })
-    }, 0)
-    return () => clearTimeout(timer)
-  }, [numFaixas, basePoliciais, policiaisFixos, independentEstado, presenceMap, postosLogic.postosConfig, tipo, removedFixedTokens, parseToken, unlockedFixedTokens])
+    })
+
+    if (tipo === "noturna") {
+      INDEPENDENT_POSTS.forEach((gId) => {
+        const list = independentEstado[gId]?.[f] || []
+        list.forEach((tok) => {
+          const p = parseToken(tok)
+          if (p) allocatedMatriculas.add(p.matricula)
+        })
+      })
+    }
+
+    const slotPool: string[] = []
+    basePoliciais.forEach((pp) => {
+      const isPresent = presenceMap[pp.matricula] !== false
+      if (isPresent && !allocatedMatriculas.has(pp.matricula)) {
+        slotPool.push(tokenId(pp.matricula, f))
+      }
+    })
+    return slotPool
+  }, [estado, basePoliciais, presenceMap, independentEstado, tipo, postosLogic.postosConfig, parseToken])
 
   // ============================
   // LOCAL STORAGE E PERSISTÊNCIA
   // ============================
+
   useEffect(() => {
+    const rawShared = localStorage.getItem(SHARED_PRESENCE_KEY)
     const raw = localStorage.getItem(LS_KEY)
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw)
-        const timer = setTimeout(() => {
+
+    const timer = setTimeout(() => {
+      if (rawShared) {
+        try {
+          const parsedShared = JSON.parse(rawShared)
+          if (parsedShared.basePoliciais) setBasePoliciais(parsedShared.basePoliciais)
+          if (parsedShared.presenceMap) setPresenceMap(parsedShared.presenceMap)
+        } catch {}
+      }
+
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw)
           if (parsed.chefe) setChefe(parsed.chefe)
           if (parsed.equipe) setEquipe(parsed.equipe)
           if (parsed.data) setDataEscala(parsed.data)
           if (parsed.horaInicio) setHoraInicio(parsed.horaInicio)
           if (parsed.horaFim) setHoraFim(parsed.horaFim)
           if (parsed.faixas) setNumFaixas(Number(parsed.faixas))
-          if (parsed.basePoliciais) setBasePoliciais(parsed.basePoliciais)
+          // basePoliciais e presenceMap são carregados da chave compartilhada, mas aceitamos fallback se não houver dados compartilhados
+          if (!rawShared) {
+            if (parsed.basePoliciais) setBasePoliciais(parsed.basePoliciais)
+            if (parsed.presenceMap) setPresenceMap(parsed.presenceMap)
+          }
           if (parsed.estado) setEstado(parsed.estado)
           if (parsed.independentEstado) setIndependentEstado(parsed.independentEstado)
           if (parsed.independentHorarios) setIndependentHorarios(parsed.independentHorarios)
-          if (parsed.presenceMap) setPresenceMap(parsed.presenceMap)
           if (parsed.removedFixedTokens) setRemovedFixedTokens(parsed.removedFixedTokens)
-          if (parsed.postosConfig) postosLogic.setPostosConfig(parsed.postosConfig)
-        }, 0)
-        return () => clearTimeout(timer)
-      } catch {}
-    }
+          
+          const setPostosConfig = postosLogic.setPostosConfig
+          if (parsed.postosConfig) setPostosConfig(parsed.postosConfig)
+        } catch {}
+      }
+    }, 0)
+
     const timer2 = setTimeout(() => setIsLoadedFromStorage(true), 0)
-    return () => clearTimeout(timer2)
-  }, [LS_KEY, postosLogic])
+    return () => {
+      clearTimeout(timer)
+      clearTimeout(timer2)
+    }
+  }, [LS_KEY, postosLogic.setPostosConfig])
 
   useEffect(() => {
     if (!isLoadedFromStorage) return
     const timer = setTimeout(() => {
+      // Salva dados compartilhados
+      const sharedPayload = { basePoliciais, presenceMap }
+      localStorage.setItem(SHARED_PRESENCE_KEY, JSON.stringify(sharedPayload))
+
+      // Salva dados específicos
       const payload = {
         chefe, equipe, data: dataEscala, horaInicio, horaFim, faixas: numFaixas,
-        basePoliciais, estado, independentEstado, independentHorarios,
-        presenceMap, removedFixedTokens, postosConfig: postosLogic.postosConfig,
+        estado, independentEstado, independentHorarios,
+        removedFixedTokens, postosConfig: postosLogic.postosConfig,
       }
       localStorage.setItem(LS_KEY, JSON.stringify(payload))
     }, 600)
@@ -527,6 +518,7 @@ export function useEscalaState({
     faixasHorario,
     parseToken,
     tokenId,
+    getPoolForFaixa,
     handleSave,
     handleClear,
     confirmClear,

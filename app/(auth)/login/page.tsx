@@ -36,59 +36,68 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md px-4">
       {/* Card de Login */}
-      <div className="glass border border-slate-200/50 dark:border-slate-800/80 card-shadow rounded-[28px] p-8">
+      <div className="relative bg-slate-900/60 backdrop-blur-xl border border-emerald-500/20 rounded-[32px] p-8 shadow-[0_0_50px_-12px_rgba(16,185,129,0.15)] overflow-hidden">
+        {/* Decorative corner brackets for tech/military UI */}
+        <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-emerald-500/40"></div>
+        <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-emerald-500/40"></div>
+        <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-emerald-500/40"></div>
+        <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-emerald-500/40"></div>
+
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-600 text-white text-2xl mb-4 shadow-lg shadow-blue-500/30">
-            🔒
+        <div className="text-center mb-8 relative">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 text-2xl mb-4 shadow-[0_0_20px_rgba(16,185,129,0.15)] font-mono">
+            {"{D}"}
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">DeepData</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Administrativo — Acesso Restrito</p>
+          <h1 className="text-2xl font-black text-white tracking-widest uppercase">DeepData</h1>
+          <div className="text-[10px] text-emerald-400/80 font-bold tracking-widest uppercase mt-1.5 flex items-center justify-center gap-1.5 bg-emerald-950/30 border border-emerald-900/30 rounded-lg py-1 px-3 w-fit mx-auto">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+            SISTEMA RESTRITO // ACESSO SEGURO
+          </div>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Username */}
           <div className="space-y-1.5">
-            <label htmlFor="username" className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider pl-1">
-              Usuário
+            <label htmlFor="username" className="text-[10px] font-black text-emerald-500 uppercase tracking-widest pl-1">
+              LOGIN_ID
             </label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 dark:text-slate-500" />
+              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500/60" />
               <input
                 id="username"
                 name="username"
                 type="text"
                 required
                 autoComplete="username"
-                placeholder="Digite seu usuário"
-                className="w-full pl-10 pr-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950/40 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-400/20 dark:focus:ring-blue-500/10 focus:bg-white dark:focus:bg-slate-950/80 placeholder:text-slate-400 dark:placeholder:text-slate-650 transition-all duration-200 font-semibold"
+                placeholder="USER_NAME"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-emerald-950 bg-slate-950 text-emerald-400 text-xs font-bold outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 placeholder:text-slate-800 transition-all duration-200"
               />
             </div>
           </div>
 
           {/* Password */}
           <div className="space-y-1.5">
-            <label htmlFor="password" className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider pl-1">
-              Senha
+            <label htmlFor="password" className="text-[10px] font-black text-emerald-500 uppercase tracking-widest pl-1">
+              ACCESS_KEY
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-slate-400 dark:text-slate-500" />
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald-500/60" />
               <input
                 id="password"
                 name="password"
                 type={showPassword ? "text" : "password"}
                 required
                 autoComplete="current-password"
-                placeholder="Digite sua senha"
-                className="w-full pl-10 pr-12 py-2.5 rounded-full border border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950/40 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-blue-400 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-400/20 dark:focus:ring-blue-500/10 focus:bg-white dark:focus:bg-slate-950/80 placeholder:text-slate-400 dark:placeholder:text-slate-650 transition-all duration-200 font-semibold"
+                placeholder="••••••••••••"
+                className="w-full pl-10 pr-12 py-3 rounded-xl border border-emerald-950 bg-slate-950 text-emerald-400 text-xs font-bold outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20 placeholder:text-slate-800 transition-all duration-200"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors cursor-pointer"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-emerald-500/40 hover:text-emerald-400 transition-colors cursor-pointer"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -97,8 +106,8 @@ export default function LoginPage() {
 
           {/* Error message */}
           {error && (
-            <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30 rounded-xl px-3 py-2.5 font-semibold">
-              <span>❌</span>
+            <div className="flex items-center gap-2 text-[10px] text-rose-400 bg-rose-950/20 border border-rose-900/40 rounded-xl px-3 py-2.5 font-bold uppercase tracking-wider">
+              <span>[!] ERROR:</span>
               <span>{error}</span>
             </div>
           )}
@@ -107,27 +116,27 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-full bg-blue-600 text-white text-sm font-bold shadow-lg shadow-blue-500/30 hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-blue-500/40 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none transition-all duration-150 mt-2 cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-black uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.2)] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 mt-4 cursor-pointer"
           >
             {loading ? (
               <>
-                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Entrando...
+                <span className="w-3.5 h-3.5 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin" />
+                VERIFYING...
               </>
             ) : (
               <>
-                <LogIn className="w-4 h-4" />
-                Entrar
+                <LogIn className="w-3.5 h-3.5" />
+                ESTABLISH_SESSION
               </>
             )}
           </button>
         </form>
 
         {/* Footer */}
-        <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800/80 text-center">
-          <p className="text-xs text-slate-400 dark:text-slate-500">
-            Sistema desenvolvido por{" "}
-            <span className="font-semibold text-blue-500 dark:text-blue-400">Daniel de Almeida</span>
+        <div className="mt-6 pt-5 border-t border-slate-800/80 text-center">
+          <p className="text-[9px] text-slate-650 tracking-wider">
+            AUTHOR_REF:{" "}
+            <span className="font-bold text-slate-400">DANIEL DE ALMEIDA</span>
           </p>
         </div>
       </div>

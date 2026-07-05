@@ -52,6 +52,7 @@ const modules: MenuItem[] = [
     label: "Escalas",
     icon: Calendar,
     subItems: [
+      { href: "/escalas/efetivo", label: "Efetivo", icon: Calendar },
       { href: "/escalas/diurna", label: "Diurna / Alvorada", icon: Calendar },
       { href: "/escalas/revezamento", label: "Revezamento", icon: Calendar },
       { href: "/escalas/noturna", label: "Noturna", icon: Calendar },
@@ -106,10 +107,10 @@ export function Sidebar({ role, userName }: SidebarProps) {
     <aside className="fixed inset-y-0 left-0 z-40 w-16 lg:w-56 flex flex-col bg-slate-900 shadow-xl transition-all duration-300 print:hidden">
       {/* Brand */}
       <div className="flex items-center gap-3 px-4 h-16 border-b border-white/10">
-        <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-sm font-bold shrink-0 shadow-lg shadow-blue-500/30">
+        <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center text-slate-950 text-sm font-black shrink-0 shadow-lg shadow-emerald-500/20 font-mono">
           D
         </div>
-        <span className="hidden lg:block text-white font-bold text-sm tracking-wide truncate">
+        <span className="hidden lg:block text-white font-extrabold text-sm tracking-widest uppercase truncate font-mono">
           DeepData
         </span>
       </div>
@@ -126,7 +127,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
             const setIsHovered = mod.label === "Alimentação" ? setIsAlimHovered : setIsEscalasHovered
             const isActiveNode = mod.label === "Alimentação" ? isAlimActive : isEscalasActive
             const groupClass = mod.label === "Alimentação" ? "relative group/alim" : "relative group/escalas"
-            const hoverDotClass = mod.label === "Alimentação" ? "after:bg-slate-700 group-hover/alim:after:bg-blue-500/40" : "after:bg-slate-700 group-hover/escalas:after:bg-blue-500/40"
+            const hoverDotClass = mod.label === "Alimentação" ? "after:bg-slate-700 group-hover/alim:after:bg-emerald-500/40" : "after:bg-slate-700 group-hover/escalas:after:bg-emerald-500/40"
             const collapsedGroupHoverClass = mod.label === "Alimentação" ? "group-hover/alim:pointer-events-auto group-hover/alim:opacity-100 group-hover/alim:translate-x-0" : "group-hover/escalas:pointer-events-auto group-hover/escalas:opacity-100 group-hover/escalas:translate-x-0"
             const topAlignClass = mod.label === "Alimentação" ? "top-24" : "top-52"
 
@@ -143,7 +144,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                   className={clsx(
                     "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 outline-none cursor-pointer",
                     isActiveNode
-                      ? "bg-blue-600/10 text-blue-400 border border-blue-500/20"
+                      ? "bg-emerald-600/10 text-emerald-400 border border-emerald-500/20"
                       : "text-slate-400 hover:text-white hover:bg-white/5"
                   )}
                 >
@@ -153,14 +154,14 @@ export function Sidebar({ role, userName }: SidebarProps) {
                   </div>
                   <ChevronDown className={clsx(
                     "w-4 h-4 hidden lg:block text-slate-500 transition-transform duration-200",
-                    (isHovered || isActiveNode || openMenu === mod.label) && "rotate-180 text-blue-400"
+                    (isHovered || isActiveNode || openMenu === mod.label) && "rotate-180 text-emerald-400"
                   )} />
                 </button>
 
                 {/* GRAPH SUBMENU FOR LARGE SCREEN (Vertical expanded) */}
                 <div
                   className={clsx(
-                    "hidden lg:block transition-all duration-300 overflow-hidden ml-6 pl-4 border-l border-blue-500/20 space-y-1 relative mt-1",
+                    "hidden lg:block transition-all duration-300 overflow-hidden ml-6 pl-4 border-l border-emerald-500/20 space-y-1 relative mt-1",
                     isHovered || isActiveNode || openMenu === mod.label
                       ? "max-h-60 opacity-100 py-1"
                       : "max-h-0 opacity-0 pointer-events-none"
@@ -176,16 +177,16 @@ export function Sidebar({ role, userName }: SidebarProps) {
                         className={clsx(
                           "relative flex items-center gap-3 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 pl-6",
                           active
-                            ? "text-blue-400 bg-blue-500/5 font-bold"
+                            ? "text-emerald-400 bg-emerald-500/5 font-bold"
                             : "text-slate-400 hover:text-white hover:bg-white/5",
                           
                           // Custom graph line branch connector
                           "before:absolute before:left-[-17px] before:top-1/2 before:-translate-y-1/2 before:w-[17px] before:h-[1px]",
-                          active ? "before:bg-blue-500" : "before:bg-blue-500/20",
+                          active ? "before:bg-emerald-500" : "before:bg-emerald-500/20",
 
                           // Custom graph node circle dot
                           "after:absolute after:left-[-20px] after:top-1/2 after:-translate-y-1/2 after:w-1.5 after:h-1.5 after:rounded-full after:transition-all after:duration-150",
-                          active ? "after:bg-blue-500 after:scale-125 shadow-sm shadow-blue-500" : hoverDotClass
+                          active ? "after:bg-emerald-500 after:scale-125 shadow-sm shadow-emerald-500" : hoverDotClass
                         )}
                       >
                         <sub.icon className="w-3.5 h-3.5 shrink-0" />
@@ -216,7 +217,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                       className={clsx(
                         "flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150",
                         isActive(sub.href)
-                          ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
+                          ? "bg-emerald-600 text-slate-950 shadow-md shadow-emerald-600/30"
                           : "text-slate-400 hover:text-white hover:bg-white/10"
                       )}
                     >
@@ -239,7 +240,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                 className={clsx(
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150",
                   isActive(href, exact)
-                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
+                    ? "bg-emerald-600 text-slate-950 shadow-lg shadow-emerald-600/30 font-bold"
                     : "text-slate-400 hover:text-white hover:bg-white/10"
                 )}
               >
@@ -266,7 +267,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                 className={clsx(
                   "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150",
                   isActive(href, exact)
-                    ? "bg-violet-600 text-white shadow-lg shadow-violet-600/30"
+                    ? "bg-emerald-700 text-slate-950 shadow-lg shadow-emerald-700/30 font-bold"
                     : "text-slate-400 hover:text-white hover:bg-white/10"
                 )}
               >
@@ -281,18 +282,18 @@ export function Sidebar({ role, userName }: SidebarProps) {
       {/* User + Logout */}
       <div className="border-t border-white/10 p-3">
         <div className="hidden lg:flex items-center gap-2 px-2 mb-2">
-          <div className="w-7 h-7 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0">
+          <div className="w-7 h-7 rounded-full bg-emerald-600/20 text-emerald-400 flex items-center justify-center text-xs font-bold shrink-0">
             {userName?.charAt(0)?.toUpperCase() ?? "U"}
           </div>
           <span className="text-xs text-slate-400 truncate">{userName}</span>
         </div>
         <button
           onClick={handleLogout}
-          title="Sair"
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-150"
+          title="Sair do sistema"
+          className="w-full flex items-center justify-center lg:justify-start gap-3 px-3 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider text-rose-500/80 hover:text-rose-400 bg-rose-500/5 hover:bg-rose-500/10 border border-rose-500/10 hover:border-rose-500/20 active:scale-95 transition-all duration-150 cursor-pointer"
         >
-          <LogOut className="w-5 h-5 shrink-0" />
-          <span className="hidden lg:block">Sair</span>
+          <LogOut className="w-4.5 h-4.5 shrink-0" />
+          <span className="hidden lg:block font-mono tracking-widest">[EXIT_SESSION]</span>
         </button>
       </div>
     </aside>

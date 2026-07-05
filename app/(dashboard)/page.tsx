@@ -89,18 +89,22 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Welcome Banner */}
-      <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 md:p-8 shadow-xl border border-slate-800">
-        <div className="absolute right-0 bottom-0 top-0 opacity-10 pointer-events-none flex items-center justify-center pr-12">
-          <ShieldCheck size={280} className="text-white" />
+      <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-6 md:p-8 shadow-[0_0_50px_-12px_rgba(16,185,129,0.1)] border border-emerald-500/20 font-mono">
+        {/* Tech lines pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.015)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none"></div>
+
+        <div className="absolute right-0 bottom-0 top-0 opacity-5 pointer-events-none flex items-center justify-center pr-12">
+          <ShieldCheck size={280} className="text-emerald-400" />
         </div>
-        <div className="relative z-10 space-y-2 max-w-2xl">
-          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30">
+        <div className="relative z-10 space-y-3 max-w-2xl">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest bg-emerald-950/80 text-emerald-400 border border-emerald-500/30">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
             Painel Operacional
           </span>
-          <h1 className="text-3xl font-black tracking-tight md:text-4xl">
+          <h1 className="text-2xl font-black tracking-widest md:text-3xl uppercase">
             Olá, {session?.user.name} 👋
           </h1>
-          <p className="text-slate-300 text-sm md:text-base font-medium leading-relaxed">
+          <p className="text-slate-400 text-xs md:text-sm font-medium leading-relaxed font-sans">
             Bem-vindo ao sistema de controle da unidade <span className="text-white font-bold">{globalConfig.nomeUnidade}</span> ({globalConfig.localidade}). Utilize os atalhos abaixo para gerenciar a alimentação, ocorrências ou verificar visitas dos internos.
           </p>
         </div>
@@ -108,7 +112,10 @@ export default async function DashboardPage() {
 
       {/* Grid of Modules */}
       <div>
-        <h2 className="text-lg font-bold text-slate-900 mb-4 tracking-tight">Atalhos Operacionais</h2>
+        <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 font-mono">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          Atalhos Operacionais
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {modules.map((m) => {
             const Icon = m.icon
@@ -116,30 +123,34 @@ export default async function DashboardPage() {
               <Link
                 key={m.href}
                 href={m.href}
-                className="group relative flex flex-col justify-between p-6 bg-white rounded-2xl border border-slate-200/80 hover:border-slate-300 hover:shadow-md transition duration-200 outline-none focus:ring-2 focus:ring-slate-900"
+                className="group relative flex flex-col justify-between p-6 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/85 dark:border-slate-800/80 hover:border-emerald-500/40 hover:shadow-[0_8px_30px_rgba(16,185,129,0.06)] transition duration-200 outline-none focus:ring-1 focus:ring-emerald-500/50"
               >
+                {/* Tech corner accent on hover */}
+                <div className="absolute top-3 left-3 w-2 h-2 border-t-2 border-l-2 border-emerald-500/0 group-hover:border-emerald-500/40 transition-colors duration-200"></div>
+                <div className="absolute top-3 right-3 w-2 h-2 border-t-2 border-r-2 border-emerald-500/0 group-hover:border-emerald-500/40 transition-colors duration-200"></div>
+
                 <div className="space-y-4">
                   {/* Icon Block */}
-                  <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${m.color} text-white shadow-sm`}>
-                    <Icon size={22} />
+                  <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${m.color} text-white shadow-sm transition-transform duration-200 group-hover:scale-105`}>
+                    <Icon size={20} />
                   </div>
-
+ 
                   {/* Title & Desc */}
                   <div className="space-y-1.5">
-                    <h3 className="font-bold text-slate-800 group-hover:text-slate-950 transition flex items-center gap-1">
+                    <h3 className="font-bold text-slate-800 dark:text-slate-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition flex items-center gap-1">
                       {m.title}
-                      <ChevronRight size={16} className="text-slate-400 group-hover:translate-x-0.5 transition" />
+                      <ChevronRight size={14} className="text-slate-400 group-hover:text-emerald-500 group-hover:translate-x-0.5 transition" />
                     </h3>
-                    <p className="text-slate-500 text-xs font-medium leading-relaxed">
+                    <p className="text-slate-500 dark:text-slate-400 text-xs font-medium leading-relaxed">
                       {m.description}
                     </p>
                   </div>
                 </div>
-
+ 
                 {/* Status indicator */}
-                <div className="mt-6 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-bold">
-                  <span className="text-slate-400 uppercase tracking-wider">Status Atual</span>
-                  <span className={`${m.textColor} bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100`}>
+                <div className="mt-6 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider font-mono">
+                  <span className="text-slate-400">Status Atual</span>
+                  <span className={`${m.textColor} bg-slate-50 dark:bg-slate-950/60 px-2 py-0.5 rounded-full border border-slate-100 dark:border-slate-900`}>
                     {m.metric}
                   </span>
                 </div>

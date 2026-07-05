@@ -9,8 +9,8 @@ interface AlimentacaoSummaryProps {
 
 export function AlimentacaoSummary({ summaryMetrics, config, globalConfig }: AlimentacaoSummaryProps) {
   return (
-    <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-2xl p-6 border border-slate-800 shadow-xl print:bg-white print:text-black print:border print:border-slate-300 print:shadow-none print:p-4 print:rounded-none">
-      <h3 className="text-lg font-bold tracking-tight mb-4 border-b border-slate-800 pb-2 print:border-slate-300 print:text-base print:uppercase print:text-center">
+    <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-2xl p-6 border border-emerald-500/20 shadow-[0_0_40px_-12px_rgba(16,185,129,0.12)] print:bg-white print:text-black print:border print:border-slate-300 print:shadow-none print:p-4 print:rounded-none">
+      <h3 className="text-lg font-bold tracking-tight mb-4 border-b border-slate-800 pb-2 print:border-slate-300 print:text-base print:uppercase print:text-center font-mono uppercase text-slate-100">
         Resumo Geral da Entrega
       </h3>
       
@@ -18,7 +18,7 @@ export function AlimentacaoSummary({ summaryMetrics, config, globalConfig }: Ali
         {Object.entries(summaryMetrics).map(([key, val]) => (
           <div key={key} className="flex justify-between items-center border-b border-slate-800/60 pb-3 last:border-0 last:pb-0 print:border-slate-200">
             <span className="text-sm text-slate-400 font-medium print:text-slate-700">{key}</span>
-            <span className="text-lg font-extrabold tracking-tight text-white font-mono print:text-black">
+            <span className="text-lg font-extrabold tracking-tight text-emerald-400 font-mono print:text-black">
               {val}
             </span>
           </div>

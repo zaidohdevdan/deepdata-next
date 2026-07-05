@@ -122,24 +122,24 @@ export default function EscalasHeader({
   return (
     <div className="print:hidden space-y-6">
       {/* Roster Header Toolbar */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-slate-700 to-slate-900 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-800 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-3xl">🛡️</span>
-            <h1 className="text-2xl font-bold tracking-tight">Escalas de Plantão UPI-4</h1>
+            <h1 className="text-2xl font-black tracking-widest uppercase">Escalas de Plantão</h1>
           </div>
-          <p className="text-white/80 text-sm">
+          <p className="text-white/80 text-xs font-sans font-medium">
             Configure os postos e a presença dos servidores nas Configurações da Escala, defina as faixas horárias e arraste para organizar o plantão.
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 font-sans">
           <button
             onClick={() => setShowConfig(!showConfig)}
             className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl shadow-sm transition cursor-pointer ${
               showConfig 
-                ? "bg-slate-600 hover:bg-slate-700 text-white" 
-                : "bg-slate-800 hover:bg-slate-750 text-white border border-slate-700"
+                ? "bg-emerald-950 text-emerald-400 border border-emerald-500/30" 
+                : "bg-emerald-900/60 hover:bg-emerald-900/80 text-white border border-emerald-400/20"
             }`}
           >
             <Settings size={14} /> Configurações
@@ -147,20 +147,20 @@ export default function EscalasHeader({
 
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-white text-slate-800 hover:bg-slate-100 rounded-xl shadow-sm transition cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-white text-emerald-900 hover:bg-slate-100 rounded-xl shadow-sm transition cursor-pointer"
           >
             <Printer size={14} /> Imprimir Escala
           </button>
 
           <button
             onClick={handleSave}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-sm transition cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl shadow-sm transition cursor-pointer"
           >
             Gravar Escala
           </button>
           <button
             onClick={handleClear}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-red-600 hover:bg-red-700 text-white rounded-xl shadow-sm transition cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-red-650 hover:bg-red-700 text-white rounded-xl shadow-sm transition cursor-pointer"
           >
             <Trash2 size={14} /> Limpar
           </button>
@@ -181,7 +181,7 @@ export default function EscalasHeader({
                   setIsManualChefe(false)
                   setChefe("")
                 }}
-                className="text-[9px] font-bold text-indigo-600 hover:text-indigo-800 transition bg-transparent border-0 cursor-pointer"
+                className="text-[9px] font-bold text-emerald-600 hover:text-emerald-800 transition bg-transparent border-0 cursor-pointer"
               >
                 Usar Lista
               </button>
@@ -204,7 +204,7 @@ export default function EscalasHeader({
                   }
                 }
               }}
-              className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 bg-white"
+              className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
             >
               <option value="">Selecione...</option>
               {availableChefes.map(c => (
@@ -220,7 +220,7 @@ export default function EscalasHeader({
               placeholder="Nome do Chefe"
               value={chefe}
               onChange={(e) => setChefe(e.target.value)}
-              className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 bg-white"
+              className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
             />
           )}
         </div>
@@ -233,7 +233,7 @@ export default function EscalasHeader({
             placeholder="EX: EQUIPE A"
             value={equipe}
             onChange={(e) => setEquipe(e.target.value)}
-            className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700"
+            className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700"
           />
         </div>
         <div className="space-y-1">
@@ -244,7 +244,7 @@ export default function EscalasHeader({
             type="date"
             value={dataEscala}
             onChange={(e) => setDataEscala(e.target.value)}
-            className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700"
+            className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700"
           />
         </div>
         <div className="space-y-1">
@@ -255,7 +255,7 @@ export default function EscalasHeader({
             type="time"
             value={horaInicio}
             onChange={(e) => setHoraInicio(e.target.value)}
-            className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700"
+            className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700"
           />
         </div>
         <div className="space-y-1">
@@ -266,7 +266,7 @@ export default function EscalasHeader({
             type="time"
             value={horaFim}
             onChange={(e) => setHoraFim(e.target.value)}
-            className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700"
+            className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700"
           />
         </div>
         <div className="space-y-1">
@@ -277,7 +277,7 @@ export default function EscalasHeader({
             value={numFaixas}
             onChange={(e) => setNumFaixas(Number(e.target.value))}
             disabled={tipo === "almoco" || tipo === "alvorada"}
-            className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 bg-white disabled:bg-slate-50 disabled:text-slate-400"
+            className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white disabled:bg-slate-50 disabled:text-slate-400"
           >
             {tipo === "alvorada" ? (
               <option value={1}>1 Turno</option>
