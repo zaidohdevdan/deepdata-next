@@ -91,7 +91,11 @@ export default function VisitasPage() {
     viewMode, setViewMode,
     selectedParidadeCela, setSelectedParidadeCela,
     celasDisponiveis,
-    displayRows
+    displayRows,
+    allDisplayRows,
+    currentPage,
+    setCurrentPage,
+    totalPages
   } = useVisitasFiltros(data)
 
   const uniqueInternos = new Set(data.filter((d) => d.prontuario > 0).map((d) => d.prontuario)).size
@@ -392,6 +396,10 @@ export default function VisitasPage() {
             displayRows={displayRows}
             totalCount={viewMode === "visitas" ? data.length : uniqueInternos}
             viewMode={viewMode}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={totalPages}
+            filteredCount={allDisplayRows.length}
           />
         </div>
       )}
