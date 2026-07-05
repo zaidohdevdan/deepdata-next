@@ -98,6 +98,7 @@ export function useEscalaState({
   const [estado, setEstado] = useState<Record<number, Record<string, string[]>>>({})
   const [presenceMap, setPresenceMap] = useState<Record<string, boolean>>({})
   const [removedFixedTokens, setRemovedFixedTokens] = useState<string[]>([])
+  const [unlockedFixedTokens, setUnlockedFixedTokens] = useState<string[]>([])
   
   const [poolFilter, setPoolFilter] = useState<"unallocated" | "all">("unallocated")
   const [poolSearch, setPoolSearch] = useState("")
@@ -239,7 +240,7 @@ export function useEscalaState({
                   }
                 }
 
-                if (!isAllocatedElsewhere && !removedFixedTokens.includes(token) && !currentList.includes(token)) {
+                if (!isAllocatedElsewhere && !removedFixedTokens.includes(token) && !unlockedFixedTokens.includes(token) && !currentList.includes(token)) {
                   currentList.push(token)
                   listChanged = true
                 }
@@ -289,7 +290,7 @@ export function useEscalaState({
                   }
                 }
 
-                if (!isAllocatedElsewhere && !removedFixedTokens.includes(token) && !novo[f][fixed.posto].includes(token)) {
+                if (!isAllocatedElsewhere && !removedFixedTokens.includes(token) && !unlockedFixedTokens.includes(token) && !novo[f][fixed.posto].includes(token)) {
                   novo[f][fixed.posto].push(token)
                 }
               }
@@ -487,6 +488,16 @@ export function useEscalaState({
     }
   }
 
+  const toggleFixedOfficerLock = (token: string) => {
+    setUnlockedFixedTokens((prev) => {
+      if (prev.includes(token)) {
+        return prev.filter((t) => t !== token)
+      } else {
+        return [...prev, token]
+      }
+    })
+  }
+
   return {
     LS_KEY,
     chefe, setChefe,
@@ -507,6 +518,8 @@ export function useEscalaState({
     isSavingConfig,
     showClearConfirm, setShowClearConfirm,
     removedFixedTokens, setRemovedFixedTokens,
+    unlockedFixedTokens, setUnlockedFixedTokens,
+    toggleFixedOfficerLock,
     independentHorarios, setIndependentHorarios,
     independentEstado, setIndependentEstado,
     isLoadedFromStorage,

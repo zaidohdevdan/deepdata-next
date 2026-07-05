@@ -1,4 +1,4 @@
-import { Shield, Plus, Trash2 } from "lucide-react"
+import { Shield, Plus, Trash2, Lock, Unlock } from "lucide-react"
 import { Policial, PolicialFixo, INDEPENDENT_POSTS } from "./types"
 
 interface IndependentPostsGridProps {
@@ -7,6 +7,8 @@ interface IndependentPostsGridProps {
   setIndependentHorarios: React.Dispatch<React.SetStateAction<Record<string, string[]>>>
   independentEstado: Record<string, Record<number, string[]>>
   policiaisFixos: PolicialFixo[]
+  unlockedFixedTokens: string[]
+  toggleFixedOfficerLock: (t: string) => void
   handleDragStart: (e: React.DragEvent, t: string) => void
   handleDragOver: (e: React.DragEvent) => void
   handleDrop: (e: React.DragEvent, s: number, p: string) => void
@@ -21,6 +23,8 @@ export default function IndependentPostsGrid({
   setIndependentHorarios,
   independentEstado,
   policiaisFixos,
+  unlockedFixedTokens,
+  toggleFixedOfficerLock,
   handleDragStart,
   handleDragOver,
   handleDrop,
@@ -94,24 +98,44 @@ export default function IndependentPostsGrid({
                             fixed.posto === gId &&
                             fixed.faixa === `Faixa ${slotIdx + 1}`
                         )
+                        const isUnlocked = isFixed && unlockedFixedTokens.includes(tid)
 
                         return (
                           <div
                             key={tid}
-                            draggable={!isFixed}
-                            onDragStart={(e) => !isFixed && handleDragStart(e, tid)}
+                            draggable={!isFixed || isUnlocked}
+                            onDragStart={(e) => (!isFixed || isUnlocked) && handleDragStart(e, tid)}
                             className={`p-1.5 rounded text-[11px] font-bold flex items-center justify-between select-none ${
                               isFixed
-                                ? "bg-blue-600 text-white"
+                                ? isUnlocked
+                                  ? "bg-blue-500 hover:bg-blue-600 text-white border border-blue-400 cursor-grab active:cursor-grabbing transition-all shadow-sm"
+                                  : "bg-blue-600 text-white border border-blue-700 cursor-not-allowed"
                                 : "bg-slate-900 text-white cursor-grab active:cursor-grabbing hover:bg-slate-850"
                             }`}
-                            title={isFixed ? "Policial fixado" : "Arraste para mover"}
+                            title={isFixed ? (isUnlocked ? "Policial fixado (Desafixado temporariamente) - Arraste para mover" : "Policial fixado - Clique no cadeado para desafixar") : "Arraste para mover"}
                           >
                             <div className="truncate pr-1">
                               <div className="truncate font-extrabold flex items-center gap-1">
-                                {pp.qra || pp.nome} {isFixed && <Shield size={8} className="shrink-0" />}
+                                {pp.qra || pp.nome} 
+                                {isFixed && (
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      toggleFixedOfficerLock(tid)
+                                    }}
+                                    className="p-0.5 hover:bg-white/20 rounded text-white transition-colors cursor-pointer border-0 bg-transparent"
+                                    title={isUnlocked ? "Bloquear/Fixar novamente" : "Desafixar e habilitar arraste"}
+                                  >
+                                    {isUnlocked ? (
+                                      <Unlock size={8} className="text-blue-100" />
+                                    ) : (
+                                      <Lock size={8} className="fill-white/20 text-white" />
+                                    )}
+                                  </button>
+                                )}
                               </div>
-                              <div className="text-[8px] text-slate-400 font-mono leading-tight">{pp.matricula}</div>
+                              <div className="text-[8px] text-slate-350 font-mono leading-tight">{pp.matricula}</div>
                             </div>
 
                             <div className="flex items-center gap-1 shrink-0">
