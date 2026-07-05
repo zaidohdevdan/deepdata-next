@@ -1,5 +1,6 @@
 import { Shield, Plus, Trash2, Lock, Unlock } from "lucide-react"
 import { Policial, PolicialFixo, INDEPENDENT_POSTS } from "./types"
+import { memo } from "react"
 
 interface IndependentPostsGridProps {
   tipo: string
@@ -17,7 +18,7 @@ interface IndependentPostsGridProps {
   parseToken: (t: string) => (Policial & { slotIdx: number }) | null
 }
 
-export default function IndependentPostsGrid({
+function IndependentPostsGrid({
   tipo,
   independentHorarios,
   setIndependentHorarios,
@@ -181,3 +182,5 @@ export default function IndependentPostsGrid({
     </div>
   )
 }
+
+export default memo(IndependentPostsGrid)

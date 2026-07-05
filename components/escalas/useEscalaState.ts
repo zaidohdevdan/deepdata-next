@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo, useCallback } from "react"
 import { toast } from "sonner"
 import { saveScaleConfigAction } from "@/app/actions/configuracoes"
 import { getChefesAction } from "@/app/actions/chefes"
@@ -109,9 +109,9 @@ export function useEscalaState({
   const [independentHorarios, setIndependentHorarios] = useState<Record<string, string[]>>(DEFAULT_INDEPENDENT_HORARIOS)
   const [independentEstado, setIndependentEstado] = useState<Record<string, Record<number, string[]>>>(DEFAULT_INDEPENDENT_ESTADO)
   const [isLoadedFromStorage, setIsLoadedFromStorage] = useState(false)
-  const faixasHorario = calcularFaixas(horaInicio, horaFim, numFaixas)
+  const faixasHorario = useMemo(() => calcularFaixas(horaInicio, horaFim, numFaixas), [horaInicio, horaFim, numFaixas])
 
-  const parseToken = (tid: string): (Policial & { slotIdx: number }) | null => {
+  const parseToken = useCallback((tid: string): (Policial & { slotIdx: number }) | null => {
     if (tid.startsWith("GLOBAL_PP_")) {
       const matricula = tid.replace("GLOBAL_PP_", "")
       const pp = basePoliciais.find((p) => p.matricula === matricula)
@@ -123,7 +123,7 @@ export function useEscalaState({
     const slotIdx = Number(match[2])
     const pp = basePoliciais.find((p) => p.matricula === matricula)
     return { nome: pp?.nome || "Policial", qra: pp?.qra || pp?.nome || "Policial", matricula, slotIdx }
-  }
+  }, [basePoliciais])
 
   // ============================
   // HOOKS ESPECIALIZADOS
