@@ -1,4 +1,4 @@
-import { UserCheck } from "lucide-react"
+import { UserCheck, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface VisitasTableProps {
   displayRows: {
@@ -15,6 +15,10 @@ interface VisitasTableProps {
   }[]
   totalCount: number
   viewMode: "visitas" | "internos"
+  currentPage: number
+  setCurrentPage: (p: number) => void
+  totalPages: number
+  filteredCount: number
 }
 
 const PRIORIDADE_BADGE = (p: string) =>
@@ -28,7 +32,15 @@ const SITUACAO_BADGE = (s: string) => {
   return "bg-slate-100 text-slate-500 border border-slate-200"
 }
 
-export function VisitasTable({ displayRows, totalCount, viewMode }: VisitasTableProps) {
+export function VisitasTable({
+  displayRows,
+  totalCount,
+  viewMode,
+  currentPage,
+  setCurrentPage,
+  totalPages,
+  filteredCount
+}: VisitasTableProps) {
   return (
     <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden flex flex-col">
       {/* Table Header */}
@@ -38,7 +50,7 @@ export function VisitasTable({ displayRows, totalCount, viewMode }: VisitasTable
         </h3>
         <div className="text-[11px] font-bold text-slate-400 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 flex items-center gap-1">
           <UserCheck size={12} className="text-slate-400" />
-          <span>Exibindo {displayRows.length} de {totalCount}</span>
+          <span>Filtro: {filteredCount} de {totalCount}</span>
         </div>
       </div>
 
@@ -140,6 +152,34 @@ export function VisitasTable({ displayRows, totalCount, viewMode }: VisitasTable
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Footer */}
+      {totalPages > 1 && (
+        <div className="p-4 border-t border-slate-100 flex items-center justify-between gap-4 bg-slate-50/50">
+          <div className="text-xs text-slate-500 font-medium">
+            Página <span className="font-bold text-slate-700">{currentPage}</span> de{" "}
+            <span className="font-bold text-slate-700">{totalPages}</span>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
+              className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer text-slate-650"
+              title="Página Anterior"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <button
+              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+              disabled={currentPage === totalPages}
+              className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition cursor-pointer text-slate-650"
+              title="Próxima Página"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

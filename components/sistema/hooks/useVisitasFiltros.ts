@@ -1,5 +1,7 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { ExtractedVisitor } from "@/lib/pdf-parser"
+
+const PAGE_SIZE = 50
 
 export function useVisitasFiltros(data: ExtractedVisitor[]) {
   const [searchInterno, setSearchInterno] = useState("")
@@ -10,6 +12,12 @@ export function useVisitasFiltros(data: ExtractedVisitor[]) {
   const [sortOption, setSortOption] = useState<"senha" | "custodiado" | "localizacao">("senha")
   const [viewMode, setViewMode] = useState<"visitas" | "internos">("visitas")
   const [selectedParidadeCela, setSelectedParidadeCela] = useState("Todas")
+  const [currentPage, setCurrentPage] = useState(1)
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchInterno, searchVisitante, selectedAla, selectedCela, selectedPrioridade, selectedParidadeCela, sortOption, viewMode])
 
   const celasDisponiveis = useMemo(() => Array.from(
     new Set(
@@ -49,7 +57,7 @@ export function useVisitasFiltros(data: ExtractedVisitor[]) {
       })
   }, [data, searchInterno, searchVisitante, selectedAla, selectedCela, selectedPrioridade, selectedParidadeCela, sortOption])
 
-  const displayRows = useMemo(() => {
+  const allDisplayRows = useMemo(() => {
     if (viewMode === "visitas") {
       return sortedAndFiltered.map((item) => ({
         senhaDisplay: String(item.senha),
@@ -99,6 +107,15 @@ export function useVisitasFiltros(data: ExtractedVisitor[]) {
     }
   }, [sortedAndFiltered, viewMode])
 
+  const totalPages = useMemo(() => {
+    return Math.max(1, Math.ceil(allDisplayRows.length / PAGE_SIZE))
+  }, [allDisplayRows])
+
+  const displayRows = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE
+    return allDisplayRows.slice(start, start + PAGE_SIZE)
+  }, [allDisplayRows, currentPage])
+
   return {
     searchInterno, setSearchInterno,
     searchVisitante, setSearchVisitante,
@@ -110,6 +127,10 @@ export function useVisitasFiltros(data: ExtractedVisitor[]) {
     selectedParidadeCela, setSelectedParidadeCela,
     celasDisponiveis,
     displayRows,
+    allDisplayRows,
+    currentPage,
+    setCurrentPage,
+    totalPages,
     sortedAndFiltered
   }
 }
