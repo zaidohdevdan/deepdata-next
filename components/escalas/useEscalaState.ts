@@ -144,6 +144,7 @@ export function useEscalaState({
     estado, setEstado,
     independentEstado, setIndependentEstado,
     removedFixedTokens, setRemovedFixedTokens,
+    policiaisFixos,
     isPostPairAllowed,
     tokenId,
     generateMoveToken,
