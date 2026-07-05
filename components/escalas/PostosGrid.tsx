@@ -1,4 +1,4 @@
-import { Shield, Plus, Trash2, RefreshCw, Save } from "lucide-react"
+import { Shield, Plus, Trash2, RefreshCw, Save, Lock, Unlock } from "lucide-react"
 import { Policial, PolicialFixo } from "./types"
 
 interface PostosGridProps {
@@ -8,6 +8,8 @@ interface PostosGridProps {
   estado: Record<number, Record<string, string[]>>
   postosConfig: Record<string, number>
   policiaisFixos: PolicialFixo[]
+  unlockedFixedTokens: string[]
+  toggleFixedOfficerLock: (t: string) => void
   poolSearch: string
   setPoolSearch: (s: string) => void
   poolFilter: "unallocated" | "all"
@@ -35,6 +37,8 @@ export default function PostosGrid({
   estado,
   postosConfig,
   policiaisFixos,
+  unlockedFixedTokens,
+  toggleFixedOfficerLock,
   poolSearch,
   setPoolSearch,
   poolFilter,
@@ -287,25 +291,45 @@ export default function PostosGrid({
                                   fixed.posto === posto &&
                                   fixed.faixa === `Faixa ${f + 1}`
                               )
+                              const isUnlocked = isFixed && unlockedFixedTokens.includes(tid)
 
                               return (
                                 <div
                                   key={tid}
-                                  draggable={!isFixed}
-                                  onDragStart={(e) => !isFixed && handleDragStart(e, tid)}
+                                  draggable={!isFixed || isUnlocked}
+                                  onDragStart={(e) => (!isFixed || isUnlocked) && handleDragStart(e, tid)}
                                   className={`p-2 rounded-lg text-xs font-bold flex items-center justify-between select-none ${
                                     isFixed
-                                      ? "bg-blue-600 text-white border border-blue-700 cursor-not-allowed"
+                                      ? isUnlocked
+                                        ? "bg-blue-500 hover:bg-blue-600 text-white border border-blue-400 cursor-grab active:cursor-grabbing transition-all shadow-sm"
+                                        : "bg-blue-600 text-white border border-blue-700 cursor-not-allowed"
                                       : "bg-slate-900 text-white cursor-grab active:cursor-grabbing hover:bg-slate-850 transition-colors"
                                   }`}
-                                  title={isFixed ? "Policial fixado via configurações do sistema" : "Arraste para mover"}
+                                  title={isFixed ? (isUnlocked ? "Policial fixado (Desafixado temporariamente) - Arraste para mover" : "Policial fixado via configurações - Clique no cadeado para desafixar") : "Arraste para mover"}
                                 >
                                   <div className="flex items-center justify-between w-full">
                                     <div className="truncate">
                                       <div className="font-extrabold flex items-center gap-1.5 truncate">
-                                        {pp.qra || pp.nome} {isFixed && <Shield size={10} className="fill-white/20 text-white shrink-0" />}
+                                        {pp.qra || pp.nome} 
+                                        {isFixed && (
+                                          <button
+                                            type="button"
+                                            onClick={(e) => {
+                                              e.stopPropagation()
+                                              toggleFixedOfficerLock(tid)
+                                            }}
+                                            className="p-0.5 hover:bg-white/20 rounded text-white transition-colors cursor-pointer border-0 bg-transparent"
+                                            title={isUnlocked ? "Bloquear/Fixar novamente" : "Desafixar e habilitar arraste"}
+                                          >
+                                            {isUnlocked ? (
+                                              <Unlock size={10} className="text-blue-100" />
+                                            ) : (
+                                              <Lock size={10} className="fill-white/20 text-white" />
+                                            )}
+                                          </button>
+                                        )}
                                       </div>
-                                      <div className="text-[9px] text-slate-400 font-mono leading-none">{pp.matricula}</div>
+                                      <div className="text-[9px] text-slate-350 font-mono leading-none">{pp.matricula}</div>
                                     </div>
                                     <div className="flex items-center gap-1 shrink-0 ml-2">
                                       <button

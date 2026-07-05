@@ -134,6 +134,8 @@ export default function EscalasContainer({
               estado={state.estado}
               postosConfig={state.postosConfig}
               policiaisFixos={state.policiaisFixos}
+              unlockedFixedTokens={state.unlockedFixedTokens}
+              toggleFixedOfficerLock={state.toggleFixedOfficerLock}
               poolSearch={state.poolSearch}
               setPoolSearch={state.setPoolSearch}
               poolFilter={state.poolFilter}
@@ -159,6 +161,8 @@ export default function EscalasContainer({
               setIndependentHorarios={state.setIndependentHorarios}
               independentEstado={state.independentEstado}
               policiaisFixos={state.policiaisFixos}
+              unlockedFixedTokens={state.unlockedFixedTokens}
+              toggleFixedOfficerLock={state.toggleFixedOfficerLock}
               handleDragStart={state.handleDragStart}
               handleDragOver={state.handleDragOver}
               handleDrop={state.handleDrop}
