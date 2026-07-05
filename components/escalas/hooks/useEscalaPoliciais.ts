@@ -48,10 +48,10 @@ export function useEscalaPoliciais({
     }
 
     const alreadyFixed = policiaisFixos.find(
-      f => f.posto === fixedPosto && f.faixa === fixedFaixa
+      f => f.matricula === selectedPP.matricula && f.posto === fixedPosto && f.faixa === fixedFaixa
     )
     if (alreadyFixed) {
-      toast.error(`Já existe policial fixado para ${fixedPosto} na ${fixedFaixa}. Remova o existente primeiro.`)
+      toast.error(`Este policial já está fixado para ${fixedPosto} na ${fixedFaixa}.`)
       return
     }
 
