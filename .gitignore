@@ -43,3 +43,9 @@ next-env.d.ts
 # ia
 .agent/
 SKILL.md
+# Prisma
+/prisma/dev.db
+/prisma/generated-client/
+# Public spreadsheets
+/public/visitas.xlsx
+/public/confere.xls

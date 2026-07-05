@@ -167,7 +167,7 @@ export function Sidebar({ role, userName }: SidebarProps) {
                   )}
                 >
                   {/* Subtle Graph lines and nodes */}
-                  {mod.subItems.map((sub, idx) => {
+                  {mod.subItems.map((sub) => {
                     const active = isActive(sub.href)
                     return (
                       <Link

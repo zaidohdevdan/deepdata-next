@@ -21,7 +21,7 @@ export function useEscalaPoliciais({
   basePoliciais, setBasePoliciais,
   policiaisFixos, setPoliciaisFixos,
   presenceMap, setPresenceMap,
-  removedFixedTokens, setRemovedFixedTokens,
+  setRemovedFixedTokens,
   handleRemoveToken,
   autoOcupar,
   tokenId

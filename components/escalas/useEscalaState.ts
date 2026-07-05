@@ -257,7 +257,7 @@ export function useEscalaState({
       })
     }, 0)
     return () => clearTimeout(timer)
-  }, [basePoliciais, policiaisFixos, tipo, removedFixedTokens, estado])
+  }, [basePoliciais, policiaisFixos, tipo, removedFixedTokens, estado, unlockedFixedTokens])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -331,7 +331,7 @@ export function useEscalaState({
       })
     }, 0)
     return () => clearTimeout(timer)
-  }, [numFaixas, basePoliciais, policiaisFixos, independentEstado, presenceMap, postosLogic.postosConfig, tipo, removedFixedTokens])
+  }, [numFaixas, basePoliciais, policiaisFixos, independentEstado, presenceMap, postosLogic.postosConfig, tipo, removedFixedTokens, parseToken, unlockedFixedTokens])
 
   // ============================
   // LOCAL STORAGE E PERSISTÊNCIA
@@ -361,7 +361,7 @@ export function useEscalaState({
     }
     const timer2 = setTimeout(() => setIsLoadedFromStorage(true), 0)
     return () => clearTimeout(timer2)
-  }, [LS_KEY])
+  }, [LS_KEY, postosLogic])
 
   useEffect(() => {
     if (!isLoadedFromStorage) return
@@ -432,7 +432,7 @@ export function useEscalaState({
       })
     }, 0)
     return () => clearTimeout(timer)
-  }, [presenceMap, basePoliciais])
+  }, [presenceMap, basePoliciais, parseToken])
 
   // ============================
   // FUNÇÕES CORE DE ROOT

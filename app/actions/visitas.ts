@@ -5,6 +5,20 @@ import { auth } from "@/lib/auth"
 import { revalidatePath } from "next/cache"
 import { createAuditLogAction } from "./audit"
 
+interface VisitaInput {
+  prontuario?: number | string
+  senha?: number | string
+  custodiado?: string
+  localizacao?: string
+  ala?: string
+  prioridade?: string
+  cela?: string
+  cpfVisitante?: string
+  nomeVisitante?: string
+  relacao?: string
+  situacao?: string
+}
+
 async function ensureAuthenticated() {
   const session = await auth()
   if (!session) {
@@ -26,8 +40,8 @@ export async function getVisitasAction() {
   }
 }
 
-export async function saveVisitasAction(visitas: any[]) {
-  const session = await ensureAuthenticated()
+export async function saveVisitasAction(visitas: VisitaInput[]) {
+  await ensureAuthenticated()
   try {
     // 1. Limpa todas as visitas existentes no banco de dados
     await prisma.visita.deleteMany()
@@ -62,14 +76,15 @@ export async function saveVisitasAction(visitas: any[]) {
 
     revalidatePath("/sistema")
     return { success: true, count: dataToInsert.length }
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Erro interno ao salvar visitas."
     console.error("Erro ao salvar visitas:", error)
-    return { success: false, error: error.message || "Erro interno ao salvar visitas." }
+    return { success: false, error: message }
   }
 }
 
 export async function clearVisitasAction() {
-  const session = await ensureAuthenticated()
+  await ensureAuthenticated()
   try {
     await prisma.visita.deleteMany()
 
@@ -82,8 +97,9 @@ export async function clearVisitasAction() {
 
     revalidatePath("/sistema")
     return { success: true }
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Erro ao limpar visitas."
     console.error("Erro ao limpar visitas:", error)
-    return { success: false, error: error.message || "Erro ao limpar visitas." }
+    return { success: false, error: message }
   }
 }

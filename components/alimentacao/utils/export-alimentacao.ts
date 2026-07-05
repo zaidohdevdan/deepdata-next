@@ -1,9 +1,9 @@
 import * as XLSX from "xlsx"
 import { toast } from "sonner"
 import { AlaDistribData } from "@/app/actions/alimentacao"
-import { ConfigValues } from "@/lib/calculation"
+import { ConfigValues, AlimentacaoConfig } from "@/lib/calculation"
 
-export const handleExportExcel = (data: AlaDistribData[], config: any, globalConfig: ConfigValues) => {
+export const handleExportExcel = (data: AlaDistribData[], config: AlimentacaoConfig, globalConfig: ConfigValues) => {
   const preparedData = data.map((item) => {
     const computed = config.calcularAla(
       { id: item.id, nome: item.nome, internos: item.internos, dietas: item.dietas },

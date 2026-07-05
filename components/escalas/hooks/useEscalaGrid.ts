@@ -24,7 +24,7 @@ interface UseEscalaGridProps {
 
 export function useEscalaGrid({
   tipo, numFaixas, postosConfig, basePoliciais, presenceMap,
-  estado, setEstado, independentEstado, setIndependentEstado,
+  setEstado, setIndependentEstado,
   removedFixedTokens, setRemovedFixedTokens, policiaisFixos,
   isPostPairAllowed, tokenId, generateMoveToken, generateDupToken, parseToken
 }: UseEscalaGridProps) {

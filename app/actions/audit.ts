@@ -6,7 +6,7 @@ import { auth } from "@/lib/auth"
 interface AuditLogPayload {
   acao: string       // Ex: "CREATE_OCORRENCIA", "UPDATE_ESCALA", "DELETE_USER"
   modulo: string     // Ex: "AUTENTICACAO", "OCORRENCIAS", "ESCALAS", "ADMIN", "CONFIGURACOES", "DISTRIBUICAO"
-  detalhes: any      // Qualquer objeto contendo dados de antes/depois da alteração
+  detalhes: Record<string, unknown>  // Qualquer objeto contendo dados de antes/depois da alteração
 }
 
 /**

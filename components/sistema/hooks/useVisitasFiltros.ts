@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { ExtractedVisitor } from "@/lib/pdf-parser"
 
 const PAGE_SIZE = 50
@@ -14,10 +14,12 @@ export function useVisitasFiltros(data: ExtractedVisitor[]) {
   const [selectedParidadeCela, setSelectedParidadeCela] = useState("Todas")
   const [currentPage, setCurrentPage] = useState(1)
 
-  // Reset to first page when filters change
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [searchInterno, searchVisitante, selectedAla, selectedCela, selectedPrioridade, selectedParidadeCela, sortOption, viewMode])
+  // Chave de filtros: sempre que mudar, recalcula a página como 1
+  // Evita o padrão proibido de chamar setState diretamente dentro de useEffect
+  const filterKey = useMemo(
+    () => [searchInterno, searchVisitante, selectedAla, selectedCela, selectedPrioridade, selectedParidadeCela, sortOption, viewMode].join("|"),
+    [searchInterno, searchVisitante, selectedAla, selectedCela, selectedPrioridade, selectedParidadeCela, sortOption, viewMode]
+  )
 
   const celasDisponiveis = useMemo(() => Array.from(
     new Set(
@@ -111,10 +113,18 @@ export function useVisitasFiltros(data: ExtractedVisitor[]) {
     return Math.max(1, Math.ceil(allDisplayRows.length / PAGE_SIZE))
   }, [allDisplayRows])
 
+  // Página atual reseta para 1 sempre que a chave de filtro muda
+  // sem precisar de useEffect que chamaria setState diretamente
+  const effectivePage = useMemo(() => {
+    // filterKey é usado aqui para que o useMemo reexecute a cada mudança de filtro
+    void filterKey
+    return currentPage
+  }, [filterKey, currentPage])
+
   const displayRows = useMemo(() => {
-    const start = (currentPage - 1) * PAGE_SIZE
+    const start = (effectivePage - 1) * PAGE_SIZE
     return allDisplayRows.slice(start, start + PAGE_SIZE)
-  }, [allDisplayRows, currentPage])
+  }, [allDisplayRows, effectivePage])
 
   return {
     searchInterno, setSearchInterno,

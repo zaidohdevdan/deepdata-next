@@ -17,7 +17,6 @@ import { useVisitasFiltros } from "@/components/sistema/hooks/useVisitasFiltros"
 export default function VisitasPage() {
   const [data, setData] = useState<ExtractedVisitor[]>([])
   const [totalVisits, setTotalVisits] = useState<number>(0)
-  const [isLoadingVisits, setIsLoadingVisits] = useState(true)
   const [isLoaded, setIsLoaded] = useState(false)
   const [showStats, setShowStats] = useState(false)
 
@@ -48,7 +47,6 @@ export default function VisitasPage() {
         }
       })
       .catch((err) => console.error("Error loading visits from db:", err))
-      .finally(() => setIsLoadingVisits(false))
   }, [])
 
   // Mark as loaded after mount
@@ -66,7 +64,12 @@ export default function VisitasPage() {
     script.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"
     script.async = true
     script.onload = () => {
-      const w = window as any
+      interface PdfjsWindow extends Window {
+        pdfjsLib?: {
+          GlobalWorkerOptions: { workerSrc: string }
+        }
+      }
+      const w = window as PdfjsWindow
       if (w.pdfjsLib) {
         w.pdfjsLib.GlobalWorkerOptions.workerSrc =
           "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js"
@@ -184,7 +187,7 @@ export default function VisitasPage() {
                     } else {
                       toast.error(res.error || "Erro ao limpar visitas no banco.")
                     }
-                  } catch (error) {
+                  } catch {
                     toast.dismiss(loadId)
                     toast.error("Erro de conexão ao limpar visitas.")
                   }
@@ -316,11 +319,10 @@ export default function VisitasPage() {
                 <button
                   type="button"
                   onClick={() => setViewMode("visitas")}
-                  className={`flex-1 rounded-lg px-2 py-1.5 text-center transition border shadow-sm outline-none cursor-pointer duration-200 select-none ${
-                    viewMode === "visitas"
+                  className={`flex-1 rounded-lg px-2 py-1.5 text-center transition border shadow-sm outline-none cursor-pointer duration-200 select-none ${viewMode === "visitas"
                       ? "bg-purple-600 border-purple-700 text-white shadow-md ring-2 ring-purple-300 scale-[1.03]"
                       : "bg-purple-50 border-purple-100 text-purple-700 hover:bg-purple-100/50 opacity-60 hover:opacity-100 hover:scale-[1.01]"
-                  }`}
+                    }`}
                 >
                   <span className={`block text-[9px] font-bold uppercase ${viewMode === "visitas" ? "text-purple-100" : "text-purple-500"}`}>Visitas</span>
                   <span className="block text-sm font-black">{totalVisits}</span>
@@ -328,11 +330,10 @@ export default function VisitasPage() {
                 <button
                   type="button"
                   onClick={() => setViewMode("internos")}
-                  className={`flex-1 rounded-lg px-2 py-1.5 text-center transition border shadow-sm outline-none cursor-pointer duration-200 select-none ${
-                    viewMode === "internos"
+                  className={`flex-1 rounded-lg px-2 py-1.5 text-center transition border shadow-sm outline-none cursor-pointer duration-200 select-none ${viewMode === "internos"
                       ? "bg-indigo-600 border-indigo-700 text-white shadow-md ring-2 ring-indigo-300 scale-[1.03]"
                       : "bg-indigo-50 border-indigo-100 text-indigo-700 hover:bg-indigo-100/50 opacity-60 hover:opacity-100 hover:scale-[1.01]"
-                  }`}
+                    }`}
                 >
                   <span className={`block text-[9px] font-bold uppercase ${viewMode === "internos" ? "text-indigo-100" : "text-indigo-500"}`}>Internos</span>
                   <span className="block text-sm font-black">{uniqueInternos}</span>
@@ -414,3 +415,4 @@ export default function VisitasPage() {
     </div>
   )
 }
+

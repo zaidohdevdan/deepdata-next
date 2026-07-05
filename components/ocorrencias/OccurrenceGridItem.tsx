@@ -1,7 +1,7 @@
 // "use client"
 
 import React from "react";
-import { Copy, Check, Edit } from "lucide-react";
+import { Copy, Edit } from "lucide-react";
 import { toast } from "sonner";
 
 interface DBInstance {
@@ -24,7 +24,7 @@ export default function OccurrenceGridItem({ occurrence, onEdit }: OccurrenceGri
       toast.success("Ocorrência copiada!", {
         description: "Texto copiado para a área de transferência.",
       });
-    } catch (error) {
+    } catch {
       toast.error("Falha ao copiar.");
     }
   };

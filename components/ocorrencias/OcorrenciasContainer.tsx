@@ -1,19 +1,14 @@
 "use client"
 
 import { useState, useTransition, useRef } from "react"
-import { Search, Copy, Check, Info, FileText, Sparkles, Plus, Trash2, Edit, Filter, Calendar, User, Loader2 } from "lucide-react"
+import { Search, Copy, Check, Plus, Trash2, Edit } from "lucide-react"
 import { toast } from "sonner"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   createOcorrenciaAction,
   updateOcorrenciaAction,
   deleteOcorrenciaAction,
-  createCategoriaAction,
-  generateOccurrenceTextAction
+  createCategoriaAction
 } from "@/app/actions/ocorrencias"
 
 import OcorrenciaFormModal from "./modals/OcorrenciaFormModal"
@@ -36,14 +31,12 @@ interface OcorrenciasContainerProps {
   initialOcorrencias: DBInstance[]
   initialCategorias: string[]
   currentUserName: string
-  userRole: string
 }
 
 export default function OcorrenciasContainer({
   initialOcorrencias,
   initialCategorias,
-  currentUserName,
-  userRole
+  currentUserName
 }: OcorrenciasContainerProps) {
   const [ocorrencias, setOcorrencias] = useState<DBInstance[]>(initialOcorrencias)
   const [categorias, setCategorias] = useState<string[]>(initialCategorias)
@@ -55,7 +48,6 @@ export default function OcorrenciasContainer({
 
   // AI HELPER STATES
   const [aiPrompt, setAiPrompt] = useState("")
-  const [isGeneratingAi, setIsGeneratingAi] = useState(false)
   const [showAiHelper, setShowAiHelper] = useState(false)
 
   // FORM / DIALOG STATES
@@ -404,7 +396,7 @@ export default function OcorrenciasContainer({
                       </button>
                       <button
                         type="button"
-                        onClick={(e) => { e.stopPropagation(); setDeletingId(item.id); setIsDeleteOpen(true) }}
+                        onClick={(e) => { e.stopPropagation(); confirmDelete(item.id) }}
                         className="flex items-center gap-1 text-[9px] font-bold bg-rose-500 text-white px-2 py-0.5 rounded-full shadow hover:bg-rose-600 transition"
                       >
                         <Trash2 size={8} /> Excluir

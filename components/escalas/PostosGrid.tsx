@@ -1,4 +1,4 @@
-import { Shield, Plus, Trash2, RefreshCw, Save, Lock, Unlock } from "lucide-react"
+import { Plus, Trash2, RefreshCw, Save, Lock, Unlock } from "lucide-react"
 import { Policial, PolicialFixo } from "./types"
 import { useMemo, memo } from "react"
 
@@ -28,7 +28,6 @@ interface PostosGridProps {
   handleDuplicateToken: (t: string, p: string, s: number, i: boolean) => void
   handleRemoveToken: (t: string) => void
   parseToken: (t: string) => (Policial & { slotIdx: number }) | null
-  tipo: string
 }
 
 function PostosGrid({
@@ -56,8 +55,7 @@ function PostosGrid({
   handleDropIntoGlobalPool,
   handleDuplicateToken,
   handleRemoveToken,
-  parseToken,
-  tipo
+  parseToken
 }: PostosGridProps) {
 
   // Helper local do painel para determinar policiais penais não alocados no pool

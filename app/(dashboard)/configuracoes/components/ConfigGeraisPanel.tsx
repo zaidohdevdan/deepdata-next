@@ -1,6 +1,25 @@
 import { Landmark, Utensils, Coffee, Cookie } from "lucide-react"
 
-export function ConfigGeraisPanel({ configBasicas }: { configBasicas: any }) {
+interface ConfigBasicas {
+  nomeUnidade: string
+  setNomeUnidade: (v: string) => void
+  localidade: string
+  setLocalidade: (v: string) => void
+  alimentacaoCaixaCapacidade: number
+  setAlimentacaoCaixaCapacidade: (v: number) => void
+  cafeCapacitePacote: number
+  setCafeCapacitePacote: (v: number) => void
+  cafePaoesPorInterno: number
+  setCafePaoesPorInterno: (v: number) => void
+  cafeLitrosPorGarrafa: number
+  setCafeLitrosPorGarrafa: (v: number) => void
+  biscoitoPorInterno: number
+  setBiscoitoPorInterno: (v: number) => void
+  biscoitoCapacidadePacote: number
+  setBiscoitoCapacidadePacote: (v: number) => void
+}
+
+export function ConfigGeraisPanel({ configBasicas }: { configBasicas: ConfigBasicas }) {
   const {
     nomeUnidade, setNomeUnidade,
     localidade, setLocalidade,
