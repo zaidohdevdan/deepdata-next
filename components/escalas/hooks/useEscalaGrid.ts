@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { toast } from "sonner"
-import { Policial, INDEPENDENT_POSTS } from "../types"
+import { Policial, INDEPENDENT_POSTS, PolicialFixo } from "../types"
 
 interface UseEscalaGridProps {
   tipo: string
@@ -14,6 +14,7 @@ interface UseEscalaGridProps {
   setIndependentEstado: React.Dispatch<React.SetStateAction<Record<string, Record<number, string[]>>>>
   removedFixedTokens: string[]
   setRemovedFixedTokens: React.Dispatch<React.SetStateAction<string[]>>
+  policiaisFixos: PolicialFixo[]
   isPostPairAllowed: (postA: string, postB: string) => boolean
   tokenId: (matricula: string, slotIdx: number) => string
   generateMoveToken: (matricula: string, destSlot: number) => string
@@ -24,7 +25,7 @@ interface UseEscalaGridProps {
 export function useEscalaGrid({
   tipo, numFaixas, postosConfig, basePoliciais, presenceMap,
   estado, setEstado, independentEstado, setIndependentEstado,
-  removedFixedTokens, setRemovedFixedTokens,
+  removedFixedTokens, setRemovedFixedTokens, policiaisFixos,
   isPostPairAllowed, tokenId, generateMoveToken, generateDupToken, parseToken
 }: UseEscalaGridProps) {
   const [draggedToken, setDraggedToken] = useState<string | null>(null)
@@ -54,6 +55,20 @@ export function useEscalaGrid({
         novoEstado[f][posto] = []
       }
     }
+
+    // Pre-populate fixed officers (if they are present)
+    policiaisFixos.forEach((fixed) => {
+      const f = Number(fixed.faixa.replace("Faixa ", "")) - 1
+      if (f >= 0 && f < numFaixas) {
+        const token = tokenId(fixed.matricula, f)
+        const isPresent = activePresence[fixed.matricula] !== false
+        if (isPresent && !removedFixedTokens.includes(token) && novoEstado[f] && novoEstado[f][fixed.posto]) {
+          if (!novoEstado[f][fixed.posto].includes(token)) {
+            novoEstado[f][fixed.posto].push(token)
+          }
+        }
+      }
+    })
 
     let ppIndex = 0
     const totalPP = activePPs.length
