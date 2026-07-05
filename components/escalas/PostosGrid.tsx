@@ -1,5 +1,6 @@
 import { Shield, Plus, Trash2, RefreshCw, Save, Lock, Unlock } from "lucide-react"
 import { Policial, PolicialFixo } from "./types"
+import { useMemo, memo } from "react"
 
 interface PostosGridProps {
   faixasHorario: { inicio: string; fim: string }[]
@@ -30,7 +31,7 @@ interface PostosGridProps {
   tipo: string
 }
 
-export default function PostosGrid({
+function PostosGrid({
   faixasHorario,
   basePoliciais,
   presenceMap,
@@ -60,7 +61,7 @@ export default function PostosGrid({
 }: PostosGridProps) {
 
   // Helper local do painel para determinar policiais penais não alocados no pool
-  const getUnallocatedOfficers = (): Policial[] => {
+  const unallocatedOfficers = useMemo(() => {
     const present = basePoliciais.filter((p) => presenceMap[p.matricula] !== false)
     return present.filter((p) => {
       // Verifica se está alocado em algum posto ou guarita em qualquer turno
@@ -79,7 +80,7 @@ export default function PostosGrid({
       }
       return !allocated
     })
-  }
+  }, [basePoliciais, presenceMap, estado, numFaixas])
 
   const getOfficerAllocations = (matricula: string): { slot: number; posto: string }[] => {
     const allocs: { slot: number; posto: string }[] = []
@@ -165,7 +166,7 @@ export default function PostosGrid({
                   : "text-slate-500 hover:text-slate-850"
               }`}
             >
-              Não Alocados ({getUnallocatedOfficers().length})
+              Não Alocados ({unallocatedOfficers.length})
             </button>
             <button
               type="button"
@@ -176,16 +177,16 @@ export default function PostosGrid({
                   : "text-slate-500 hover:text-slate-850"
               }`}
             >
-              Todos ({basePoliciais.filter(p => presenceMap[p.matricula] !== false).length})
+              Todos ({basePoliciais.filter((p: Policial) => presenceMap[p.matricula] !== false).length})
             </button>
           </div>
 
           {/* Roster List */}
           <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
             {(() => {
-              const presentOfficers = basePoliciais.filter(p => presenceMap[p.matricula] !== false)
-              const filteredList = (poolFilter === "unallocated" ? getUnallocatedOfficers() : presentOfficers)
-                .filter(p => {
+              const presentOfficers = basePoliciais.filter((p: Policial) => presenceMap[p.matricula] !== false)
+              const filteredList = (poolFilter === "unallocated" ? unallocatedOfficers : presentOfficers)
+                .filter((p: Policial) => {
                   const search = poolSearch.toLowerCase().trim()
                   if (!search) return true
                   return (p.qra || p.nome).toLowerCase().includes(search) || p.nome.toLowerCase().includes(search) || p.matricula.includes(search)
@@ -199,7 +200,7 @@ export default function PostosGrid({
                 )
               }
 
-              return filteredList.map((pp) => {
+              return filteredList.map((pp: Policial) => {
                 const allocs = getOfficerAllocations(pp.matricula)
                 const isAllocated = allocs.length > 0
 
@@ -408,3 +409,5 @@ export default function PostosGrid({
     </div>
   )
 }
+
+export default memo(PostosGrid)

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { toast } from "sonner"
 import { Policial, INDEPENDENT_POSTS, PolicialFixo } from "../types"
 
@@ -31,7 +31,7 @@ export function useEscalaGrid({
   const [draggedToken, setDraggedToken] = useState<string | null>(null)
   const [isDragOverPool, setIsDragOverPool] = useState(false)
 
-  const autoOcupar = (pps: Policial[], customPresence?: Record<string, boolean>) => {
+  const autoOcupar = useCallback((pps: Policial[], customPresence?: Record<string, boolean>) => {
     const activePresence = customPresence || presenceMap
     const allPPs = pps.length > 0 ? pps : basePoliciais
     const activePPs = allPPs.filter(p => activePresence[p.matricula] !== false)
@@ -131,18 +131,20 @@ export function useEscalaGrid({
         }
       }
       
-      const token = tokenId(pp.matricula, targetSlot)
-      if (novoEstado[targetSlot][excessPost]) {
-        novoEstado[targetSlot][excessPost].push(token)
-      }
+      novoEstado[targetSlot][excessPost].push(tokenId(pp.matricula, targetSlot))
       fControle = (targetSlot + 1) % numFaixas
     }
 
+    // Fill pool for remaining slots
     for (let s = 0; s < numFaixas; s++) {
       const allocated = new Set<string>()
-      for (const p of keys) {
-        ;(novoEstado[s]?.[p] || []).forEach((t) => allocated.add(t))
-      }
+      Object.keys(novoEstado[s]).forEach((posto) => {
+        if (posto === "POOL") return
+        novoEstado[s][posto].forEach((t) => {
+          const p = parseToken(t)
+          if (p) allocated.add(tokenId(p.matricula, s))
+        })
+      })
 
       const pool: string[] = []
       activePPs.forEach((pp) => {
@@ -156,18 +158,18 @@ export function useEscalaGrid({
 
     setEstado(novoEstado)
     toast.success("Ocupação automática concluída!")
-  }
+  }, [presenceMap, basePoliciais, postosConfig, numFaixas, policiaisFixos, removedFixedTokens, tokenId, isPostPairAllowed, setEstado, parseToken])
 
-  const handleDragStart = (e: React.DragEvent, token: string) => {
+  const handleDragStart = useCallback((e: React.DragEvent, token: string) => {
     setDraggedToken(token)
     e.dataTransfer.setData("text/plain", token)
-  }
+  }, [])
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
-  }
+  }, [])
 
-  const handleDrop = (e: React.DragEvent, destSlot: number, destPosto: string) => {
+  const handleDrop = useCallback((e: React.DragEvent, destSlot: number, destPosto: string) => {
     e.preventDefault()
     const token = e.dataTransfer.getData("text/plain") || draggedToken
     if (!token) return
@@ -241,9 +243,9 @@ export function useEscalaGrid({
     })
 
     setDraggedToken(null)
-  }
+  }, [draggedToken, parseToken, tipo, generateMoveToken, setEstado, setIndependentEstado, isPostPairAllowed])
 
-  const handleDropIntoGlobalPool = (e: React.DragEvent) => {
+  const handleDropIntoGlobalPool = useCallback((e: React.DragEvent) => {
     e.preventDefault()
     setIsDragOverPool(false)
     const token = e.dataTransfer.getData("text/plain") || draggedToken
@@ -283,9 +285,9 @@ export function useEscalaGrid({
 
     setDraggedToken(null)
     toast.success(`Policial ${parsed.nome} removido de todas as faixas.`)
-  }
+  }, [draggedToken, parseToken, setEstado, setIndependentEstado])
 
-  const handleRemoveToken = (token: string) => {
+  const handleRemoveToken = useCallback((token: string) => {
     if (!token.includes("_DUP_")) {
       setRemovedFixedTokens((prev) => [...prev, token])
     }
@@ -312,9 +314,9 @@ export function useEscalaGrid({
       return next
     })
     toast.success("Policial removido com sucesso.")
-  }
+  }, [setRemovedFixedTokens, setEstado, setIndependentEstado])
 
-  const handleDuplicateToken = (token: string, posto: string, slotIdx: number, isIndependent: boolean) => {
+  const handleDuplicateToken = useCallback((token: string, posto: string, slotIdx: number, isIndependent: boolean) => {
     const parsed = parseToken(token)
     if (!parsed) return
 
@@ -354,7 +356,7 @@ export function useEscalaGrid({
       })
     }
     toast.success(`Policial ${parsed.nome} duplicado no mesmo posto.`)
-  }
+  }, [parseToken, generateDupToken, setIndependentEstado, setEstado])
 
   return {
     draggedToken, setDraggedToken,
