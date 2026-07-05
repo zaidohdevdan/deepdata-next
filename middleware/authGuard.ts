@@ -18,7 +18,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
-  const token = await getToken({ req: request, secret });
+  const secureCookie = request.nextUrl.protocol === 'https:';
+  const token = await getToken({ 
+    req: request, 
+    secret,
+    secureCookie
+  });
   if (!token) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('callbackUrl', request.url);
