@@ -201,11 +201,11 @@ export default function OcorrenciasContainer({
   ]
 
   const CATEGORY_GRADIENT: Record<string, string> = {
-    "Saúde": "from-blue-500 to-cyan-600",
-    "Jurídico/Atendimento": "from-purple-600 to-violet-700",
-    "Operação/Rotina": "from-slate-600 to-slate-800",
-    "Escoltas": "from-rose-600 to-red-700",
-    "Alimentação": "from-amber-500 to-orange-600",
+    "Saúde": "from-emerald-600 to-teal-700",
+    "Jurídico/Atendimento": "from-teal-700 to-cyan-900",
+    "Operação/Rotina": "from-emerald-800 to-teal-950",
+    "Escoltas": "from-emerald-900 to-slate-900",
+    "Alimentação": "from-emerald-700 to-teal-850",
   }
 
   const searchLower = historySearch.toLowerCase()
@@ -253,17 +253,17 @@ export default function OcorrenciasContainer({
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-800 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-800 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono">
         <div>
           <div className="flex items-center gap-2.5">
             <span className="text-3xl">📝</span>
-            <h1 className="text-2xl font-bold tracking-tight">Ocorrências</h1>
+            <h1 className="text-2xl font-black tracking-widest uppercase">Ocorrências</h1>
           </div>
-          <p className="text-white/75 text-sm mt-1">
-            Clique para copiar · Duplo clique para editar · <Plus size={12} className="inline" /> para criar novo
+          <p className="text-white/75 text-[10px] uppercase font-bold tracking-wider mt-1.5 font-sans">
+            Clique para copiar · Duplo clique para editar · <Plus size={10} className="inline align-middle" /> para criar novo
           </p>
         </div>
-        <div className="flex items-center gap-2 self-start md:self-auto">
+        <div className="flex items-center gap-2 self-start md:self-auto font-sans">
           <div className="relative">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-white/50" />
             <input
@@ -271,12 +271,12 @@ export default function OcorrenciasContainer({
               placeholder="Pesquisar..."
               value={historySearch}
               onChange={(e) => setHistorySearch(e.target.value)}
-              className="pl-9 pr-4 py-2 text-sm bg-white/15 border border-white/20 placeholder-white/50 text-white rounded-xl outline-none focus:bg-white/25 focus:border-white/40 transition w-48"
+              className="pl-9 pr-4 py-2 text-sm bg-white/15 border border-white/20 placeholder-white/50 text-white rounded-xl outline-none focus:bg-white/25 focus:border-white/40 transition w-48 font-semibold"
             />
           </div>
           <Button
             onClick={() => openNewForm()}
-            className="bg-white hover:bg-slate-50 text-indigo-800 font-bold rounded-xl shadow-sm gap-1.5 whitespace-nowrap"
+            className="bg-white hover:bg-slate-50 text-emerald-800 font-bold rounded-xl shadow-sm gap-1.5 whitespace-nowrap"
           >
             <Plus size={15} /> Nova
           </Button>
@@ -354,7 +354,7 @@ export default function OcorrenciasContainer({
       {/* CUSTOM DB OCCURRENCES */}
       {(filteredCustom.length > 0 || ocorrencias.length === 0) && (
         <section>
-          <div className="flex items-center gap-3 px-5 py-4 rounded-2xl bg-gradient-to-r from-slate-700 to-slate-900 mb-4 shadow-sm">
+          <div className="flex items-center gap-3 px-5 py-4 rounded-2xl bg-gradient-to-r from-emerald-950 to-slate-900 mb-4 shadow-sm">
             <span className="text-2xl">📒</span>
             <h2 className="font-bold text-white text-sm uppercase tracking-widest">Ocorrências Personalizadas</h2>
           </div>
@@ -367,7 +367,7 @@ export default function OcorrenciasContainer({
                   key={item.id}
                   className={`group relative bg-white border-2 rounded-2xl p-3 cursor-pointer transition-all duration-200 flex flex-col items-center text-center gap-1.5 active:scale-95 select-none ${isCopied
                       ? "border-emerald-400 shadow-emerald-100 shadow-lg"
-                      : "border-slate-200 hover:border-indigo-400 hover:shadow-lg"
+                      : "border-slate-200 hover:border-emerald-500 hover:shadow-lg"
                     }`}
                   onClick={() => handleCardClick(item.id, item.texto)}
                   onDoubleClick={() => openEditForm(item)}
@@ -379,7 +379,7 @@ export default function OcorrenciasContainer({
                   </span>
 
                   {/* Copy/Copied indicator */}
-                  <span className={`absolute top-1.5 right-1.5 transition-all duration-300 ${isCopied ? "text-emerald-500 scale-110" : "text-slate-300 group-hover:text-indigo-400"
+                  <span className={`absolute top-1.5 right-1.5 transition-all duration-300 ${isCopied ? "text-emerald-500 scale-110" : "text-slate-300 group-hover:text-emerald-500"
                     }`}>
                     {isCopied ? <Check size={10} /> : <Copy size={9} />}
                   </span>
@@ -390,7 +390,7 @@ export default function OcorrenciasContainer({
                       <button
                         type="button"
                         onClick={(e) => { e.stopPropagation(); openEditForm(item) }}
-                        className="flex items-center gap-1 text-[9px] font-bold bg-indigo-600 text-white px-2 py-0.5 rounded-full shadow hover:bg-indigo-700 transition"
+                        className="flex items-center gap-1 text-[9px] font-bold bg-emerald-600 text-slate-950 px-2 py-0.5 rounded-full shadow hover:bg-emerald-500 transition"
                       >
                         <Edit size={8} /> Editar
                       </button>
@@ -418,11 +418,11 @@ export default function OcorrenciasContainer({
             {/* "+ Nova" card */}
             <button
               type="button"
-              className="bg-slate-50 border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30 rounded-2xl p-3 cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-1.5 min-h-[90px] active:scale-95"
+              className="bg-slate-50/50 border-2 border-dashed border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/10 rounded-2xl p-3 cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-1.5 min-h-[90px] active:scale-95"
               onClick={() => openNewForm()}
             >
-              <Plus size={22} className="text-slate-400" />
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Nova</span>
+              <Plus size={22} className="text-slate-400 group-hover:text-emerald-500" />
+              <span className="text-[10px] font-bold text-slate-400 group-hover:text-emerald-650 uppercase">Nova</span>
             </button>
           </div>
         </section>

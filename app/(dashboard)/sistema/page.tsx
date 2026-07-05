@@ -149,28 +149,28 @@ export default function VisitasPage() {
   return (
     <div className="space-y-4">
       {/* Header Banner */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-600 to-violet-800 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-800 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="text-3xl">👥</span>
-            <h1 className="text-2xl font-bold tracking-tight">Sistema de Visitas UPI-4</h1>
+            <h1 className="text-2xl font-black tracking-widest uppercase">Sistema de Visitas</h1>
           </div>
-          <p className="text-white/80 text-sm">
+          <p className="text-white/80 text-xs font-sans font-medium">
             Importe o relatório de visitas (.xlsx ou .pdf) para consultar, filtrar e exportar os dados completos.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 font-sans">
           {data.length > 0 && (
             <>
               <button
                 onClick={() => handleExportExcel(displayRows, viewMode)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-white text-purple-700 hover:bg-slate-100 rounded-xl shadow-sm transition"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-white text-emerald-800 hover:bg-slate-100 rounded-xl shadow-sm transition"
               >
                 <Download size={14} /> Exportar Planilha
               </button>
               <button
                 onClick={() => handleGeneratePDF(displayRows, viewMode)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-purple-900/60 hover:bg-purple-900/80 text-white rounded-xl border border-purple-400/40 shadow-sm transition"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-emerald-950/60 hover:bg-emerald-950/80 text-white rounded-xl border border-emerald-400/40 shadow-sm transition"
               >
                 <FileText size={14} /> Gerar PDF
               </button>
@@ -192,7 +192,7 @@ export default function VisitasPage() {
                     toast.error("Erro de conexão ao limpar visitas.")
                   }
                 }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-purple-800/60 hover:bg-purple-800/80 text-white rounded-xl border border-purple-400/30 shadow-sm transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-emerald-900/60 hover:bg-emerald-900/80 text-white rounded-xl border border-emerald-400/30 shadow-sm transition cursor-pointer"
               >
                 <RefreshCw size={14} /> Importar Outro
               </button>
@@ -220,7 +220,7 @@ export default function VisitasPage() {
                   value={searchInterno}
                   onChange={(e) => setSearchInterno(e.target.value)}
                   placeholder="Nome do custodiado ou prontuário..."
-                  className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 focus:border-purple-400 focus:ring-1 focus:ring-purple-400 rounded-lg outline-none font-semibold text-slate-700"
+                  className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700"
                 />
               </div>
             </div>
@@ -235,7 +235,7 @@ export default function VisitasPage() {
                   value={searchVisitante}
                   onChange={(e) => setSearchVisitante(e.target.value)}
                   placeholder="Nome do visitante ou CPF..."
-                  className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 focus:border-purple-400 focus:ring-1 focus:ring-purple-400 rounded-lg outline-none font-semibold text-slate-700"
+                  className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700"
                 />
               </div>
             </div>
@@ -246,7 +246,7 @@ export default function VisitasPage() {
               <select
                 value={selectedAla}
                 onChange={(e) => { setSelectedAla(e.target.value); setSelectedCela("Todas") }}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 bg-white"
+                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
               >
                 <option value="Todos">Todas as Alas</option>
                 {ALAS_VALIDAS_UPI4.map((ala) => (
@@ -261,7 +261,7 @@ export default function VisitasPage() {
               <select
                 value={selectedCela}
                 onChange={(e) => setSelectedCela(e.target.value)}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 bg-white"
+                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
               >
                 <option value="Todas">Todas as Celas</option>
                 {celasDisponiveis.map((c) => (
@@ -276,7 +276,7 @@ export default function VisitasPage() {
               <select
                 value={selectedParidadeCela}
                 onChange={(e) => setSelectedParidadeCela(e.target.value)}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 bg-white"
+                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
               >
                 <option value="Todas">Todas</option>
                 <option value="pares">Pares</option>
@@ -290,7 +290,7 @@ export default function VisitasPage() {
               <select
                 value={selectedPrioridade}
                 onChange={(e) => setSelectedPrioridade(e.target.value)}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 bg-white"
+                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
               >
                 <option value="Todas">Todas</option>
                 <option value="sim">Prioritárias</option>
@@ -304,7 +304,7 @@ export default function VisitasPage() {
               <select
                 value={sortOption}
                 onChange={(e) => setSortOption(e.target.value as "senha" | "custodiado" | "localizacao")}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700 bg-white"
+                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
               >
                 <option value="senha">Senha</option>
                 <option value="custodiado">Nome do Interno</option>
@@ -320,22 +320,22 @@ export default function VisitasPage() {
                   type="button"
                   onClick={() => setViewMode("visitas")}
                   className={`flex-1 rounded-lg px-2 py-1.5 text-center transition border shadow-sm outline-none cursor-pointer duration-200 select-none ${viewMode === "visitas"
-                      ? "bg-purple-600 border-purple-700 text-white shadow-md ring-2 ring-purple-300 scale-[1.03]"
-                      : "bg-purple-50 border-purple-100 text-purple-700 hover:bg-purple-100/50 opacity-60 hover:opacity-100 hover:scale-[1.01]"
+                      ? "bg-emerald-600 border-emerald-700 text-slate-950 shadow-md ring-2 ring-emerald-300 scale-[1.03]"
+                      : "bg-emerald-50 border-emerald-100 text-emerald-800 hover:bg-emerald-100/50 opacity-60 hover:opacity-100 hover:scale-[1.01]"
                     }`}
                 >
-                  <span className={`block text-[9px] font-bold uppercase ${viewMode === "visitas" ? "text-purple-100" : "text-purple-500"}`}>Visitas</span>
+                  <span className={`block text-[9px] font-bold uppercase ${viewMode === "visitas" ? "text-emerald-800" : "text-emerald-600"}`}>Visitas</span>
                   <span className="block text-sm font-black">{totalVisits}</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setViewMode("internos")}
                   className={`flex-1 rounded-lg px-2 py-1.5 text-center transition border shadow-sm outline-none cursor-pointer duration-200 select-none ${viewMode === "internos"
-                      ? "bg-indigo-600 border-indigo-700 text-white shadow-md ring-2 ring-indigo-300 scale-[1.03]"
-                      : "bg-indigo-50 border-indigo-100 text-indigo-700 hover:bg-indigo-100/50 opacity-60 hover:opacity-100 hover:scale-[1.01]"
+                      ? "bg-teal-600 border-teal-700 text-slate-950 shadow-md ring-2 ring-teal-300 scale-[1.03]"
+                      : "bg-teal-50 border-teal-100 text-teal-800 hover:bg-teal-100/50 opacity-60 hover:opacity-100 hover:scale-[1.01]"
                     }`}
                 >
-                  <span className={`block text-[9px] font-bold uppercase ${viewMode === "internos" ? "text-indigo-100" : "text-indigo-500"}`}>Internos</span>
+                  <span className={`block text-[9px] font-bold uppercase ${viewMode === "internos" ? "text-teal-800" : "text-teal-600"}`}>Internos</span>
                   <span className="block text-sm font-black">{uniqueInternos}</span>
                 </button>
               </div>

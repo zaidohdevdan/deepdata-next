@@ -146,7 +146,7 @@ export const alimentacaoConfig: AlimentacaoConfig = {
   emoji: "🍽️",
   storageKey: "controleAlimentacaoUPI4",
   modulo: "ALIMENTACAO",
-  headerColor: "from-green-600 to-green-800",
+  headerColor: "from-emerald-600 to-teal-800",
   temDietas: true,
   colunas: [
     { key: "nome", header: "Ala", editable: true },
@@ -186,7 +186,7 @@ export const cafeConfig: AlimentacaoConfig = {
   emoji: "☕",
   storageKey: "controleCafeUPI4",
   modulo: "CAFE",
-  headerColor: "from-amber-700 to-amber-900",
+  headerColor: "from-emerald-700 to-teal-900",
   temDietas: false,
   colunas: [
     { key: "nome", header: "Ala", editable: true },
@@ -229,7 +229,7 @@ export const biscoitoConfig: AlimentacaoConfig = {
   emoji: "🍪",
   storageKey: "controleBiscoitosUPI4",
   modulo: "BISCOITO",
-  headerColor: "from-yellow-600 to-yellow-800",
+  headerColor: "from-emerald-800 to-teal-950",
   temDietas: false,
   colunas: [
     { key: "nome", header: "Ala", editable: true },

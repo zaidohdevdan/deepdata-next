@@ -3,7 +3,6 @@
 import { Fragment } from "react"
 import { useEscalaState } from "./useEscalaState"
 import EscalasHeader from "./EscalasHeader"
-import EfetivoChecklist from "./EfetivoChecklist"
 import PostosGrid from "./PostosGrid"
 import IndependentPostsGrid from "./IndependentPostsGrid"
 import { EscalasContainerProps } from "./types"
@@ -96,36 +95,7 @@ export default function EscalasContainer({
           handleSaveScaleSettings={state.handleSaveScaleSettings}
           isSavingConfig={state.isSavingConfig} />
 
-        <EfetivoChecklist
-          basePoliciais={state.basePoliciais}
-          setBasePoliciais={state.setBasePoliciais}
-          presenceMap={state.presenceMap}
-          setPresenceMap={state.setPresenceMap}
-          currentUser={currentUser}
-          equipeAlfa={equipeAlfa}
-          equipeBravo={equipeBravo}
-          equipeEcho={equipeEcho}
-          equipeFox={equipeFox}
-          selectedForDeletion={state.selectedForDeletion}
-          setSelectedForDeletion={state.setSelectedForDeletion}
-          handleDeleteSelectedOfficers={state.handleDeleteSelectedOfficers}
-          editingOfficerMatricula={state.editingOfficerMatricula}
-          setEditingOfficerMatricula={state.setEditingOfficerMatricula}
-          editOfficerNome={state.editOfficerNome}
-          setEditOfficerNome={state.setEditOfficerNome}
-          editOfficerMatricula={state.editOfficerMatricula}
-          setEditOfficerMatricula={state.setEditOfficerMatricula}
-          handleSaveEditOfficer={state.handleSaveEditOfficer}
-          handleStartEditOfficer={state.handleStartEditOfficer}
-          handleDeleteOfficer={state.handleDeleteOfficer}
-          newPPNome={state.newPPNome}
-          setNewPPNome={state.setNewPPNome}
-          newPPMatricula={state.newPPMatricula}
-          setNewPPMatricula={state.setNewPPMatricula}
-          handleAddPolicial={state.handleAddPolicial}
-          handleCSVUpload={state.handleCSVUpload} />
-
-        {state.basePoliciais.length > 0 && (
+        {state.basePoliciais.length > 0 ? (
           <>
             <PostosGrid
               faixasHorario={state.faixasHorario}
@@ -169,6 +139,14 @@ export default function EscalasContainer({
               handleRemoveToken={state.handleRemoveToken}
               parseToken={state.parseToken} />
           </>
+        ) : (
+          <div className="flex flex-col items-center justify-center p-12 bg-white border border-slate-200/80 rounded-2xl shadow-sm text-center print:hidden">
+            <span className="text-3xl mb-2">📋</span>
+            <h3 className="font-bold text-slate-800 text-sm">Nenhum Policial no Contingente</h3>
+            <p className="text-slate-400 text-xs max-w-xs mt-1">
+              Por favor, acesse o menu <strong>Efetivo</strong> acima para carregar o contingente de plantão antes de iniciar a escala.
+            </p>
+          </div>
         )}
       </div>
 
