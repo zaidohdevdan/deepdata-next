@@ -11,23 +11,46 @@ export const dynamic = "force-dynamic"
 
 export default async function DashboardPage() {
   const session = await auth()
-  const globalConfig = await getConfigValues()
+  
+  let globalConfig = {
+    nomeUnidade: "UPI-4",
+    localidade: "Itaitinga",
+    alimentacaoCaixaCapacidade: 24,
+    cafeCapacitePacote: 10,
+    cafeLitrosPorGarrafa: 2,
+    biscoitoCapacidadePacote: 10,
+  }
+  try {
+    globalConfig = await getConfigValues()
+  } catch (err) {
+    console.warn("Aviso ao carregar config da dashboard:", err)
+  }
 
-  // Aggregate current totals for preview cards
-  const [sumAlimentacao, sumCafe, sumBiscoito] = await Promise.all([
-    prisma.distribAla.aggregate({
-      where: { modulo: "ALIMENTACAO", ala: { ativa: true } },
-      _sum: { internos: true, dietas: true },
-    }),
-    prisma.distribAla.aggregate({
-      where: { modulo: "CAFE", ala: { ativa: true } },
-      _sum: { internos: true },
-    }),
-    prisma.distribAla.aggregate({
-      where: { modulo: "BISCOITO", ala: { ativa: true } },
-      _sum: { internos: true },
-    }),
-  ])
+  let sumAlimentacao: { _sum: { internos: number | null; dietas: number | null } } = { _sum: { internos: 0, dietas: 0 } }
+  let sumCafe: { _sum: { internos: number | null } } = { _sum: { internos: 0 } }
+  let sumBiscoito: { _sum: { internos: number | null } } = { _sum: { internos: 0 } }
+
+  try {
+    const [resAlim, resCafe, resBiscoito] = await Promise.all([
+      prisma.distribAla.aggregate({
+        where: { modulo: "ALIMENTACAO", ala: { ativa: true } },
+        _sum: { internos: true, dietas: true },
+      }),
+      prisma.distribAla.aggregate({
+        where: { modulo: "CAFE", ala: { ativa: true } },
+        _sum: { internos: true },
+      }),
+      prisma.distribAla.aggregate({
+        where: { modulo: "BISCOITO", ala: { ativa: true } },
+        _sum: { internos: true },
+      }),
+    ])
+    if (resAlim) sumAlimentacao = resAlim
+    if (resCafe) sumCafe = resCafe
+    if (resBiscoito) sumBiscoito = resBiscoito
+  } catch (err) {
+    console.warn("Aviso ao carregar agregados da dashboard:", err)
+  }
 
   const modules = [
     {
