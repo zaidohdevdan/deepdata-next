@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
-import { Modulo } from "@prisma/client"
+import { Modulo } from "@/types/prisma-enums"
 import { createAuditLogAction } from "./audit"
 
 export interface AlaDistribData {

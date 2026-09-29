@@ -1,11 +1,12 @@
 import { useState } from "react"
 import { toast } from "sonner"
-import { Sparkles, Loader2 } from "lucide-react"
+import { Sparkles, Loader2, Printer } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { generateOccurrenceTextAction } from "@/app/actions/ocorrencias"
+import { handlePrintOcorrencia } from "../utils/print-ocorrencia"
 
 interface OcorrenciaFormModalProps {
   isOpen: boolean
@@ -208,15 +209,37 @@ export default function OcorrenciaFormModal({
           </div>
         </div>
 
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" className="rounded-xl text-xs font-bold">Cancelar</Button>} />
+        <DialogFooter className="flex flex-wrap items-center justify-between gap-2 sm:justify-between">
           <Button
-            onClick={handleSave}
-            disabled={isPending}
-            className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold"
+            type="button"
+            variant="outline"
+            onClick={() => {
+              if (!formTexto.trim()) {
+                toast.error("Preencha o relato da ocorrência antes de imprimir.")
+                return
+              }
+              handlePrintOcorrencia({
+                titulo: formTitulo || "Ocorrência Operacional",
+                categoria: formCategoria || "Operação/Rotina",
+                texto: formTexto,
+                servidor: formServidor || "Policial Penal",
+              })
+            }}
+            className="rounded-xl text-xs font-bold gap-1.5 text-slate-700 hover:text-slate-900 border-slate-200"
           >
-            {isPending ? "Salvando..." : "Salvar Ocorrência"}
+            <Printer size={13} /> Imprimir Ficha A4
           </Button>
+
+          <div className="flex items-center gap-2">
+            <DialogClose render={<Button variant="outline" className="rounded-xl text-xs font-bold">Cancelar</Button>} />
+            <Button
+              onClick={handleSave}
+              disabled={isPending}
+              className="bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold"
+            >
+              {isPending ? "Salvando..." : "Salvar Ocorrência"}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

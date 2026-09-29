@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useTransition, useRef } from "react"
-import { Search, Copy, Check, Plus, Trash2, Edit } from "lucide-react"
+import { Search, Copy, Check, Plus, Trash2, Edit, Printer } from "lucide-react"
 import { toast } from "sonner"
+import { handlePrintOcorrencia } from "./utils/print-ocorrencia"
 import { Button } from "@/components/ui/button"
 import {
   createOcorrenciaAction,
@@ -386,18 +387,28 @@ export default function OcorrenciasContainer({
 
                   {/* Hover overlay with edit/delete */}
                   {!isCopied && (
-                    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/85 rounded-2xl transition-all duration-150 flex flex-col items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
+                    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/90 rounded-2xl transition-all duration-150 flex flex-wrap items-center justify-center gap-1.5 p-2 opacity-0 group-hover:opacity-100">
                       <button
                         type="button"
                         onClick={(e) => { e.stopPropagation(); openEditForm(item) }}
-                        className="flex items-center gap-1 text-[9px] font-bold bg-emerald-600 text-slate-950 px-2 py-0.5 rounded-full shadow hover:bg-emerald-500 transition"
+                        className="flex items-center gap-1 text-[9px] font-bold bg-slate-900 text-white px-2 py-0.5 rounded-full shadow hover:bg-slate-800 transition cursor-pointer"
+                        title="Editar Ocorrência"
                       >
                         <Edit size={8} /> Editar
                       </button>
                       <button
                         type="button"
+                        onClick={(e) => { e.stopPropagation(); handlePrintOcorrencia(item) }}
+                        className="flex items-center gap-1 text-[9px] font-bold bg-emerald-600 text-slate-950 px-2 py-0.5 rounded-full shadow hover:bg-emerald-500 transition cursor-pointer"
+                        title="Imprimir Relatório Oficial em Folha A4"
+                      >
+                        <Printer size={8} /> Imprimir
+                      </button>
+                      <button
+                        type="button"
                         onClick={(e) => { e.stopPropagation(); confirmDelete(item.id) }}
-                        className="flex items-center gap-1 text-[9px] font-bold bg-rose-500 text-white px-2 py-0.5 rounded-full shadow hover:bg-rose-600 transition"
+                        className="flex items-center gap-1 text-[9px] font-bold bg-rose-500 text-white px-2 py-0.5 rounded-full shadow hover:bg-rose-600 transition cursor-pointer"
+                        title="Excluir Ocorrência"
                       >
                         <Trash2 size={8} /> Excluir
                       </button>

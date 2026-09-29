@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Download, AlertCircle, RefreshCw, Search, FileText } from "lucide-react"
+import { Download, AlertCircle, RefreshCw, Search, FileText, Printer } from "lucide-react"
 import { toast } from "sonner"
 
 import { UploadArea } from "@/components/sistema/UploadArea"
@@ -13,6 +13,7 @@ import { getVisitasAction, clearVisitasAction } from "@/app/actions/visitas"
 import { handleExportExcel, handleGeneratePDF } from "@/components/sistema/utils/export-visitas"
 import { useVisitasFileProcessor } from "@/components/sistema/hooks/useVisitasFileProcessor"
 import { useVisitasFiltros } from "@/components/sistema/hooks/useVisitasFiltros"
+import { detectVisitorGender } from "@/lib/gender-detector"
 
 export default function VisitasPage() {
   const [data, setData] = useState<ExtractedVisitor[]>([])
@@ -104,34 +105,66 @@ export default function VisitasPage() {
   const uniqueInternos = new Set(data.filter((d) => d.prontuario > 0).map((d) => d.prontuario)).size
 
   const generateReport = () => {
-    const wings = Array.from(new Set(data.map(d => d.ala.toUpperCase()))).sort()
+    const isFilteringAla = selectedAla && selectedAla !== "Todos"
+    const targetData = isFilteringAla
+      ? data.filter(d => d.ala && d.ala.toUpperCase() === selectedAla.toUpperCase())
+      : data
+
+    const wings = isFilteringAla
+      ? [selectedAla.toUpperCase()]
+      : Array.from(new Set(data.map(d => d.ala.toUpperCase()))).sort()
+
     let reportText = "RELATÓRIO DE CONTROLE DE VISITAS - UPI-4\n"
+    if (isFilteringAla) {
+      reportText += `ALA SELECIONADA: ${selectedAla.toUpperCase()}\n`
+    }
     reportText += "========================================\n\n"
 
     let totalGeralVisitantes = 0
+    let totalGeralHomens = 0
+    let totalGeralMulheres = 0
     const totalGeralInternosSet = new Set<number>()
 
     wings.forEach(wingName => {
-      const wingData = data.filter(d => d.ala.toUpperCase() === wingName)
+      const wingData = targetData.filter(d => d.ala && d.ala.toUpperCase() === wingName)
       const comPrioridade = wingData.filter(d => d.prioridade === "sim").length
       const semPrioridade = wingData.filter(d => d.prioridade === "não").length
       const totalVisitantes = wingData.length
-      const internos = new Set(wingData.map(d => d.prontuario))
+      const internos = new Set(wingData.filter(d => d.prontuario > 0).map(d => d.prontuario))
+
+      let homens = 0
+      let mulheres = 0
+      wingData.forEach(d => {
+        const gender = detectVisitorGender(d.relacao, d.nomeVisitante)
+        if (gender === "M") {
+          homens++
+        } else {
+          mulheres++
+        }
+      })
 
       totalGeralVisitantes += totalVisitantes
-      wingData.forEach(d => totalGeralInternosSet.add(d.prontuario))
+      totalGeralHomens += homens
+      totalGeralMulheres += mulheres
+      wingData.forEach(d => {
+        if (d.prontuario > 0) totalGeralInternosSet.add(d.prontuario)
+      })
 
       reportText += `${wingName}:\n`
+      reportText += `  - HOMENS: ${homens}\n`
+      reportText += `  - MULHERES: ${mulheres}\n`
       reportText += `  - COM PRIORIDADE: ${comPrioridade}\n`
       reportText += `  - SEM PRIORIDADE: ${semPrioridade}\n`
       reportText += `  - QUANTIDADE DE INTERNOS: ${internos.size}\n`
       reportText += `  - TOTAL DE VISITANTES: ${totalVisitantes}\n`
-      reportText += `  - SÍNTESE: ${wingName}: COM PRIORIDADE: ${comPrioridade}, SEM PRIORIDADE: ${semPrioridade}, TOTAL: ${totalVisitantes}\n\n`
+      reportText += `  - SÍNTESE: ${wingName}: HOMENS: ${homens}, MULHERES: ${mulheres}, COM PRIORIDADE: ${comPrioridade}, SEM PRIORIDADE: ${semPrioridade}, TOTAL: ${totalVisitantes}\n\n`
     })
 
     reportText += "========================================\n"
-    reportText += `TOTAL GERAL DE VISITANTES: ${totalGeralVisitantes}\n`
-    reportText += `TOTAL GERAL DE INTERNOS VISITADOS: ${totalGeralInternosSet.size}\n`
+    reportText += `${isFilteringAla ? `TOTAL (${selectedAla.toUpperCase()}) DE HOMENS` : "TOTAL GERAL DE HOMENS"}: ${totalGeralHomens}\n`
+    reportText += `${isFilteringAla ? `TOTAL (${selectedAla.toUpperCase()}) DE MULHERES` : "TOTAL GERAL DE MULHERES"}: ${totalGeralMulheres}\n`
+    reportText += `${isFilteringAla ? `TOTAL (${selectedAla.toUpperCase()}) DE VISITANTES` : "TOTAL GERAL DE VISITANTES"}: ${totalGeralVisitantes}\n`
+    reportText += `${isFilteringAla ? `TOTAL (${selectedAla.toUpperCase()}) DE INTERNOS VISITADOS` : "TOTAL GERAL DE INTERNOS VISITADOS"}: ${totalGeralInternosSet.size}\n`
     return reportText
   }
 
@@ -147,7 +180,8 @@ export default function VisitasPage() {
   }
 
   return (
-    <div className="space-y-4">
+    <>
+      <div className="space-y-4 print:hidden">
       {/* Header Banner */}
       <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-800 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono">
         <div className="space-y-1">
@@ -163,16 +197,18 @@ export default function VisitasPage() {
           {data.length > 0 && (
             <>
               <button
-                onClick={() => handleExportExcel(displayRows, viewMode)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-white text-emerald-800 hover:bg-slate-100 rounded-xl shadow-sm transition"
+                onClick={() => handleExportExcel(allDisplayRows, viewMode)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-white text-emerald-800 hover:bg-slate-100 rounded-xl shadow-sm transition cursor-pointer"
+                title="Exportar todos os registros filtrados para Excel"
               >
-                <Download size={14} /> Exportar Planilha
+                <Download size={14} /> Exportar Planilha ({allDisplayRows.length})
               </button>
               <button
-                onClick={() => handleGeneratePDF(displayRows, viewMode)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-emerald-950/60 hover:bg-emerald-950/80 text-white rounded-xl border border-emerald-400/40 shadow-sm transition"
+                onClick={() => handleGeneratePDF(allDisplayRows, viewMode)}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-emerald-950/60 hover:bg-emerald-950/80 text-white rounded-xl border border-emerald-400/40 shadow-sm transition cursor-pointer"
+                title="Imprimir ou gerar PDF de todos os registros filtrados (todas as páginas)"
               >
-                <FileText size={14} /> Gerar PDF
+                <Printer size={14} /> Imprimir / PDF ({allDisplayRows.length})
               </button>
               <button
                 onClick={async () => {
@@ -368,7 +404,7 @@ export default function VisitasPage() {
                 <div className="space-y-3 bg-slate-50 border border-slate-200/60 rounded-xl p-4 flex flex-col">
                   <div className="flex items-center justify-between border-b border-slate-200 pb-2">
                     <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">
-                      📄 Relatório de Controle
+                      📄 Relatório de Controle {selectedAla !== "Todos" ? `• Ala ${selectedAla}` : "• Geral"}
                     </span>
                     <button
                       type="button"
@@ -412,7 +448,129 @@ export default function VisitasPage() {
           <span>Carregando módulo PDF.js no navegador para processamento local...</span>
         </div>
       )}
-    </div>
+      </div>
+
+      {/* Container de Impressão Oficial Completo (Ctrl + P) */}
+      {data.length > 0 && (
+        <div className="hidden print:block text-black bg-white w-full">
+          <style dangerouslySetInnerHTML={{ __html: `
+            @media print {
+              @page {
+                size: A4 portrait;
+                margin: 8mm 10mm 10mm 10mm;
+              }
+              body {
+                background: #ffffff !important;
+                color: #000000 !important;
+              }
+              .print-visitas-table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+                border: 1px solid #000000 !important;
+                font-size: 9.5px !important;
+              }
+              .print-visitas-table thead {
+                display: table-header-group !important;
+              }
+              .print-visitas-table tr {
+                page-break-inside: avoid !important;
+              }
+              .print-visitas-table th, .print-visitas-table td {
+                border: 1px solid #475569 !important;
+                padding: 4px 6px !important;
+                vertical-align: middle !important;
+              }
+              .print-visitas-table th {
+                background-color: #f1f5f9 !important;
+                font-weight: 800 !important;
+                text-transform: uppercase !important;
+              }
+            }
+          ` }} />
+
+          <div className="border-b-2 border-slate-900 pb-2 mb-3">
+            <div className="text-[11px] font-extrabold text-slate-700 uppercase tracking-wide">
+              Secretaria da Administração Penitenciária • UPI-4
+            </div>
+            <div className="text-base font-black uppercase text-slate-950">
+              {viewMode === "visitas" ? "Relatório Oficial de Visitas" : "Relação Oficial de Custodiados"}
+            </div>
+            <div className="flex justify-between text-[10px] text-slate-600 font-semibold mt-1">
+              <span>Emissão: {new Date().toLocaleDateString("pt-BR")} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+              <span>Total de Registros: {allDisplayRows.length}</span>
+              <span>Documento de Controle Interno</span>
+            </div>
+          </div>
+
+          <table className="print-visitas-table">
+            <thead>
+              {viewMode === "visitas" ? (
+                <tr>
+                  <th style={{ width: "32px", textAlign: "center" }}>Nº</th>
+                  <th style={{ width: "55px", textAlign: "center" }}>Senha</th>
+                  <th>Visitante</th>
+                  <th style={{ width: "90px", textAlign: "center" }}>Parentesco</th>
+                  <th style={{ width: "80px", textAlign: "center" }}>Situação</th>
+                  <th>Custodiado Vinculado / Prontuário</th>
+                  <th style={{ width: "75px", textAlign: "center" }}>Ala / Cela</th>
+                  <th style={{ width: "55px", textAlign: "center" }}>Prioritário</th>
+                </tr>
+              ) : (
+                <tr>
+                  <th style={{ width: "45px", textAlign: "center" }}>QTD</th>
+                  <th style={{ width: "100px", textAlign: "center" }}>Prontuário</th>
+                  <th>Nome do Interno</th>
+                  <th style={{ width: "130px", textAlign: "center" }}>Ala / Cela</th>
+                </tr>
+              )}
+            </thead>
+            <tbody>
+              {allDisplayRows.map((r, idx) => (
+                <tr key={idx}>
+                  {viewMode === "visitas" ? (
+                    <>
+                      <td style={{ textAlign: "center", fontWeight: "bold" }}>{idx + 1}</td>
+                      <td style={{ textAlign: "center", fontWeight: "bold", fontFamily: "monospace" }}>{r.senhaDisplay}</td>
+                      <td>
+                        <div style={{ fontWeight: 700, textTransform: "uppercase" }}>{r.nomeVisitante || "—"}</div>
+                      </td>
+                      <td style={{ textAlign: "center", fontSize: "9.5px" }}>{r.relacao || "—"}</td>
+                      <td style={{ textAlign: "center", fontSize: "9px", fontWeight: 600 }}>{r.situacao || "—"}</td>
+                      <td>
+                        <div style={{ fontWeight: "bold", textTransform: "uppercase" }}>{r.custodiado}</div>
+                        {r.prontuario > 0 && <div style={{ fontSize: "8.5px", color: "#475569", fontFamily: "monospace" }}>Pront: #{r.prontuario}</div>}
+                      </td>
+                      <td style={{ textAlign: "center", fontWeight: "bold" }}>{r.cela || r.ala}</td>
+                      <td style={{ textAlign: "center", fontWeight: "bold" }}>
+                        {r.prioridade === "sim" ? "SIM" : "NÃO"}
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td style={{ textAlign: "center", fontWeight: "bold" }}>{idx + 1}</td>
+                      <td style={{ textAlign: "center", fontFamily: "monospace", fontWeight: "bold", fontSize: "11px" }}>
+                        {r.prontuario > 0 ? r.prontuario : "—"}
+                      </td>
+                      <td style={{ fontWeight: "bold", textTransform: "uppercase" }}>{r.custodiado}</td>
+                      <td style={{ textAlign: "center", fontWeight: "bold" }}>{r.cela || r.ala}</td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className="mt-8 flex justify-between pt-4 page-break-inside-avoid">
+            <div className="w-[45%] border-t border-slate-900 text-center text-[9px] pt-1 font-semibold text-slate-800">
+              Responsável pela Emissão / Conferência
+            </div>
+            <div className="w-[45%] border-t border-slate-900 text-center text-[9px] pt-1 font-semibold text-slate-800">
+              Chefe de Equipe / Plantão Operacional
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 

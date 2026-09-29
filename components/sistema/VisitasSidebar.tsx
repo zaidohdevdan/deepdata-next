@@ -1,5 +1,6 @@
-import { User, UserCheck } from "lucide-react"
+import { User, UserCheck, Users } from "lucide-react"
 import { ExtractedVisitor, ALAS_VALIDAS_UPI4 } from "@/lib/pdf-parser"
+import { detectVisitorGender } from "@/lib/gender-detector"
 
 // Cor distinta por Ala
 const ALA_COLOR_MAP: Record<string, string> = {
@@ -19,11 +20,33 @@ interface VisitasSidebarProps {
 }
 
 export function VisitasSidebar({ data, totalVisits }: VisitasSidebarProps) {
+  let totalHomens = 0
+  let totalMulheres = 0
+  data.forEach((d) => {
+    if (detectVisitorGender(d.relacao, d.nomeVisitante) === "M") {
+      totalHomens++
+    } else {
+      totalMulheres++
+    }
+  })
+  const pctMulheres = data.length > 0 ? Math.round((totalMulheres / data.length) * 100) : 0
+  const pctHomens = data.length > 0 ? Math.round((totalHomens / data.length) * 100) : 0
+
   return (
     <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm">
-      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
-        Estatísticas por Ala
-      </h3>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+          Estatísticas por Ala
+        </h3>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-pink-50 text-pink-700 border border-pink-200 shadow-xs">
+            👩 Mulheres: {totalMulheres} ({pctMulheres}%)
+          </span>
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-xs">
+            👨 Homens: {totalHomens} ({pctHomens}%)
+          </span>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Visitas por Ala */}

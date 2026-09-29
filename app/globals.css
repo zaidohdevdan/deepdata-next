@@ -144,3 +144,19 @@ body {
     background-color: rgba(23, 20, 42, 0.65); /* Deep soft violet hue in dark mode */
   }
 }
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm 8mm 10mm;
+  }
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+}
+
