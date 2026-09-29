@@ -11,6 +11,7 @@ import { useConfigEquipes } from "./hooks/useConfigEquipes"
 import { useConfigPoliciaisFixos } from "./hooks/useConfigPoliciaisFixos"
 import { ConfigGeraisPanel } from "./components/ConfigGeraisPanel"
 import { ConfigEquipesPanel } from "./components/ConfigEquipesPanel"
+import { ConfigBackupPanel } from "./components/ConfigBackupPanel"
 
 interface ConfigFormProps {
   initialConfig: ConfigValues
@@ -85,7 +86,10 @@ export function ConfigForm({ initialConfig, currentUserRole }: ConfigFormProps) 
       <ConfigGeraisPanel configBasicas={configBasicas} />
 
       {currentUserRole === "ADMIN" && (
-        <ConfigEquipesPanel configEquipes={configEquipes} />
+        <>
+          <ConfigEquipesPanel configEquipes={configEquipes} />
+          <ConfigBackupPanel />
+        </>
       )}
 
       <div className="flex items-center gap-2 text-[11px] text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-200/50">

@@ -72,10 +72,10 @@ export function VisitasTable({
               </tr>
             ) : (
               <tr className="border-b border-slate-200 text-slate-500 font-bold text-[10px] bg-slate-50/60 uppercase tracking-wider">
-                <th className="py-3 px-3 w-12 text-center">Nº</th>
-                <th className="py-3 px-3 w-28">Prontuário</th>
-                <th className="py-3 px-3">Interno</th>
-                <th className="py-3 px-3 w-48">Ala / Cela</th>
+                <th className="py-3 px-3 w-16 text-center">QTD</th>
+                <th className="py-3 px-3 w-32">Prontuário</th>
+                <th className="py-3 px-3">Nome do Interno</th>
+                <th className="py-3 px-3 w-40">Ala / Cela</th>
               </tr>
             )}
           </thead>

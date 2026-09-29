@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -12,7 +12,7 @@ model User {
   username     String   @unique
   passwordHash String
   name         String
-  role         Role     @default(USER)
+  role         String   @default("USER")
   active       Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -25,11 +25,6 @@ model User {
   ocorrenciasCriadas   Ocorrencia[] @relation("OcorrenciasCriadas")
   ocorrenciasAlteradas Ocorrencia[] @relation("OcorrenciasAlteradas")
   logsAuditoria        AuditLog[]
-}
-
-enum Role {
-  ADMIN
-  USER
 }
 
 // NextAuth required models
@@ -89,7 +84,7 @@ model Ala {
 
 model DistribAla {
   id        String   @id @default(cuid())
-  modulo    Modulo
+  modulo    String
   alaId     String
   ala       Ala      @relation(fields: [alaId], references: [id], onDelete: Cascade)
   internos  Int      @default(0)
@@ -97,12 +92,6 @@ model DistribAla {
   updatedAt DateTime @updatedAt
 
   @@unique([modulo, alaId])
-}
-
-enum Modulo {
-  ALIMENTACAO
-  CAFE
-  BISCOITO
 }
 
 model Ocorrencia {

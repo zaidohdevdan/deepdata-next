@@ -1,8 +1,7 @@
-// "use client"
-
 import React from "react";
-import { Copy, Edit } from "lucide-react";
+import { Copy, Edit, Printer } from "lucide-react";
 import { toast } from "sonner";
+import { handlePrintOcorrencia } from "./utils/print-ocorrencia";
 
 interface DBInstance {
   id: string;
@@ -45,9 +44,20 @@ export default function OccurrenceGridItem({ occurrence, onEdit }: OccurrenceGri
               handleCopy();
             }}
             className="text-slate-500 hover:text-slate-700"
-            title="Copiar"
+            title="Copiar Texto"
           >
             <Copy size={14} />
+          </button>
+          <button
+            type="button"
+            onClick={e => {
+              e.stopPropagation();
+              handlePrintOcorrencia(occurrence);
+            }}
+            className="text-slate-500 hover:text-emerald-600"
+            title="Imprimir Ocorrência (Ficha A4)"
+          >
+            <Printer size={14} />
           </button>
           <button
             type="button"
