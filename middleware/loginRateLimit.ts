@@ -16,8 +16,9 @@ const loginMap: Map<string, RateInfo> = new Map();
  * Returns true if the attempt is within the allowed quota, otherwise false.
  */
 export async function ensureLoginAllowed(username: string): Promise<boolean> {
+  const normUser = username.trim().toLowerCase();
   const now = Date.now();
-  const info = loginMap.get(username) ?? { timestamps: [] };
+  const info = loginMap.get(normUser) ?? { timestamps: [] };
   // Remove timestamps older than the window
   info.timestamps = info.timestamps.filter((ts) => now - ts < WINDOW_MS);
   if (info.timestamps.length >= RATE_LIMIT) {
@@ -26,6 +27,15 @@ export async function ensureLoginAllowed(username: string): Promise<boolean> {
   }
   // Record this attempt and allow
   info.timestamps.push(now);
-  loginMap.set(username, info);
+  loginMap.set(normUser, info);
   return true;
 }
+
+export function clearLoginAttempts(username: string): void {
+  loginMap.delete(username.trim().toLowerCase());
+}
+
+export function resetAllLoginLimits(): void {
+  loginMap.clear();
+}
+
