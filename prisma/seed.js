@@ -2,10 +2,7 @@
 const { PrismaClient } = require("@prisma/client")
 const bcrypt = require("bcryptjs")
 
-const dbUrl = (process.env.DATABASE_URL && process.env.DATABASE_URL.startsWith("file:"))
-  ? process.env.DATABASE_URL
-  : "file:./prisma/local.db"
-const prisma = new PrismaClient({ datasourceUrl: dbUrl })
+const prisma = new PrismaClient()
 
 const equipeAlfa = [
   { nome: "ADAITON CANDIDO DE ALCANTARA", matricula: "30063317" },
