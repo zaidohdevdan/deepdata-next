@@ -1,4 +1,4 @@
-import { User, UserCheck, Users } from "lucide-react"
+import { User, UserCheck } from "lucide-react"
 import { ExtractedVisitor, ALAS_VALIDAS_UPI4 } from "@/lib/pdf-parser"
 import { detectVisitorGender } from "@/lib/gender-detector"
 

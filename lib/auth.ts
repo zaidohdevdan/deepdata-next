@@ -20,15 +20,37 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const cleanUsername = parsed.data.username.trim().toLowerCase()
         const cleanPassword = parsed.data.password.trim()
 
-        // 1. Verificação Mestra do Administrador (garante acesso 100% imediato em produção/Vercel e local)
+        // 1. Verificação Mestra do Administrador (garante acesso 100% imediato e ID real no SQLite)
         if (cleanUsername === "admin" && (cleanPassword === "admin#216216" || cleanPassword === "admin")) {
           try {
             const { clearLoginAttempts } = await import('@/middleware/loginRateLimit')
             clearLoginAttempts(cleanUsername)
           } catch {}
+
+          let adminUser = null
+          try {
+            adminUser = await prisma.user.findFirst({
+              where: { username: "admin" },
+            })
+            if (!adminUser) {
+              const passwordHash = await bcrypt.hash(cleanPassword, 10)
+              adminUser = await prisma.user.create({
+                data: {
+                  username: "admin",
+                  name: "Administrador",
+                  passwordHash,
+                  role: "ADMIN",
+                  active: true,
+                },
+              })
+            }
+          } catch (err) {
+            console.error("Erro ao sincronizar usuário admin no banco:", err)
+          }
+
           return {
-            id: "master-admin-id",
-            name: "Administrador",
+            id: adminUser?.id || "master-admin-id",
+            name: adminUser?.name || "Administrador",
             username: "admin",
             role: "ADMIN",
           }

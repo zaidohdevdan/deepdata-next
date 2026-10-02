@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useTransition } from "react"
+import { useState, useEffect, useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { AlaDistribData, saveAlimentacaoData, clearAlimentacaoData, addAlaAction, deleteAlaAction } from "@/app/actions/alimentacao"
@@ -12,46 +12,23 @@ export function useAlimentacaoData({ modulo, initialData }: UseAlimentacaoDataAr
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
 
-  const [data, setData] = useState<AlaDistribData[]>(() => {
-    if (typeof window === "undefined") return initialData
-    const stored = localStorage.getItem(`alimentacao_data_${modulo}`)
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored) as AlaDistribData[]
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed
-      } catch {
-        // fallback to initialData
-      }
-    }
-    return initialData
-  })
+  const [data, setData] = useState<AlaDistribData[]>(initialData)
+  const [prevInitialData, setPrevInitialData] = useState<AlaDistribData[]>(initialData)
+
+  if (initialData !== prevInitialData) {
+    setPrevInitialData(initialData)
+    setData(initialData)
+  }
 
   const [showAddModal, setShowAddModal] = useState(false)
   const [showClearModal, setShowClearModal] = useState(false)
   const [alaToDelete, setAlaToDelete] = useState<{ id: string; name: string } | null>(null)
 
-  const lastInitialDataRef = useRef<AlaDistribData[]>(initialData)
-
   useEffect(() => {
-    const lastInitialData = lastInitialDataRef.current
-    const initialDataChanged = initialData.length !== lastInitialData.length || !initialData.every((p, i) =>
-      p.id === lastInitialData[i].id && p.internos === lastInitialData[i].internos && p.dietas === lastInitialData[i].dietas
-    )
-
-    if (initialDataChanged) {
-      setData(initialData)
-      lastInitialDataRef.current = initialData
-    }
-  }, [initialData])
-
-  useEffect(() => {
-    if (typeof window === "undefined") return
-    if (data.length > 0) {
-      localStorage.setItem(`alimentacao_data_${modulo}`, JSON.stringify(data))
-    } else {
+    if (typeof window !== "undefined") {
       localStorage.removeItem(`alimentacao_data_${modulo}`)
     }
-  }, [data, modulo])
+  }, [modulo])
 
   const handleCellChange = (id: string, field: "internos" | "dietas", value: string) => {
     const numericValue = value === "" ? 0 : Math.max(0, parseInt(value, 10) || 0)
