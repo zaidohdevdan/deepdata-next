@@ -39,7 +39,7 @@ export async function exportDatabaseBackupAction() {
     const backupData = {
       version: "1.0",
       timestamp: new Date().toISOString(),
-      source: "DeepData Local SQLite",
+      source: "DeepData Database",
       data: {
         configs,
         alas,
