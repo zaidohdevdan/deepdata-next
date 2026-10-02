@@ -46,17 +46,10 @@ deepdata-next/
 
 O sistema adota uma política de **vazamento zero de dados pessoais sensíveis** de custodiados e visitantes. Para cumprir com os mais altos padrões de segurança e autorização, o sistema realiza uma separação rígida do armazenamento de dados:
 
-### Processamento Local de PII (Informações Pessoais Identificáveis)
-* **Sem Banco de Dados Remoto:** Os dados contidos nos relatórios de visitas importados (Nomes de visitantes, CPFs, Nomes de internos e prontuários) **nunca são enviados ou gravados no banco de dados do servidor**.
-* **Processamento Client-Side:** Toda a leitura e parser de arquivos PDF e Excel ocorrem na memória local do navegador do operador.
-* **Armazenamento:** Esses dados residem unicamente no `localStorage` do navegador da máquina operadora (`sistema_visitas_data` e `sistema_visitas_total`). Caso o navegador seja limpo ou outro computador seja usado, os dados não estarão acessíveis, garantindo privacidade absoluta.
-
-### Persistência no Banco de Dados
-Apenas informações de configuração e relatórios agregados sem dados nominais sensíveis são salvos no banco de dados central:
-* **Usuários:** Credenciais de servidores autorizados para login.
-* **Configurações Gerais:** Relação de postos de plantão e policiais definidos como fixos por escala.
-* **Dados de Distribuição:** **Apenas os totais numéricos** de internos e dietas de cada ala (ex: Ala A - 50 internos, 5 dietas) para controle de cozinha, sem os nomes ou prontuários individuais dos detentos.
-* **Ocorrências:** Registros administrativos do andamento do plantão.
+### Processamento e Armazenamento Local 100% Offline (SQLite)
+* **Sem Envio para Nuvem Externa:** Toda a aplicação opera localmente. Os dados contidos nos relatórios de visitas importados, ocorrências, distribuições e configurações operacionais residem de forma isolada na base SQLite local da máquina operadora (`prisma/local.db`), sem tráfego ou sincronização para servidores externos.
+* **Processamento no Navegador e Persistência Local:** Toda a extração e decodificação dos arquivos PDF e Excel ocorrem na máquina, sendo então persistidos de forma segura no banco local para consultas rápidas, filtros e geração de relatórios de plantão.
+* **Backup e Restauração Local:** Permite a exportação e restauração completa da base em arquivo estruturado `.json` diretamente pelo painel administrativo para rotinas de contingência e preservação histórica.
 
 ---
 

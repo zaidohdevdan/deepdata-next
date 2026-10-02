@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Download, AlertCircle, RefreshCw, Search, FileText, Printer } from "lucide-react"
+import { Download, AlertCircle, RefreshCw, Search, Printer } from "lucide-react"
 import { toast } from "sonner"
 
 import { UploadArea } from "@/components/sistema/UploadArea"

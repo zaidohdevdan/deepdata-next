@@ -184,7 +184,7 @@ async function main() {
   for (const cfg of defaultConfigs) {
     await prisma.configuracaoGlobal.upsert({
       where: { chave: cfg.chave },
-      update: { valor: cfg.valor }, // update the values if configuration already exists (e.g. over empty arrays)
+      update: {}, // Não sobrescreve configurações personalizadas salvas pelo administrador
       create: cfg,
     })
   }

@@ -17,13 +17,23 @@ export async function exportDatabaseBackupAction() {
   await ensureAdmin()
 
   try {
-    const [configs, alas, distribs, ocorrencias, categorias, visitas] = await Promise.all([
+    const [configs, alas, distribs, ocorrencias, categorias, visitas, users] = await Promise.all([
       prisma.configuracaoGlobal.findMany(),
       prisma.ala.findMany({ orderBy: { ordem: "asc" } }),
       prisma.distribAla.findMany(),
       prisma.ocorrencia.findMany({ orderBy: { createdAt: "desc" } }),
       prisma.ocorrenciaCategoria.findMany(),
       prisma.visita.findMany({ orderBy: { senha: "asc" } }),
+      prisma.user.findMany({
+        select: {
+          id: true,
+          username: true,
+          name: true,
+          role: true,
+          active: true,
+          passwordHash: true,
+        },
+      }),
     ])
 
     const backupData = {
@@ -37,6 +47,7 @@ export async function exportDatabaseBackupAction() {
         ocorrencias,
         categorias,
         visitas,
+        users,
       },
     }
 
@@ -60,7 +71,7 @@ export async function exportDatabaseBackupAction() {
 }
 
 export async function importDatabaseBackupAction(jsonString: string) {
-  await ensureAdmin()
+  const session = await ensureAdmin()
 
   try {
     const parsed = JSON.parse(jsonString)
@@ -68,7 +79,7 @@ export async function importDatabaseBackupAction(jsonString: string) {
       return { success: false, error: "Arquivo de backup inválido ou em formato incompatível." }
     }
 
-    const { configs, alas, distribs, ocorrencias, categorias, visitas } = parsed.data
+    const { configs, alas, distribs, ocorrencias, categorias, visitas, users } = parsed.data
 
     await prisma.$transaction(async (tx) => {
       // 1. Restaurar configurações
@@ -84,7 +95,32 @@ export async function importDatabaseBackupAction(jsonString: string) {
         }
       }
 
-      // 2. Restaurar categorias de ocorrência
+      // 2. Restaurar usuários (se presentes no backup)
+      if (Array.isArray(users)) {
+        for (const u of users) {
+          if (u.id && u.username) {
+            await tx.user.upsert({
+              where: { username: u.username },
+              update: {
+                name: u.name,
+                role: u.role,
+                active: u.active ?? true,
+                ...(u.passwordHash ? { passwordHash: u.passwordHash } : {}),
+              },
+              create: {
+                id: u.id,
+                username: u.username,
+                name: u.name,
+                role: u.role,
+                active: u.active ?? true,
+                passwordHash: u.passwordHash || "",
+              },
+            })
+          }
+        }
+      }
+
+      // 3. Restaurar categorias de ocorrência
       if (Array.isArray(categorias)) {
         for (const cat of categorias) {
           if (cat.id && cat.nome) {
@@ -97,7 +133,7 @@ export async function importDatabaseBackupAction(jsonString: string) {
         }
       }
 
-      // 3. Restaurar alas e distribuições
+      // 4. Restaurar alas e distribuições
       if (Array.isArray(alas)) {
         for (const ala of alas) {
           if (ala.id && ala.nome) {
@@ -132,7 +168,7 @@ export async function importDatabaseBackupAction(jsonString: string) {
         }
       }
 
-      // 4. Restaurar visitas
+      // 5. Restaurar visitas
       if (Array.isArray(visitas)) {
         await tx.visita.deleteMany()
         if (visitas.length > 0) {
@@ -154,21 +190,48 @@ export async function importDatabaseBackupAction(jsonString: string) {
         }
       }
 
-      // 5. Restaurar ocorrências
+      // 6. Restaurar ocorrências
       if (Array.isArray(ocorrencias)) {
-        for (const oc of ocorrencias) {
-          if (oc.id && oc.titulo && oc.categoriaId && oc.criadoPorId) {
-            // Verifica se a categoria e o usuário existem antes de inserir
-            const [catExists, userExists] = await Promise.all([
-              tx.ocorrenciaCategoria.findUnique({ where: { id: oc.categoriaId } }),
-              tx.user.findUnique({ where: { id: oc.criadoPorId } }),
-            ])
+        const fallbackAdmin = await tx.user.findFirst({ where: { role: "ADMIN" } })
+        const fallbackUserId = session.user?.id || fallbackAdmin?.id
 
-            if (catExists && userExists) {
+        for (const oc of ocorrencias) {
+          if (oc.id && oc.titulo) {
+            // Garante que a categoria existe
+            let targetCatId = oc.categoriaId
+            if (targetCatId) {
+              const catExists = await tx.ocorrenciaCategoria.findUnique({ where: { id: targetCatId } })
+              if (!catExists) {
+                const createdCat = await tx.ocorrenciaCategoria.create({
+                  data: { id: targetCatId, nome: `Categoria ${targetCatId.slice(-4)}` },
+                })
+                targetCatId = createdCat.id
+              }
+            } else {
+              let defaultCat = await tx.ocorrenciaCategoria.findFirst()
+              if (!defaultCat) {
+                defaultCat = await tx.ocorrenciaCategoria.create({ data: { nome: "Geral" } })
+              }
+              targetCatId = defaultCat.id
+            }
+
+            // Garante que o usuário criador existe
+            let targetUserId = oc.criadoPorId
+            if (targetUserId) {
+              const userExists = await tx.user.findUnique({ where: { id: targetUserId } })
+              if (!userExists) {
+                targetUserId = fallbackUserId
+              }
+            } else {
+              targetUserId = fallbackUserId
+            }
+
+            if (targetCatId && targetUserId) {
               await tx.ocorrencia.upsert({
                 where: { id: oc.id },
                 update: {
                   titulo: oc.titulo,
+                  categoriaId: targetCatId,
                   texto: oc.texto || "",
                   servidor: oc.servidor || "",
                   icone: oc.icone || "📋",
@@ -176,11 +239,11 @@ export async function importDatabaseBackupAction(jsonString: string) {
                 create: {
                   id: oc.id,
                   titulo: oc.titulo,
-                  categoriaId: oc.categoriaId,
+                  categoriaId: targetCatId,
                   texto: oc.texto || "",
                   servidor: oc.servidor || "",
                   icone: oc.icone || "📋",
-                  criadoPorId: oc.criadoPorId,
+                  criadoPorId: targetUserId,
                   createdAt: oc.createdAt ? new Date(oc.createdAt) : new Date(),
                 },
               })
