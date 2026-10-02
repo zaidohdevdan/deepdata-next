@@ -93,13 +93,13 @@ export function ConfigBackupPanel() {
           </div>
           <div>
             <h3 className="font-bold text-slate-800 text-base flex items-center gap-2">
-              Banco de Dados Local & Segurança
+              Banco de Dados & Segurança
               <span className="inline-flex items-center gap-1 text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">
-                <ShieldCheck size={12} /> 100% Offline
+                <ShieldCheck size={12} /> Conectado
               </span>
             </h3>
             <p className="text-xs text-slate-500">
-              Os dados estão armazenados localmente nesta máquina (SQLite). Não há envio para nuvem externa.
+              Banco de dados integrado com persistência ativa. Exporte cópias de segurança em JSON regularmente.
             </p>
           </div>
         </div>
