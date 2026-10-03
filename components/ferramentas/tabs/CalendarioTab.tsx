@@ -261,9 +261,10 @@ export function CalendarioTab() {
 
                       {/* Badge da Equipe */}
                       <span
-                        className={`px-1.5 py-0.5 rounded-md text-[9px] font-extrabold uppercase ${equipe.tint}`}
+                        className={`px-1 sm:px-1.5 py-0.5 rounded-md text-[8px] sm:text-[9px] font-extrabold uppercase ${equipe.tint}`}
                       >
-                        {equipe.nome}
+                        <span className="hidden sm:inline">{equipe.nome}</span>
+                        <span className="sm:hidden">{equipe.nome[0]}</span>
                       </span>
                     </div>
 
