@@ -172,42 +172,39 @@ export function DashboardView({ data }: DashboardViewProps) {
   })
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto">
+    <div className="space-y-6">
       {/* ========================================================= */}
       {/* 1. HERO BANNER PRINCIPAL DO DASHBOARD (ESTILO ENTERPRISE) */}
       {/* ========================================================= */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white p-6 sm:p-8 shadow-xl border border-slate-700/50">
-        {/* Padrão geométrico suave no fundo */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-        
-        {/* Glow azul no canto */}
-        <div className="absolute -right-12 -top-12 w-80 h-80 rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
+      <div className="relative overflow-hidden rounded-3xl bg-white p-6 sm:p-8 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] border border-slate-200/80">
+        {/* Filete superior em gradiente institucional */}
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-3 max-w-2xl">
+          <div className="space-y-2.5 max-w-2xl">
             {/* Tag / Badge superior */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-blue-500/15 border border-blue-400/30 text-blue-300">
-              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-extrabold bg-blue-50 text-blue-700 border border-blue-200/80 tracking-wide uppercase">
+              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
               <span>PAINEL OPERACIONAL UNIFICADO • {data.unidade}</span>
             </div>
 
             {/* Saudação e Título Principal */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-slate-900">
               Olá, {data.userName} 👋
             </h1>
 
             {/* Descrição clara do que é o Dashboard */}
-            <p className="text-slate-300 text-xs sm:text-sm font-medium leading-relaxed">
-              Bem-vindo ao centro de controle da unidade <strong className="text-white font-bold">{data.unidade}</strong> ({data.localidade}). Acompanhe abaixo os indicadores em tempo real e utilize os atalhos para os módulos operacionais.
+            <p className="text-slate-500 text-xs sm:text-sm font-medium leading-relaxed">
+              Bem-vindo ao centro de controle da unidade <strong className="text-slate-800 font-bold">{data.unidade}</strong> ({data.localidade}). Acompanhe abaixo os indicadores em tempo real e utilize os atalhos para os módulos operacionais.
             </p>
 
             {/* Pílula de data e horário */}
             <div className="flex items-center gap-2 text-xs text-slate-400 pt-1">
-              <Clock size={13} className="text-blue-400" />
-              <span className="capitalize">{dataHoje}</span>
-              <span className="text-slate-600">•</span>
-              <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <Clock size={13} className="text-blue-600" />
+              <span className="capitalize text-slate-600 font-medium">{dataHoje}</span>
+              <span className="text-slate-300">•</span>
+              <span className="text-emerald-600 font-semibold flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 Sistema 100% Conectado
               </span>
             </div>
@@ -217,26 +214,26 @@ export function DashboardView({ data }: DashboardViewProps) {
           <div className="flex flex-wrap lg:flex-col gap-2.5 shrink-0">
             <Link
               href="/alimentacao"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl text-xs font-extrabold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition active:scale-98 cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-xs font-extrabold bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/20 transition active:scale-98 cursor-pointer"
             >
               <Utensils size={15} />
               <span>Lançar Alimentação</span>
-              <ArrowUpRight size={13} className="opacity-70" />
+              <ArrowUpRight size={13} className="opacity-80" />
             </Link>
 
             <Link
               href="/ocorrencias"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold bg-white/10 hover:bg-white/15 text-white border border-white/10 transition active:scale-98 cursor-pointer backdrop-blur-xs"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 shadow-2xs transition active:scale-98 cursor-pointer"
             >
-              <ClipboardList size={15} className="text-purple-300" />
+              <ClipboardList size={15} className="text-blue-600" />
               <span>Livro de Ocorrências</span>
             </Link>
 
             <Link
               href="/sistema"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold bg-white/10 hover:bg-white/15 text-white border border-white/10 transition active:scale-98 cursor-pointer backdrop-blur-xs"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80 shadow-2xs transition active:scale-98 cursor-pointer"
             >
-              <Users size={15} className="text-emerald-300" />
+              <Users size={15} className="text-blue-600" />
               <span>Consultar Visitas</span>
             </Link>
           </div>
@@ -244,7 +241,7 @@ export function DashboardView({ data }: DashboardViewProps) {
       </div>
 
       {/* ========================================================= */}
-      {/* 2. 4 CARDS DE INDICADORES GERAIS (TEMA tela-tab.png)       */}
+      {/* 2. 4 CARDS DE INDICADORES GERAIS (TEMA ENTERPRISE HERO)   */}
       {/* ========================================================= */}
       <div>
         <div className="flex items-center justify-between mb-3 px-1">
@@ -258,73 +255,83 @@ export function DashboardView({ data }: DashboardViewProps) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Card 1: População & Alas (Branco com marcador vertical) */}
-          <div className="bg-white rounded-2xl p-5 shadow-[0_4px_20px_-4px_rgba(20,50,110,0.06)] border border-slate-200/80 flex items-center gap-4 transition hover:shadow-md">
-            <div className="w-1.5 h-12 bg-blue-600 rounded-full shrink-0" />
-            <div>
-              <div className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight font-mono">
+          {/* Card 1: População & Alas */}
+          <div className="bg-white rounded-3xl p-6 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] border border-slate-200/80 flex flex-col justify-between transition hover:shadow-md group">
+            <div className="flex items-center justify-between">
+              <span className="text-3xl font-black text-slate-900 tracking-tight font-mono">
                 {data.totalAlas.toString().padStart(2, "0")}
+              </span>
+              <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100/80 flex items-center justify-center shrink-0">
+                <Activity size={18} />
               </div>
-              <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+            </div>
+            <div className="mt-3">
+              <div className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">
                 Alas Ativas
               </div>
-              <div className="text-[11px] text-blue-600 font-semibold mt-0.5">
+              <div className="text-[11px] text-blue-600 font-bold mt-0.5">
                 {data.unidade} Total
               </div>
             </div>
           </div>
 
-          {/* Card 2: População Carcerária Total (Azul Royal) */}
-          <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white rounded-2xl p-5 shadow-md shadow-blue-600/20 flex flex-col justify-center transition hover:shadow-lg">
+          {/* Card 2: População Carcerária Total */}
+          <div className="bg-white rounded-3xl p-6 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] border border-slate-200/80 flex flex-col justify-between transition hover:shadow-md group">
             <div className="flex items-center justify-between">
-              <span className="text-2xl sm:text-3xl font-black tracking-tight font-mono">
+              <span className="text-3xl font-black text-slate-900 tracking-tight font-mono">
                 {data.totalInternosAlimentacao.toLocaleString("pt-BR")}
               </span>
-              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
-                <Shield size={16} />
+              <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100/80 flex items-center justify-center shrink-0">
+                <Shield size={18} />
               </div>
             </div>
-            <div className="text-xs font-bold text-blue-100 uppercase tracking-wider mt-1">
-              Internos Custodiados
-            </div>
-            <div className="text-[11px] text-blue-200 mt-0.5">
-              Censo carcerário ativo
+            <div className="mt-3">
+              <div className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">
+                Internos Custodiados
+              </div>
+              <div className="text-[11px] text-slate-500 font-semibold mt-0.5">
+                Censo carcerário ativo
+              </div>
             </div>
           </div>
 
-          {/* Card 3: Livro de Ocorrências (Roxo Indigo) */}
-          <div className="bg-gradient-to-br from-indigo-600 to-purple-700 text-white rounded-2xl p-5 shadow-md shadow-indigo-600/20 flex flex-col justify-center transition hover:shadow-lg">
+          {/* Card 3: Livro de Ocorrências */}
+          <div className="bg-white rounded-3xl p-6 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] border border-slate-200/80 flex flex-col justify-between transition hover:shadow-md group">
             <div className="flex items-center justify-between">
-              <span className="text-2xl sm:text-3xl font-black tracking-tight font-mono">
+              <span className="text-3xl font-black text-slate-900 tracking-tight font-mono">
                 {data.totalOcorrencias.toString().padStart(2, "0")}
               </span>
-              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
-                <ClipboardList size={16} />
+              <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 border border-amber-100/80 flex items-center justify-center shrink-0">
+                <ClipboardList size={18} />
               </div>
             </div>
-            <div className="text-xs font-bold text-indigo-100 uppercase tracking-wider mt-1">
-              Ocorrências Registradas
-            </div>
-            <div className="text-[11px] text-indigo-200 mt-0.5">
-              Livro de plantão digital
+            <div className="mt-3">
+              <div className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">
+                Ocorrências Registradas
+              </div>
+              <div className="text-[11px] text-slate-500 font-semibold mt-0.5">
+                Livro de plantão digital
+              </div>
             </div>
           </div>
 
-          {/* Card 4: Refeições Diárias (Esmeralda / Azul Sky) */}
-          <div className="bg-gradient-to-br from-blue-600 to-teal-700 text-white rounded-2xl p-5 shadow-md shadow-teal-600/20 flex flex-col justify-center transition hover:shadow-lg">
+          {/* Card 4: Refeições Diárias */}
+          <div className="bg-white rounded-3xl p-6 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] border border-slate-200/80 flex flex-col justify-between transition hover:shadow-md group">
             <div className="flex items-center justify-between">
-              <span className="text-2xl sm:text-3xl font-black tracking-tight font-mono">
+              <span className="text-3xl font-black text-slate-900 tracking-tight font-mono">
                 {(data.totalInternosAlimentacao * 2).toLocaleString("pt-BR")}
               </span>
-              <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
-                <Package size={16} />
+              <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100/80 flex items-center justify-center shrink-0">
+                <Package size={18} />
               </div>
             </div>
-            <div className="text-xs font-bold text-teal-100 uppercase tracking-wider mt-1">
-              Refeições / Dia (Almoço/Janta)
-            </div>
-            <div className="text-[11px] text-teal-200 mt-0.5">
-              + {data.totalDietas} dietas especiais
+            <div className="mt-3">
+              <div className="text-xs font-extrabold text-slate-400 uppercase tracking-wider">
+                Refeições / Dia (Almoço/Janta)
+              </div>
+              <div className="text-[11px] text-emerald-600 font-bold mt-0.5">
+                + {data.totalDietas} dietas especiais
+              </div>
             </div>
           </div>
         </div>

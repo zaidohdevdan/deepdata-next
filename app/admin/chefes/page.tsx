@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useTransition } from "react"
-import { Plus, Search, Edit, Trash2, Loader2 } from "lucide-react"
+import { Plus, Search, Edit, Trash2, Loader2, UserCheck } from "lucide-react"
 import { toast } from "sonner"
 import { getChefesAction, saveChefesAction, ChefeEquipe } from "@/app/actions/chefes"
 
@@ -155,13 +155,19 @@ export default function ChefesPage() {
   return (
     <div className="space-y-6">
       {/* Header Toolbar */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-800 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
+      <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500" />
+        <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="text-3xl">👮</span>
-            <h1 className="text-2xl font-bold tracking-tight">Chefes de Equipe</h1>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-blue-50 text-blue-700 border border-blue-200/80 tracking-wide uppercase">
+              <UserCheck size={12} className="text-blue-600" />
+              Liderança Operacional • UPI-4
+            </span>
           </div>
-          <p className="text-white/80 text-sm mt-1">
+          <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+            Chefes de Equipe
+          </h1>
+          <p className="text-xs md:text-sm text-slate-500 max-w-xl font-medium leading-relaxed">
             Gerencie os chefes de equipe e vincule-os às respectivas equipes de plantão do sistema DeepData.
           </p>
         </div>
@@ -173,24 +179,24 @@ export default function ChefesPage() {
             setEquipesInput([])
             setShowAddModal(true)
           }}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-white text-violet-700 hover:bg-slate-100 rounded-xl shadow-sm transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-extrabold bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md shadow-blue-600/20 transition cursor-pointer self-start md:self-auto shrink-0"
         >
           <Plus size={14} /> Novo Chefe
         </button>
       </div>
 
       {/* Search and Table block */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+      <div className="bg-white border border-slate-200/80 rounded-3xl shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] overflow-hidden flex flex-col">
         {/* Search header */}
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between gap-4">
+        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between gap-4 bg-slate-50/50">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
             <input
               type="text"
               placeholder="Pesquisar por nome ou matrícula..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-700"
+              className="w-full pl-9 pr-4 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-800 bg-white transition"
             />
           </div>
         </div>
@@ -199,7 +205,7 @@ export default function ChefesPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[600px]">
             <thead>
-              <tr className="border-b border-slate-200 text-slate-500 font-semibold text-xs bg-slate-50/40 uppercase tracking-wider">
+              <tr className="border-b border-slate-200/80 text-slate-500 font-black text-[11px] bg-slate-50/70 uppercase tracking-wider">
                 <th className="py-3.5 px-4">Nome Completo</th>
                 <th className="py-3.5 px-4">Matrícula</th>
                 <th className="py-3.5 px-4">Equipes Vinculadas</th>
@@ -210,49 +216,49 @@ export default function ChefesPage() {
               {isPending && chefes.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="py-8 text-center text-slate-400">
-                    <Loader2 size={24} className="animate-spin mx-auto text-violet-600 mb-2" />
+                    <Loader2 size={24} className="animate-spin mx-auto text-blue-600 mb-2" />
                     Carregando chefes de equipe...
                   </td>
                 </tr>
               ) : filteredChefes.length === 0 ? (
                 <tr>
-                  <td colSpan={4} className="py-8 text-center text-slate-400">
+                  <td colSpan={4} className="py-8 text-center text-slate-400 font-medium">
                     Nenhum chefe de equipe cadastrado.
                   </td>
                 </tr>
               ) : (
                 filteredChefes.map((c) => (
                   <tr key={c.id} className="hover:bg-slate-50/50 transition">
-                    <td className="py-3 px-4 font-semibold text-slate-900">{c.nome}</td>
-                    <td className="py-3 px-4 font-mono text-slate-600 font-bold">{c.matricula}</td>
-                    <td className="py-3 px-4">
+                    <td className="py-3.5 px-4 font-bold text-slate-900">{c.nome}</td>
+                    <td className="py-3.5 px-4 font-mono text-slate-600 font-bold">{c.matricula}</td>
+                    <td className="py-3.5 px-4">
                       <div className="flex flex-wrap gap-1.5">
                         {c.equipes.length === 0 ? (
                           <span className="text-slate-400 italic text-xs">Sem vinculações</span>
                         ) : (
                           c.equipes.map((team) => (
-                            <span key={team} className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-700 uppercase">
+                            <span key={team} className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-blue-50 text-blue-700 border border-blue-200/80 uppercase">
                               {TEAM_LABELS[team] || team}
                             </span>
                           ))
                         )}
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-right">
-                      <div className="flex justify-end gap-2">
+                    <td className="py-3.5 px-4 text-right">
+                      <div className="flex justify-end gap-1.5">
                         <button
                           onClick={() => handleEditOpen(c)}
-                          className="p-1 hover:bg-slate-100 text-slate-500 hover:text-slate-800 rounded transition cursor-pointer"
+                          className="p-1.5 hover:bg-blue-50 text-slate-400 hover:text-blue-600 rounded-full transition cursor-pointer"
                           title="Editar"
                         >
-                          <Edit size={16} />
+                          <Edit size={15} />
                         </button>
                         <button
                           onClick={() => handleDelete(c.id, c.nome)}
-                          className="p-1 hover:bg-rose-50 text-rose-600 rounded transition cursor-pointer"
+                          className="p-1.5 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-full transition cursor-pointer"
                           title="Excluir"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={15} />
                         </button>
                       </div>
                     </td>
@@ -266,37 +272,37 @@ export default function ChefesPage() {
 
       {/* CREATE MODAL */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-sm p-4">
-          <div className="bg-white border border-slate-200 shadow-2xl rounded-2xl max-w-lg w-full p-6 animate-in fade-in zoom-in-95 duration-150">
-            <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">Novo Chefe de Equipe</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+          <div className="bg-white border border-slate-200/80 shadow-[0_20px_60px_-15px_rgba(20,50,110,0.15)] rounded-3xl max-w-lg w-full p-6 sm:p-8 animate-in fade-in zoom-in-95 duration-150">
+            <h3 className="text-lg font-black text-slate-900 border-b border-slate-100 pb-3 mb-5">Novo Chefe de Equipe</h3>
             <form onSubmit={handleCreate} className="space-y-4">
-              <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Nome Completo</label>
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wide">Nome Completo</label>
                 <input
                   type="text"
                   required
                   value={nomeInput}
                   onChange={(e) => setNomeInput(e.target.value)}
                   placeholder="EX: POLICIAL PENAL ALMEIDA"
-                  className="w-full px-3 py-2 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-700 uppercase"
+                  className="w-full px-4 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-800 uppercase bg-white transition"
                 />
               </div>
 
-              <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Matrícula</label>
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wide">Matrícula</label>
                 <input
                   type="text"
                   required
                   value={matriculaInput}
                   onChange={(e) => setMatriculaInput(e.target.value)}
                   placeholder="EX: 3048881A"
-                  className="w-full px-3 py-2 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-700 uppercase"
+                  className="w-full px-4 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-800 uppercase bg-white transition"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Equipes Vinculadas</label>
-                <div className="grid grid-cols-2 gap-2 p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wide">Equipes Vinculadas</label>
+                <div className="grid grid-cols-2 gap-2 p-3.5 bg-slate-50 border border-slate-100 rounded-2xl">
                   {Object.entries(TEAM_LABELS).map(([value, label]) => {
                     const checked = equipesInput.includes(value)
                     return (
@@ -305,7 +311,7 @@ export default function ChefesPage() {
                           type="checkbox"
                           checked={checked}
                           onChange={() => toggleEquipeInput(value)}
-                          className="w-3.5 h-3.5 border border-slate-300 rounded cursor-pointer accent-violet-600"
+                          className="w-3.5 h-3.5 border border-slate-300 rounded cursor-pointer accent-blue-600"
                         />
                         <span>{label}</span>
                       </label>
@@ -314,18 +320,18 @@ export default function ChefesPage() {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 border-t border-slate-100 pt-4 mt-6">
+              <div className="flex justify-end gap-2 border-t border-slate-100 pt-5 mt-6">
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition cursor-pointer"
+                  className="px-5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 rounded-full transition cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="px-4 py-2 text-xs font-semibold bg-violet-600 hover:bg-violet-700 text-white rounded-xl shadow transition cursor-pointer"
+                  className="px-5 py-2 text-xs font-extrabold bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md shadow-blue-600/20 transition cursor-pointer"
                 >
                   {isPending ? "Cadastrando..." : "Cadastrar Chefe"}
                 </button>
@@ -337,35 +343,35 @@ export default function ChefesPage() {
 
       {/* EDIT MODAL */}
       {showEditModal && selectedChefe && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 backdrop-blur-sm p-4">
-          <div className="bg-white border border-slate-200 shadow-2xl rounded-2xl max-w-lg w-full p-6 animate-in fade-in zoom-in-95 duration-150">
-            <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">Editar Chefe de Equipe</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+          <div className="bg-white border border-slate-200/80 shadow-[0_20px_60px_-15px_rgba(20,50,110,0.15)] rounded-3xl max-w-lg w-full p-6 sm:p-8 animate-in fade-in zoom-in-95 duration-150">
+            <h3 className="text-lg font-black text-slate-900 border-b border-slate-100 pb-3 mb-5">Editar Chefe de Equipe</h3>
             <form onSubmit={handleUpdate} className="space-y-4">
-              <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Nome Completo</label>
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wide">Nome Completo</label>
                 <input
                   type="text"
                   required
                   value={nomeInput}
                   onChange={(e) => setNomeInput(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-700 uppercase"
+                  className="w-full px-4 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-800 uppercase bg-white transition"
                 />
               </div>
 
-              <div className="space-y-1">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Matrícula</label>
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wide">Matrícula</label>
                 <input
                   type="text"
                   required
                   value={matriculaInput}
                   onChange={(e) => setMatriculaInput(e.target.value)}
-                  className="w-full px-3 py-2 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-700 uppercase"
+                  className="w-full px-4 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-800 uppercase bg-white transition"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Equipes Vinculadas</label>
-                <div className="grid grid-cols-2 gap-2 p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wide">Equipes Vinculadas</label>
+                <div className="grid grid-cols-2 gap-2 p-3.5 bg-slate-50 border border-slate-100 rounded-2xl">
                   {Object.entries(TEAM_LABELS).map(([value, label]) => {
                     const checked = equipesInput.includes(value)
                     return (
@@ -374,7 +380,7 @@ export default function ChefesPage() {
                           type="checkbox"
                           checked={checked}
                           onChange={() => toggleEquipeInput(value)}
-                          className="w-3.5 h-3.5 border border-slate-300 rounded cursor-pointer accent-violet-600"
+                          className="w-3.5 h-3.5 border border-slate-300 rounded cursor-pointer accent-blue-600"
                         />
                         <span>{label}</span>
                       </label>
@@ -383,18 +389,18 @@ export default function ChefesPage() {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2 border-t border-slate-100 pt-4 mt-6">
+              <div className="flex justify-end gap-2 border-t border-slate-100 pt-5 mt-6">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="px-4 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition cursor-pointer"
+                  className="px-5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 rounded-full transition cursor-pointer"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="px-4 py-2 text-xs font-semibold bg-violet-600 hover:bg-violet-700 text-white rounded-xl shadow transition cursor-pointer"
+                  className="px-5 py-2 text-xs font-extrabold bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md shadow-blue-600/20 transition cursor-pointer"
                 >
                   {isPending ? "Salvando..." : "Salvar Alterações"}
                 </button>

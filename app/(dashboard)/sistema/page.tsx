@@ -181,7 +181,7 @@ export default function VisitasPage() {
 
   return (
     <>
-      <div className="space-y-5 print:hidden">
+      <div className="space-y-6 print:hidden">
       {/* Header Banner estilo Enterprise Hero */}
       <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/80 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1.5">
