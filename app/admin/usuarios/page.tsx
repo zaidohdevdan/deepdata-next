@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useTransition } from "react"
-import { Plus, Search, Edit2, CheckCircle, XCircle, Loader2 } from "lucide-react"
+import { Plus, Search, Edit2, CheckCircle, XCircle, Loader2, Users } from "lucide-react"
 import { toast } from "sonner"
 import { getUsersAction, createUserAction, updateUserAction, toggleUserStatusAction } from "@/app/actions/usuarios"
 import UserAddModal from "@/components/admin/usuarios/UserAddModal"
@@ -124,37 +124,43 @@ export default function UsuariosPage() {
   return (
     <div className="space-y-6">
       {/* Header Toolbar */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-800 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
+      <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500" />
+        <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <span className="text-3xl">👥</span>
-            <h1 className="text-2xl font-bold tracking-tight">Gerenciamento de Usuários</h1>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-blue-50 text-blue-700 border border-blue-200/80 tracking-wide uppercase">
+              <Users size={12} className="text-blue-600" />
+              Gestão de Acessos • UPI-4
+            </span>
           </div>
-          <p className="text-white/80 text-sm mt-1">
-            Cadastre novos policiais penais ou edite as permissões de acesso ao sistema DeepData.
+          <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+            Gerenciamento de Usuários
+          </h1>
+          <p className="text-xs md:text-sm text-slate-500 max-w-xl font-medium leading-relaxed">
+            Cadastre novos policiais penais ou configure as permissões de acesso ao sistema DeepData.
           </p>
         </div>
 
         <button
           onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-white text-violet-700 hover:bg-slate-100 rounded-xl shadow-sm transition"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 text-xs font-extrabold bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md shadow-blue-600/20 transition cursor-pointer self-start md:self-auto shrink-0"
         >
           <Plus size={14} /> Novo Usuário
         </button>
       </div>
 
       {/* Search and Table block */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+      <div className="bg-white border border-slate-200/80 rounded-3xl shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] overflow-hidden flex flex-col">
         {/* Search header */}
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between gap-4">
+        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between gap-4 bg-slate-50/50">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
             <input
               type="text"
               placeholder="Pesquisar por nome ou usuário..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-700"
+              className="w-full pl-9 pr-4 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-800 bg-white transition"
             />
           </div>
         </div>
@@ -192,32 +198,32 @@ export default function UsuariosPage() {
                     <td className="py-3 px-4 font-mono text-slate-600">{u.username}</td>
                     <td className="py-3 px-4">
                       {u.role === "ADMIN" ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-700">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-blue-50 text-blue-700 border border-blue-200/80">
                           Administrador
                         </span>
                       ) : (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
-                          Segurança/User
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200/80">
+                          Operador
                         </span>
                       )}
                     </td>
                     <td className="py-3 px-4">
                       {u.active ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700">
-                          <CheckCircle size={14} className="text-emerald-500" /> Ativo
+                        <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200/80 rounded-full px-2.5 py-0.5">
+                          <CheckCircle size={12} className="text-emerald-500" /> Ativo
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-red-600">
-                          <XCircle size={14} className="text-red-500" /> Inativo
+                        <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-slate-500 bg-slate-100 border border-slate-200/80 rounded-full px-2.5 py-0.5">
+                          <XCircle size={12} className="text-slate-400" /> Inativo
                         </span>
                       )}
                     </td>
                     <td className="py-3 px-4 text-right flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleToggleStatus(u.id, u.active, u.name)}
-                        className={`px-2.5 py-1 text-xs font-bold rounded-lg border transition ${
+                        className={`px-3 py-1 text-xs font-bold rounded-full border transition cursor-pointer ${
                           u.active
-                            ? "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100"
+                            ? "bg-white text-slate-600 border-slate-200/80 hover:bg-slate-50 hover:text-rose-600 shadow-2xs"
                             : "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100"
                         }`}
                       >
@@ -225,7 +231,7 @@ export default function UsuariosPage() {
                       </button>
                       <button
                         onClick={() => handleEditOpen(u)}
-                        className="p-1.5 text-slate-400 hover:text-slate-800 rounded-md hover:bg-slate-100 transition"
+                        className="p-1.5 text-slate-400 hover:text-blue-600 rounded-full hover:bg-blue-50 transition cursor-pointer"
                         title="Editar Usuário"
                       >
                         <Edit2 size={14} />

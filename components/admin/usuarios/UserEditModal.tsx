@@ -42,16 +42,16 @@ export default function UserEditModal({
   if (!showModal || !selectedUser) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl p-6 max-w-md w-full border border-slate-200 shadow-2xl">
-        <h3 className="text-lg font-bold text-slate-900 mb-2">Editar Usuário</h3>
-        <p className="text-sm text-slate-500 mb-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200/80 shadow-[0_20px_60px_-15px_rgba(20,50,110,0.15)] animate-in fade-in zoom-in-95 duration-150">
+        <h3 className="text-lg font-black text-slate-900 mb-1.5">Editar Usuário</h3>
+        <p className="text-xs text-slate-500 font-medium mb-5">
           Atualize as permissões ou redefina a senha de <strong>{selectedUser.username}</strong>.
         </p>
 
         <form onSubmit={handleUpdate} className="space-y-4">
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+          <div className="space-y-1.5">
+            <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
               Nome Completo
             </label>
             <input
@@ -59,55 +59,55 @@ export default function UserEditModal({
               required
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-800"
+              className="w-full px-4 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-800 bg-white transition"
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+          <div className="space-y-1.5">
+            <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
               Alterar Senha (opcional)
             </label>
             <div className="relative">
-              <KeyRound className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+              <KeyRound className="absolute left-3.5 top-2.5 h-4 w-4 text-slate-400" />
               <input
                 type="password"
                 placeholder="Deixe em branco para manter a atual"
                 value={passwordInput}
                 onChange={(e) => setPasswordInput(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-800"
+                className="w-full pl-9 pr-4 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-800 bg-white transition"
               />
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">
+          <div className="space-y-1.5">
+            <label className="block text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
               Permissão
             </label>
             <select
               value={roleInput}
               onChange={(e) => setRoleInput(e.target.value as "ADMIN" | "USER")}
-              className="w-full px-3 py-2 border border-slate-200 rounded-xl outline-none font-semibold text-slate-700 bg-white"
+              className="w-full px-4 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-800 bg-white transition"
             >
-              <option value="USER">Segurança / Usuário</option>
+              <option value="USER">Operador / Segurança</option>
               <option value="ADMIN">Administrador (Root)</option>
             </select>
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-2 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={() => {
                 setShowModal(false)
                 setSelectedUser(null)
               }}
-              className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition"
+              className="px-5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 rounded-full transition cursor-pointer"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={isPending}
-              className="px-5 py-2 text-sm font-semibold bg-slate-900 hover:bg-slate-800 text-white rounded-xl shadow transition flex items-center gap-1.5"
+              className="px-5 py-2 text-xs font-extrabold bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md shadow-blue-600/20 transition flex items-center gap-1.5 cursor-pointer"
             >
               {isPending && <Loader2 size={14} className="animate-spin" />}
               Salvar Alterações
