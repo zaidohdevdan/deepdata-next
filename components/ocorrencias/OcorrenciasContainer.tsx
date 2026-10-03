@@ -260,21 +260,21 @@ export default function OcorrenciasContainer({
           </p>
         </div>
 
-        <div className="flex items-center gap-2 self-start md:self-auto">
-          <div className="relative">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
+          <div className="relative flex-1 sm:w-56">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
             <input
               type="text"
               placeholder="Filtrar modelos..."
               value={historySearch}
               onChange={(e) => setHistorySearch(e.target.value)}
-              className="pl-9 pr-4 py-2 text-xs bg-slate-50 border border-slate-200/90 placeholder-slate-400 text-slate-700 rounded-full outline-none focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition w-44 sm:w-56 font-medium"
+              className="w-full pl-9 pr-4 py-2 text-xs bg-slate-50 border border-slate-200/90 placeholder-slate-400 text-slate-700 rounded-full outline-none focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition font-medium"
             />
           </div>
           <Button
             type="button"
             onClick={() => openNewForm()}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-full px-5 py-2.5 shadow-md shadow-blue-600/20 gap-1.5 cursor-pointer"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-full px-5 py-2.5 shadow-md shadow-blue-600/20 gap-1.5 cursor-pointer justify-center"
           >
             <Plus size={14} />
             <span>Nova Ocorrência</span>

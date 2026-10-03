@@ -433,7 +433,7 @@ export default function VisitasPage() {
                   setSelectedPrioridade("Todas")
                   setSortOption("senha")
                 }}
-                className="ml-auto text-[11px] font-bold text-blue-600 hover:text-blue-800 transition cursor-pointer"
+                className="w-full sm:w-auto sm:ml-auto text-left sm:text-right text-[11px] font-bold text-blue-600 hover:text-blue-800 transition cursor-pointer pt-1 sm:pt-0"
               >
                 Limpar Todos os Filtros
               </button>
