@@ -19,6 +19,7 @@ import {
   Shield,
   ChevronRight,
   Clock,
+  Wrench,
 } from "lucide-react"
 
 export interface DashboardMetricData {
@@ -142,6 +143,21 @@ export function DashboardView({ data }: DashboardViewProps) {
       href: "/sistema",
       metric: "Planilha Integrada",
       submetric: "Busca por nome/matrícula",
+      status: "Disponível",
+      destaque: false,
+    },
+    {
+      id: "ferramentas",
+      title: "Central de Ferramentas",
+      subtitle: "Conversor e compactador de arquivos, calculadora LEP, notas e calendário",
+      category: "GESTAO",
+      categoryLabel: "Gestão",
+      badgeColor: "bg-blue-50 text-blue-700 border-blue-200/80",
+      icon: Wrench,
+      iconBg: "bg-blue-600 text-white",
+      href: "/ferramentas",
+      metric: "5 Ferramentas",
+      submetric: "Utilitários integrados",
       status: "Disponível",
       destaque: false,
     },
