@@ -36,12 +36,12 @@ function IndependentPostsGrid({
   if (tipo !== "noturna") return null
 
   return (
-    <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4 print:hidden">
-      <div className="border-b border-slate-100 pb-2">
-        <h3 className="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+    <div className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] space-y-4 print:hidden">
+      <div className="border-b border-slate-100 pb-3">
+        <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
           <Shield size={16} className="text-blue-600" /> Postos Especiais (Guaritas G1, G3, G5, G6 & Tenda ABC)
         </h3>
-        <p className="text-[11px] text-slate-500">
+        <p className="text-xs text-slate-500 font-medium mt-0.5">
           Estas posições têm 4 faixas de horários editáveis em linha e independentes das demais escalas.
         </p>
       </div>

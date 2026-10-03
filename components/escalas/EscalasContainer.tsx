@@ -1,6 +1,8 @@
 "use client"
 
 import { Fragment } from "react"
+import Link from "next/link"
+import { Users } from "lucide-react"
 import { useEscalaState } from "./useEscalaState"
 import EscalasHeader from "./EscalasHeader"
 import PostosGrid from "./PostosGrid"
@@ -140,12 +142,23 @@ export default function EscalasContainer({
               parseToken={state.parseToken} />
           </>
         ) : (
-          <div className="flex flex-col items-center justify-center p-12 bg-white border border-slate-200/80 rounded-2xl shadow-sm text-center print:hidden">
-            <span className="text-3xl mb-2">📋</span>
-            <h3 className="font-bold text-slate-800 text-sm">Nenhum Policial no Contingente</h3>
-            <p className="text-slate-400 text-xs max-w-xs mt-1">
-              Por favor, acesse o menu <strong>Efetivo</strong> acima para carregar o contingente de plantão antes de iniciar a escala.
-            </p>
+          <div className="flex flex-col items-center justify-center p-12 md:p-16 bg-white border border-slate-200/80 rounded-3xl shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] text-center print:hidden space-y-4">
+            <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-200/80 flex items-center justify-center text-blue-600 shadow-sm">
+              <Users size={32} />
+            </div>
+            <div className="space-y-1.5 max-w-md">
+              <h3 className="font-black text-slate-900 text-lg">Nenhum Policial no Contingente</h3>
+              <p className="text-slate-500 text-xs md:text-sm font-medium leading-relaxed">
+                Para alocar servidores nesta escala, é necessário primeiro carregar ou confirmar o efetivo de plantão.
+              </p>
+            </div>
+            <Link
+              href="/escalas/efetivo"
+              className="inline-flex items-center gap-2 px-6 py-2.5 text-xs font-extrabold bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md shadow-blue-600/20 transition cursor-pointer"
+            >
+              <Users size={14} />
+              Gerenciar Efetivo de Plantão
+            </Link>
           </div>
         )}
       </div>

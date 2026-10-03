@@ -201,14 +201,6 @@ export default function OcorrenciasContainer({
     "Alimentação",
   ]
 
-  const CATEGORY_GRADIENT: Record<string, string> = {
-    "Saúde": "from-emerald-600 to-teal-700",
-    "Jurídico/Atendimento": "from-teal-700 to-cyan-900",
-    "Operação/Rotina": "from-emerald-800 to-teal-950",
-    "Escoltas": "from-emerald-900 to-slate-900",
-    "Alimentação": "from-emerald-700 to-teal-850",
-  }
-
   const searchLower = historySearch.toLowerCase()
 
   const filteredTemplates = TEMPLATES.filter(
@@ -252,34 +244,40 @@ export default function OcorrenciasContainer({
   }
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-800 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <span className="text-3xl">📝</span>
-            <h1 className="text-2xl font-black tracking-widest uppercase">Ocorrências</h1>
+    <div className="space-y-6">
+      {/* Header Banner estilo Enterprise Hero */}
+      <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/80 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/80">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
+            <span>SISTEMA ADMINISTRATIVO • UPI-4</span>
           </div>
-          <p className="text-white/75 text-[10px] uppercase font-bold tracking-wider mt-1.5 font-sans">
-            Clique para copiar · Duplo clique para editar · <Plus size={10} className="inline align-middle" /> para criar novo
+          <h1 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight">
+            Livro Diário de Ocorrências
+          </h1>
+          <p className="text-slate-400 text-xs font-medium max-w-xl leading-relaxed">
+            Clique em um card para copiar instantaneamente o texto padrão · Duplo clique para editar · Formatação rápida para o livro de plantão
           </p>
         </div>
-        <div className="flex items-center gap-2 self-start md:self-auto font-sans">
+
+        <div className="flex items-center gap-2 self-start md:self-auto">
           <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-white/50" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
             <input
               type="text"
-              placeholder="Pesquisar..."
+              placeholder="Filtrar modelos..."
               value={historySearch}
               onChange={(e) => setHistorySearch(e.target.value)}
-              className="pl-9 pr-4 py-2 text-sm bg-white/15 border border-white/20 placeholder-white/50 text-white rounded-xl outline-none focus:bg-white/25 focus:border-white/40 transition w-48 font-semibold"
+              className="pl-9 pr-4 py-2 text-xs bg-slate-50 border border-slate-200/90 placeholder-slate-400 text-slate-700 rounded-full outline-none focus:bg-white focus:border-blue-500 focus:ring-3 focus:ring-blue-100 transition w-44 sm:w-56 font-medium"
             />
           </div>
           <Button
+            type="button"
             onClick={() => openNewForm()}
-            className="bg-white hover:bg-slate-50 text-emerald-800 font-bold rounded-xl shadow-sm gap-1.5 whitespace-nowrap"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-full px-5 py-2.5 shadow-md shadow-blue-600/20 gap-1.5 cursor-pointer"
           >
-            <Plus size={15} /> Nova
+            <Plus size={14} />
+            <span>Nova Ocorrência</span>
           </Button>
         </div>
       </div>
@@ -289,59 +287,72 @@ export default function OcorrenciasContainer({
         const items = filteredTemplates.filter((t) => t.category === category)
         if (items.length === 0) return null
 
-        const gradient = CATEGORY_GRADIENT[category] ?? "from-slate-600 to-slate-800"
-
         return (
-          <section key={category}>
-            {/* Category header */}
-            <div className={`flex items-center gap-3 px-5 py-4 rounded-2xl bg-gradient-to-r ${gradient} mb-4 shadow-sm`}>
-              <span className="text-2xl">{CATEGORY_ICONS[category]}</span>
-              <h2 className="font-bold text-white text-sm uppercase tracking-widest">{category}</h2>
+          <section key={category} className="space-y-3">
+            {/* Category header estilo Enterprise Hero */}
+            <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+              <div className="flex items-center gap-2.5">
+                <span className="text-xl">{CATEGORY_ICONS[category]}</span>
+                <h2 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider">
+                  {category}
+                </h2>
+              </div>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-200/60 font-mono">
+                {items.length} modelos
+              </span>
             </div>
 
             {/* Icon grid */}
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
               {items.map((template) => {
                 const isCopied = copiedId === template.id
                 return (
                   <div
                     key={template.id}
-                    className={`group relative bg-white border-2 rounded-2xl p-3 cursor-pointer transition-all duration-200 flex flex-col items-center text-center gap-1.5 active:scale-95 select-none ${isCopied
-                        ? "border-emerald-400 shadow-emerald-100 shadow-lg"
-                        : "border-slate-200 hover:border-indigo-400 hover:shadow-lg"
-                      }`}
+                    className={`group relative bg-white border rounded-2xl p-3.5 cursor-pointer transition-all duration-200 flex flex-col items-center text-center gap-2 active:scale-95 select-none ${
+                      isCopied
+                        ? "border-blue-500 ring-2 ring-blue-200 bg-blue-50/50 shadow-md shadow-blue-500/10"
+                        : "border-slate-200/80 hover:border-blue-400 hover:shadow-md"
+                    }`}
                     onClick={() => handleCardClick(template.id, template.text)}
                     onDoubleClick={() => openEditTemplate(template)}
                     title={template.title}
                   >
                     <span className="text-3xl leading-none">{template.icon}</span>
-                    <span className="text-[10px] font-bold text-slate-600 uppercase leading-tight line-clamp-2">
+                    <span className="text-[11px] font-bold text-slate-700 leading-snug line-clamp-2">
                       {template.title}
                     </span>
 
                     {/* Copy/Copied indicator */}
-                    <span className={`absolute top-1.5 right-1.5 transition-all duration-300 ${isCopied ? "text-emerald-500 scale-110" : "text-slate-300 group-hover:text-indigo-400"
-                      }`}>
-                      {isCopied ? <Check size={10} /> : <Copy size={9} />}
+                    <span
+                      className={`absolute top-2 right-2 transition-all duration-200 ${
+                        isCopied ? "text-blue-600 scale-110" : "text-slate-300 group-hover:text-blue-500"
+                      }`}
+                    >
+                      {isCopied ? <Check size={12} strokeWidth={2.5} /> : <Copy size={11} />}
                     </span>
 
                     {/* Hover overlay: edit button */}
                     {!isCopied && (
-                      <div className="absolute inset-0 bg-white/0 group-hover:bg-white/80 rounded-2xl transition-all duration-150 flex items-end justify-center pb-2 opacity-0 group-hover:opacity-100">
+                      <div className="absolute inset-0 bg-white/85 rounded-2xl transition-all duration-150 flex items-center justify-center p-2 opacity-0 group-hover:opacity-100">
                         <button
                           type="button"
-                          onClick={(e) => { e.stopPropagation(); openEditTemplate(template) }}
-                          className="flex items-center gap-1 text-[9px] font-bold bg-indigo-600 text-white px-2 py-0.5 rounded-full shadow hover:bg-indigo-700 transition"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            openEditTemplate(template)
+                          }}
+                          className="flex items-center gap-1 text-[10px] font-bold bg-blue-600 text-white px-3 py-1 rounded-full shadow hover:bg-blue-700 transition cursor-pointer"
                         >
-                          <Edit size={8} /> Editar
+                          <Edit size={10} />
+                          <span>Editar</span>
                         </button>
                       </div>
                     )}
 
                     {/* Copied flash overlay */}
                     {isCopied && (
-                      <div className="absolute inset-0 bg-emerald-50/80 rounded-2xl flex items-center justify-center">
-                        <Check size={20} className="text-emerald-500" strokeWidth={3} />
+                      <div className="absolute inset-0 bg-blue-50/90 rounded-2xl flex items-center justify-center">
+                        <Check size={24} className="text-blue-600" strokeWidth={3} />
                       </div>
                     )}
                   </div>
@@ -354,60 +365,80 @@ export default function OcorrenciasContainer({
 
       {/* CUSTOM DB OCCURRENCES */}
       {(filteredCustom.length > 0 || ocorrencias.length === 0) && (
-        <section>
-          <div className="flex items-center gap-3 px-5 py-4 rounded-2xl bg-gradient-to-r from-emerald-950 to-slate-900 mb-4 shadow-sm">
-            <span className="text-2xl">📒</span>
-            <h2 className="font-bold text-white text-sm uppercase tracking-widest">Ocorrências Personalizadas</h2>
+        <section className="space-y-3">
+          <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-white border border-slate-200/80 shadow-2xs">
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl">📒</span>
+              <h2 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider">
+                Ocorrências Personalizadas do Plantão
+              </h2>
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/80 font-mono">
+              {filteredCustom.length} cadastradas
+            </span>
           </div>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
             {filteredCustom.map((item) => {
               const isCopied = copiedId === item.id
               return (
                 <div
                   key={item.id}
-                  className={`group relative bg-white border-2 rounded-2xl p-3 cursor-pointer transition-all duration-200 flex flex-col items-center text-center gap-1.5 active:scale-95 select-none ${isCopied
-                      ? "border-emerald-400 shadow-emerald-100 shadow-lg"
-                      : "border-slate-200 hover:border-emerald-500 hover:shadow-lg"
-                    }`}
+                  className={`group relative bg-white border rounded-2xl p-3.5 cursor-pointer transition-all duration-200 flex flex-col items-center text-center gap-2 active:scale-95 select-none ${
+                    isCopied
+                      ? "border-blue-500 ring-2 ring-blue-200 bg-blue-50/50 shadow-md shadow-blue-500/10"
+                      : "border-slate-200/80 hover:border-blue-400 hover:shadow-md"
+                  }`}
                   onClick={() => handleCardClick(item.id, item.texto)}
                   onDoubleClick={() => openEditForm(item)}
                   title={item.titulo}
                 >
                   <span className="text-3xl leading-none">{item.icone || CATEGORY_ICONS[item.categoria] || "📋"}</span>
-                  <span className="text-[10px] font-bold text-slate-600 uppercase leading-tight line-clamp-2">
+                  <span className="text-[11px] font-bold text-slate-700 leading-snug line-clamp-2">
                     {item.titulo}
                   </span>
 
                   {/* Copy/Copied indicator */}
-                  <span className={`absolute top-1.5 right-1.5 transition-all duration-300 ${isCopied ? "text-emerald-500 scale-110" : "text-slate-300 group-hover:text-emerald-500"
-                    }`}>
-                    {isCopied ? <Check size={10} /> : <Copy size={9} />}
+                  <span
+                    className={`absolute top-2 right-2 transition-all duration-200 ${
+                      isCopied ? "text-blue-600 scale-110" : "text-slate-300 group-hover:text-blue-500"
+                    }`}
+                  >
+                    {isCopied ? <Check size={12} strokeWidth={2.5} /> : <Copy size={11} />}
                   </span>
 
                   {/* Hover overlay with edit/delete */}
                   {!isCopied && (
-                    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/90 rounded-2xl transition-all duration-150 flex flex-wrap items-center justify-center gap-1.5 p-2 opacity-0 group-hover:opacity-100">
+                    <div className="absolute inset-0 bg-white/90 rounded-2xl transition-all duration-150 flex flex-col items-center justify-center gap-1.5 p-2 opacity-0 group-hover:opacity-100">
                       <button
                         type="button"
-                        onClick={(e) => { e.stopPropagation(); openEditForm(item) }}
-                        className="flex items-center gap-1 text-[9px] font-bold bg-slate-900 text-white px-2 py-0.5 rounded-full shadow hover:bg-slate-800 transition cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          openEditForm(item)
+                        }}
+                        className="w-full flex items-center justify-center gap-1 text-[9px] font-bold bg-slate-900 text-white px-2 py-0.5 rounded-full shadow hover:bg-slate-800 transition cursor-pointer"
                         title="Editar Ocorrência"
                       >
                         <Edit size={8} /> Editar
                       </button>
                       <button
                         type="button"
-                        onClick={(e) => { e.stopPropagation(); handlePrintOcorrencia(item) }}
-                        className="flex items-center gap-1 text-[9px] font-bold bg-emerald-600 text-slate-950 px-2 py-0.5 rounded-full shadow hover:bg-emerald-500 transition cursor-pointer"
-                        title="Imprimir Relatório Oficial em Folha A4"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handlePrintOcorrencia(item)
+                        }}
+                        className="w-full flex items-center justify-center gap-1 text-[9px] font-bold bg-blue-600 text-white px-2 py-0.5 rounded-full shadow hover:bg-blue-700 transition cursor-pointer"
+                        title="Imprimir Relatório Oficial"
                       >
                         <Printer size={8} /> Imprimir
                       </button>
                       <button
                         type="button"
-                        onClick={(e) => { e.stopPropagation(); confirmDelete(item.id) }}
-                        className="flex items-center gap-1 text-[9px] font-bold bg-rose-500 text-white px-2 py-0.5 rounded-full shadow hover:bg-rose-600 transition cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          confirmDelete(item.id)
+                        }}
+                        className="w-full flex items-center justify-center gap-1 text-[9px] font-bold bg-rose-50 text-rose-700 border border-rose-200 px-2 py-0.5 rounded-full hover:bg-rose-100 transition cursor-pointer"
                         title="Excluir Ocorrência"
                       >
                         <Trash2 size={8} /> Excluir
@@ -417,23 +448,23 @@ export default function OcorrenciasContainer({
 
                   {/* Copied flash overlay */}
                   {isCopied && (
-                    <div className="absolute inset-0 bg-emerald-50/80 rounded-2xl flex items-center justify-center">
-                      <Check size={20} className="text-emerald-500" strokeWidth={3} />
+                    <div className="absolute inset-0 bg-blue-50/90 rounded-2xl flex items-center justify-center">
+                      <Check size={24} className="text-blue-600" strokeWidth={3} />
                     </div>
                   )}
                 </div>
               )
             })}
-
-
             {/* "+ Nova" card */}
             <button
               type="button"
-              className="bg-slate-50/50 border-2 border-dashed border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/10 rounded-2xl p-3 cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-1.5 min-h-[90px] active:scale-95"
+              className="bg-slate-50 border-2 border-dashed border-slate-200 hover:border-blue-500 hover:bg-blue-50/20 rounded-2xl p-3 cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-1.5 min-h-[90px] active:scale-95 group"
               onClick={() => openNewForm()}
             >
-              <Plus size={22} className="text-slate-400 group-hover:text-emerald-500" />
-              <span className="text-[10px] font-bold text-slate-400 group-hover:text-emerald-650 uppercase">Nova</span>
+              <Plus size={22} className="text-slate-400 group-hover:text-blue-600 transition" />
+              <span className="text-[10px] font-bold text-slate-400 group-hover:text-blue-600 uppercase transition">
+                Nova
+              </span>
             </button>
           </div>
         </section>
