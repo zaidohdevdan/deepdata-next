@@ -463,6 +463,9 @@ export default function VisitasPage() {
                 background: #ffffff !important;
                 color: #000000 !important;
               }
+              [data-sonner-toaster], [data-sonner-toast], section[aria-label*="Notification" i], section[aria-label*="Notificação" i], [role="alert"], [role="status"] {
+                display: none !important;
+              }
               .print-visitas-table {
                 width: 100% !important;
                 border-collapse: collapse !important;

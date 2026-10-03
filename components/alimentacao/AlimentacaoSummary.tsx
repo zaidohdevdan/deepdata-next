@@ -1,4 +1,4 @@
-import { AlertCircle } from "lucide-react"
+import { Info, CheckCircle2 } from "lucide-react"
 import { AlimentacaoConfig, ConfigValues } from "@/lib/calculation"
 
 interface AlimentacaoSummaryProps {
@@ -9,42 +9,53 @@ interface AlimentacaoSummaryProps {
 
 export function AlimentacaoSummary({ summaryMetrics, config, globalConfig }: AlimentacaoSummaryProps) {
   return (
-    <div className="bg-gradient-to-b from-slate-900 to-slate-950 text-white rounded-2xl p-6 border border-emerald-500/20 shadow-[0_0_40px_-12px_rgba(16,185,129,0.12)] print:bg-white print:text-black print:border print:border-slate-300 print:shadow-none print:p-4 print:rounded-none">
-      <h3 className="text-lg font-bold tracking-tight mb-4 border-b border-slate-800 pb-2 print:border-slate-300 print:text-base print:uppercase print:text-center font-mono uppercase text-slate-100">
-        Resumo Geral da Entrega
-      </h3>
+    <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-[0_10px_35px_-10px_rgba(20,50,110,0.06)] print:bg-white print:text-black print:border print:border-slate-300 print:shadow-none print:p-4 print:rounded-none">
+      <div className="flex items-center gap-2 mb-4 border-b border-slate-100 pb-3">
+        <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+          <CheckCircle2 size={16} />
+        </div>
+        <div>
+          <h3 className="text-sm font-extrabold tracking-tight text-slate-800 uppercase">
+            Resumo Operacional
+          </h3>
+          <p className="text-[11px] text-slate-400 font-medium">Totais consolidados para entrega</p>
+        </div>
+      </div>
       
-      <div className="space-y-4">
+      <div className="space-y-3">
         {Object.entries(summaryMetrics).map(([key, val]) => (
-          <div key={key} className="flex justify-between items-center border-b border-slate-800/60 pb-3 last:border-0 last:pb-0 print:border-slate-200">
-            <span className="text-sm text-slate-400 font-medium print:text-slate-700">{key}</span>
-            <span className="text-lg font-extrabold tracking-tight text-emerald-400 font-mono print:text-black">
+          <div
+            key={key}
+            className="flex justify-between items-center p-3 bg-slate-50/70 hover:bg-slate-50 rounded-2xl border border-slate-100/90 transition-all"
+          >
+            <span className="text-xs text-slate-600 font-semibold">{key}</span>
+            <span className="text-base font-black tracking-tight text-blue-700 font-mono">
               {val}
             </span>
           </div>
         ))}
       </div>
 
-      <div className="mt-6 pt-4 border-t border-slate-850 text-xs text-slate-500 space-y-1 print:hidden">
-        <div className="flex items-center gap-1">
-          <AlertCircle size={12} className="text-slate-400" />
-          <span>Cálculos baseados nos parâmetros globais:</span>
+      <div className="mt-5 pt-4 border-t border-slate-100 text-xs text-slate-400 space-y-1.5 print:hidden">
+        <div className="flex items-center gap-1.5 text-slate-600 font-bold text-[11px] mb-1">
+          <Info size={13} className="text-blue-600" />
+          <span>Parâmetros de Cálculo da Unidade:</span>
         </div>
         {config.modulo === "ALIMENTACAO" && (
-          <p>• Quentinhas por caixa: {globalConfig.alimentacaoCaixaCapacidade}</p>
+          <p className="text-[11px] text-slate-500">• Capacidade da Caixa: <strong className="text-slate-700">{globalConfig.alimentacaoCaixaCapacidade} quentinhas</strong></p>
         )}
         {config.modulo === "CAFE" && (
           <>
-            <p>• Pães por interno: {globalConfig.cafePaoesPorInterno}</p>
-            <p>• Pães por pacote: {globalConfig.cafeCapacitePacote}</p>
-            <p>• Garrafa térmica: {globalConfig.cafeLitrosPorGarrafa} L</p>
+            <p className="text-[11px] text-slate-500">• Pães por interno: <strong className="text-slate-700">{globalConfig.cafePaoesPorInterno} un</strong></p>
+            <p className="text-[11px] text-slate-500">• Pães por pacote: <strong className="text-slate-700">{globalConfig.cafeCapacitePacote} un</strong></p>
+            <p className="text-[11px] text-slate-500">• Garrafa térmica: <strong className="text-slate-700">{globalConfig.cafeLitrosPorGarrafa} Litros</strong></p>
           </>
         )}
         {config.modulo === "BISCOITO" && (
           <>
-            <p>• Biscoitos por interno: {globalConfig.biscoitoPorInterno}</p>
-            <p>• Unidades por pacote: {globalConfig.biscoitoCapacidadePacote}</p>
-            <p>• Garrafa leite/suco: 40 L</p>
+            <p className="text-[11px] text-slate-500">• Biscoitos por interno: <strong className="text-slate-700">{globalConfig.biscoitoPorInterno} un</strong></p>
+            <p className="text-[11px] text-slate-500">• Unidades por pacote: <strong className="text-slate-700">{globalConfig.biscoitoCapacidadePacote} un</strong></p>
+            <p className="text-[11px] text-slate-500">• Garrafa de suco: <strong className="text-slate-700">40 Litros</strong></p>
           </>
         )}
       </div>

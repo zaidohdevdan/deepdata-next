@@ -158,5 +158,27 @@ body {
     background: #ffffff !important;
     color: #000000 !important;
   }
+
+  /* Oculta completamente toasts, notificações e alerts na impressão */
+  [data-sonner-toaster],
+  [data-sonner-toast],
+  [data-sonner-toaster] *,
+  section[aria-label*="Notification" i],
+  section[aria-label*="Notificação" i],
+  [role="alert"],
+  [role="status"],
+  [aria-live="polite"],
+  [aria-live="assertive"],
+  .toaster,
+  .toast,
+  .print\\:hidden {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    pointer-events: none !important;
+    overflow: hidden !important;
+  }
 }
 

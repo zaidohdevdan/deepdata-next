@@ -30,18 +30,18 @@ export function AddAlaModal({ isOpen, onClose, onConfirm, isPending }: AddAlaMod
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md bg-white rounded-2xl border border-slate-200 shadow-2xl">
+      <DialogContent className="max-w-md bg-white rounded-3xl border border-slate-200/80 shadow-[0_20px_60px_-15px_rgba(20,50,110,0.15)] p-6">
         <DialogHeader>
-          <DialogTitle className="text-lg font-bold text-slate-900">
+          <DialogTitle className="text-lg font-black text-slate-900 tracking-tight">
             Cadastrar Nova Ala / Galpão
           </DialogTitle>
-          <DialogDescription className="text-sm text-slate-500">
-            Adicione um novo setor. Ele estará disponível para lançamento em todos os módulos do sistema.
+          <DialogDescription className="text-xs text-slate-500 font-medium">
+            Adicione um novo setor. Ele estará disponível para lançamento em todos os módulos de alimentação.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1">
+        <form onSubmit={handleSubmit} className="space-y-4 pt-2">
+          <div className="space-y-1.5">
             <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider">
               Nome da Ala
             </label>
@@ -51,23 +51,23 @@ export function AddAlaModal({ isOpen, onClose, onConfirm, isPending }: AddAlaMod
               placeholder="EX: ALA G, GALPÃO 1"
               value={newAlaName}
               onChange={(e) => setNewAlaName(e.target.value)}
-              className="uppercase font-semibold text-slate-800"
+              className="uppercase font-bold text-slate-800 rounded-2xl border-slate-200 bg-slate-50/60 focus:bg-white focus:ring-blue-100 focus:border-blue-500"
             />
           </div>
 
-          <DialogFooter className="gap-2 pt-2">
+          <DialogFooter className="gap-2 pt-3 sm:justify-end">
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              className="rounded-xl font-semibold"
+              className="rounded-full font-bold text-xs px-5 border-slate-200 hover:bg-slate-100"
             >
               Cancelar
             </Button>
             <Button
               type="submit"
               disabled={isPending}
-              className="rounded-xl font-semibold bg-slate-900 hover:bg-slate-800 text-white flex items-center gap-1.5"
+              className="rounded-full font-bold text-xs px-6 bg-slate-900 hover:bg-slate-800 text-white flex items-center gap-1.5 shadow-sm"
             >
               {isPending && <Loader2 size={14} className="animate-spin" />}
               Adicionar Ala
@@ -89,22 +89,22 @@ interface ClearDataModalProps {
 export function ClearDataModal({ isOpen, onClose, onConfirm, isPending }: ClearDataModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md bg-white rounded-2xl border border-slate-200 shadow-2xl">
+      <DialogContent className="max-w-md bg-white rounded-3xl border border-slate-200/80 shadow-[0_20px_60px_-15px_rgba(20,50,110,0.15)] p-6">
         <DialogHeader>
-          <DialogTitle className="text-lg font-bold text-slate-900">
-            Resetar Números
+          <DialogTitle className="text-lg font-black text-slate-900 tracking-tight">
+            Resetar Lançamentos
           </DialogTitle>
-          <DialogDescription className="text-sm text-slate-500">
-            Tem certeza que deseja limpar todos os lançamentos de internos e dietas? Esta ação definirá os valores de todas as alas para 0 neste módulo e NÃO pode ser desfeita.
+          <DialogDescription className="text-xs text-slate-500 font-medium">
+            Tem certeza que deseja zerar os lançamentos de internos e dietas deste módulo? Esta ação definirá os valores para 0 e não pode ser revertida.
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter className="gap-2 pt-2">
+        <DialogFooter className="gap-2 pt-4 sm:justify-end">
           <Button
             type="button"
             variant="outline"
             onClick={onClose}
-            className="rounded-xl font-semibold"
+            className="rounded-full font-bold text-xs px-5 border-slate-200 hover:bg-slate-100"
           >
             Voltar
           </Button>
@@ -112,7 +112,7 @@ export function ClearDataModal({ isOpen, onClose, onConfirm, isPending }: ClearD
             onClick={onConfirm}
             disabled={isPending}
             variant="destructive"
-            className="rounded-xl font-semibold text-white"
+            className="rounded-full font-bold text-xs px-6 text-white shadow-sm"
           >
             Sim, Limpar Tudo
           </Button>
@@ -139,22 +139,22 @@ export function DeleteAlaModal({
 }: DeleteAlaModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md bg-white rounded-2xl border border-slate-200 shadow-2xl">
+      <DialogContent className="max-w-md bg-white rounded-3xl border border-slate-200/80 shadow-[0_20px_60px_-15px_rgba(20,50,110,0.15)] p-6">
         <DialogHeader>
-          <DialogTitle className="text-lg font-bold text-slate-900">
+          <DialogTitle className="text-lg font-black text-slate-900 tracking-tight">
             Remover Ala / Galpão
           </DialogTitle>
-          <DialogDescription className="text-sm text-slate-500">
-            Tem certeza que deseja remover a ala <strong>{alaName}</strong>? Esta ação é irreversível e desativará os lançamentos relacionados.
+          <DialogDescription className="text-xs text-slate-500 font-medium">
+            Tem certeza que deseja remover a ala <strong>{alaName}</strong>? Esta ação é irreversível.
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter className="gap-2 pt-2">
+        <DialogFooter className="gap-2 pt-4 sm:justify-end">
           <Button
             type="button"
             variant="outline"
             onClick={onClose}
-            className="rounded-xl font-semibold"
+            className="rounded-full font-bold text-xs px-5 border-slate-200 hover:bg-slate-100"
           >
             Cancelar
           </Button>
@@ -162,7 +162,7 @@ export function DeleteAlaModal({
             onClick={onConfirm}
             disabled={isPending}
             variant="destructive"
-            className="rounded-xl font-semibold text-white flex items-center gap-1.5"
+            className="rounded-full font-bold text-xs px-6 text-white flex items-center gap-1.5 shadow-sm"
           >
             {isPending && <Loader2 size={14} className="animate-spin" />}
             Confirmar Remoção
