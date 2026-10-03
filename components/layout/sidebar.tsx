@@ -17,6 +17,7 @@ import {
   Settings,
   ChevronDown,
   UserCheck,
+  Wrench,
 } from "lucide-react"
 import { clsx } from "clsx"
 import { LucideIcon } from "lucide-react"
@@ -58,6 +59,7 @@ const modules: MenuItem[] = [
       { href: "/escalas/noturna", label: "Noturna", icon: Calendar },
     ]
   },
+  { href: "/ferramentas", label: "Ferramentas", icon: Wrench },
   { href: "/configuracoes", label: "Configurações", icon: Settings },
 ]
 
