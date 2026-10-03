@@ -49,28 +49,25 @@ export function AlimentacaoPage({ modulo, initialData, globalConfig }: Alimentac
           onClearClick={() => distribData.setShowClearModal(true)}
         />
 
-        {/* Main Container */}
-        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-          {/* Table Column */}
-          <div className="xl:col-span-3 flex flex-col">
-            <AlimentacaoTable
-              data={distribData.data}
-              config={config}
-              globalConfig={globalConfig}
-              isPending={distribData.isPending}
-              onCellChange={distribData.handleCellChange}
-              onDeleteAla={distribData.handleDeleteAla}
-              onAddAlaClick={() => distribData.setShowAddModal(true)}
-              onResetLocal={() => {
-                distribData.setData(initialData)
-                toast.success("Alterações descartadas. Dados restaurados do banco local.")
-              }}
-              onSave={distribData.handleSave}
-            />
-          </div>
+        {/* Main Container: Tabela Full Width com Design de tela-tab */}
+        <div className="space-y-6">
+          <AlimentacaoTable
+            data={distribData.data}
+            config={config}
+            globalConfig={globalConfig}
+            isPending={distribData.isPending}
+            onCellChange={distribData.handleCellChange}
+            onDeleteAla={distribData.handleDeleteAla}
+            onAddAlaClick={() => distribData.setShowAddModal(true)}
+            onResetLocal={() => {
+              distribData.setData(initialData)
+              toast.success("Alterações descartadas. Dados restaurados do banco local.")
+            }}
+            onSave={distribData.handleSave}
+          />
 
-          {/* Summary sidebar Column */}
-          <div className="xl:col-span-1 space-y-6">
+          {/* Resumo Operacional Consolidado */}
+          <div className="max-w-2xl">
             <AlimentacaoSummary
               summaryMetrics={summaryMetrics}
               config={config}

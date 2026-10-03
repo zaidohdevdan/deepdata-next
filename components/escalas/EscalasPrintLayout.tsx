@@ -37,6 +37,7 @@ export default function EscalasPrintLayout({
             .print-container { display: none; }
             @media print {
               * { box-sizing: border-box !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+              [data-sonner-toaster], [data-sonner-toast], section[aria-label*="Notification" i], section[aria-label*="Notificação" i], [role="alert"], [role="status"] { display: none !important; }
               @page { size: A4 portrait; margin: 6mm 8mm 6mm 8mm; }
               body { background-color: #ffffff !important; color: #111827 !important; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important; font-size: 11px !important; margin: 0 !important; padding: 0 !important; }
               .print-container { display: flex !important; flex-direction: column !important; width: 100% !important; max-width: 194mm !important; margin: 0 auto !important; padding: 0 !important; box-sizing: border-box !important; }

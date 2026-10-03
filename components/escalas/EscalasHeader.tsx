@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Settings, Printer, Trash2 } from "lucide-react"
+import { toast } from "sonner"
 import { ChefeEquipe, Policial, PolicialFixo } from "./types"
 import EscalasConfigPanel from "./EscalasConfigPanel"
 import {
@@ -146,7 +147,10 @@ export default function EscalasHeader({
           </button>
 
           <button
-            onClick={() => window.print()}
+            onClick={() => {
+              toast.dismiss()
+              window.print()
+            }}
             className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-white text-emerald-900 hover:bg-slate-100 rounded-xl shadow-sm transition cursor-pointer"
           >
             <Printer size={14} /> Imprimir Escala
