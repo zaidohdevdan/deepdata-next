@@ -171,7 +171,7 @@ body {
   [aria-live="assertive"],
   .toaster,
   .toast,
-  .print\\:hidden {
+  .print\:hidden {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;

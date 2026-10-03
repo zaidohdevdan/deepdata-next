@@ -92,10 +92,12 @@ export function ConfigForm({ initialConfig, currentUserRole }: ConfigFormProps) 
         </>
       )}
 
-      <div className="flex items-center gap-2 text-[11px] text-slate-500 bg-slate-50 p-4 rounded-xl border border-slate-200/50">
-        <Info size={16} className="text-slate-400 shrink-0" />
-        <span>
-          A alteração destes parâmetros causará recalculação instantânea em todas as colunas computadas dos respectivos painéis de distribuição (Alimentação, Café e Biscoitos) sem perda de dados históricos de internos.
+      <div className="flex items-center gap-3 text-xs text-blue-900 bg-blue-50/70 p-4 sm:p-5 rounded-2xl border border-blue-200/60 shadow-2xs">
+        <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+          <Info size={16} />
+        </div>
+        <span className="font-medium leading-relaxed">
+          A alteração destes parâmetros causará o recálculo instantâneo de todas as colunas das tabelas de distribuição (Alimentação, Café e Biscoitos) sem perda dos registros cadastrados.
         </span>
       </div>
 
@@ -104,14 +106,14 @@ export function ConfigForm({ initialConfig, currentUserRole }: ConfigFormProps) 
         <button
           type="submit"
           disabled={isPending}
-          className="inline-flex items-center gap-2 px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl shadow-2xl hover:shadow-slate-900/30 transition-all duration-200 disabled:opacity-60 cursor-pointer font-bold text-sm border border-slate-700/50 hover:scale-105 active:scale-95"
+          className="inline-flex items-center gap-2 px-6 py-3.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded-full shadow-xl shadow-blue-600/30 hover:shadow-2xl transition-all duration-150 disabled:opacity-60 cursor-pointer font-extrabold text-xs"
         >
           {isPending ? (
-            <Loader2 size={18} className="animate-spin" />
+            <Loader2 size={16} className="animate-spin" />
           ) : (
-            <Save size={18} />
+            <Save size={16} />
           )}
-          Gravar Configurações
+          <span>Gravar Configurações</span>
         </button>
       </div>
     </form>

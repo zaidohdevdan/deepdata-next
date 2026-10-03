@@ -47,27 +47,31 @@ export default function DiurnaClient(props: DiurnaClientProps) {
 
   return (
     <div className="space-y-6">
-      {/* Tabs Selector */}
-      <div className="flex border-b border-slate-200 print:hidden">
+      {/* Tabs Selector estilo Enterprise Hero */}
+      <div className="flex items-center gap-2 bg-white border border-slate-200/80 rounded-2xl p-1.5 shadow-2xs w-fit print:hidden">
         <button
+          type="button"
           onClick={() => setActiveTab("diurna")}
-          className={`px-6 py-3 font-bold text-sm border-b-2 transition ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
             activeTab === "diurna"
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs"
+              : "text-slate-500 hover:text-slate-800"
           }`}
         >
-          ☀️ Escala Diurna
+          <span>☀️</span>
+          <span>Escala Diurna</span>
         </button>
         <button
+          type="button"
           onClick={() => setActiveTab("alvorada")}
-          className={`px-6 py-3 font-bold text-sm border-b-2 transition ${
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
             activeTab === "alvorada"
-              ? "border-blue-600 text-blue-600"
-              : "border-transparent text-slate-500 hover:text-slate-800"
+              ? "bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs"
+              : "text-slate-500 hover:text-slate-800"
           }`}
         >
-          🌅 Alvorada
+          <span>🌅</span>
+          <span>Alvorada</span>
         </button>
       </div>
 

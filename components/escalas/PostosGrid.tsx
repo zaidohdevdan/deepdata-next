@@ -124,44 +124,45 @@ function PostosGrid({
           onDragOver={handleDragOver}
           onDragLeave={() => setIsDragOverPool(false)}
           onDrop={handleDropIntoGlobalPool}
-          className={`bg-white border rounded-2xl p-5 shadow-sm space-y-4 transition ${
+          className={`bg-white border rounded-3xl p-5 shadow-[0_10px_35px_-5px_rgba(20,50,110,0.06)] space-y-4 transition-all duration-200 ${
             isDragOverPool 
-              ? "border-dashed border-slate-900 bg-slate-50 ring-2 ring-slate-900/10 scale-[1.01]" 
+              ? "border-dashed border-blue-500 bg-blue-50/30 ring-2 ring-blue-500/20 scale-[1.01]" 
               : "border-slate-200/80"
           }`}
         >
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
               <h3 className="text-sm font-extrabold text-slate-800 flex items-center gap-1.5">
-                🔄 Pool de Policiais
+                <span>🔄</span>
+                <span>Pool de Policiais</span>
               </h3>
-              <p className="text-[10px] text-slate-400">
-                Disponíveis no plantão. Arraste para os postos ou solte aqui para remover.
+              <p className="text-[10px] text-slate-400 font-medium mt-0.5">
+                Servidores disponíveis. Arraste para alocar ou solte aqui para remover.
               </p>
             </div>
           </div>
 
-          {/* Search Bar */}
+          {/* Search Bar em pílula */}
           <div className="relative">
             <input
               type="text"
-              placeholder="Buscar policial..."
+              placeholder="Buscar policial por nome ou matrícula..."
               value={poolSearch}
               onChange={(e) => setPoolSearch(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-lg outline-none font-semibold text-slate-700 placeholder-slate-400"
+              className="w-full pl-9 pr-3 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-700 placeholder-slate-400 bg-white transition"
             />
-            <span className="absolute left-2.5 top-2.5 text-slate-400 text-xs">🔍</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs">🔍</span>
           </div>
 
-          {/* Filter Tabs */}
-          <div className="flex border border-slate-100 p-0.5 rounded-lg bg-slate-50">
+          {/* Filter Tabs estilo Enterprise Hero */}
+          <div className="flex border border-slate-200/80 p-1 rounded-2xl bg-slate-50">
             <button
               type="button"
               onClick={() => setPoolFilter("unallocated")}
-              className={`flex-1 text-center py-1 text-[10px] font-bold rounded-md transition ${
+              className={`flex-1 text-center py-1.5 text-[10px] font-bold rounded-xl transition cursor-pointer ${
                 poolFilter === "unallocated"
-                  ? "bg-slate-900 text-white shadow-xs"
-                  : "text-slate-500 hover:text-slate-850"
+                  ? "bg-blue-600 text-white shadow-2xs font-extrabold"
+                  : "text-slate-500 hover:text-slate-800"
               }`}
             >
               Não Alocados ({unallocatedOfficers.length})
@@ -169,10 +170,10 @@ function PostosGrid({
             <button
               type="button"
               onClick={() => setPoolFilter("all")}
-              className={`flex-1 text-center py-1 text-[10px] font-bold rounded-md transition ${
+              className={`flex-1 text-center py-1.5 text-[10px] font-bold rounded-xl transition cursor-pointer ${
                 poolFilter === "all"
-                  ? "bg-slate-900 text-white shadow-xs"
-                  : "text-slate-500 hover:text-slate-850"
+                  ? "bg-blue-600 text-white shadow-2xs font-extrabold"
+                  : "text-slate-500 hover:text-slate-800"
               }`}
             >
               Todos ({basePoliciais.filter((p: Policial) => presenceMap[p.matricula] !== false).length})
@@ -246,15 +247,21 @@ function PostosGrid({
               const slotTime = faixasHorario[f] || { inicio: "--:--", fim: "--:--" }
 
               return (
-                <div key={f} className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex flex-col space-y-4 shadow-sm">
+                <div key={f} className="bg-white border border-slate-200/80 rounded-3xl p-5 flex flex-col space-y-4 shadow-[0_10px_35px_-5px_rgba(20,50,110,0.05)]">
                   {/* Slot Header */}
-                  <div className="border-b border-slate-200 pb-2 flex items-center justify-between">
+                  <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
                     <div>
-                      <h4 className="text-sm font-extrabold text-slate-800">Turno {f + 1}</h4>
+                      <h4 className="text-sm font-extrabold text-blue-600 tracking-tight flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-blue-600" />
+                        <span>Turno {f + 1}</span>
+                      </h4>
                       <span className="text-[10px] font-bold text-slate-400 font-mono">
                         {slotTime.inicio} - {slotTime.fim}
                       </span>
                     </div>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60 font-mono">
+                      Faixa {f + 1}
+                    </span>
                   </div>
 
                   {/* Post Positions Stack */}
@@ -267,10 +274,10 @@ function PostosGrid({
                           key={posto}
                           onDragOver={handleDragOver}
                           onDrop={(e) => handleDrop(e, f, posto)}
-                          className={`p-3 border rounded-xl transition ${
+                          className={`p-3.5 border rounded-2xl transition-all duration-150 ${
                             allocatedIds.length === 0
-                              ? "bg-amber-50/10 border-amber-200/50 border-dashed"
-                              : "bg-white border-slate-200 shadow-sm"
+                              ? "bg-slate-50/60 border-slate-200/80 border-dashed"
+                              : "bg-white border-slate-200/90 shadow-2xs hover:border-blue-400/60"
                           }`}
                         >
                           <div className="flex items-center justify-between mb-1.5">

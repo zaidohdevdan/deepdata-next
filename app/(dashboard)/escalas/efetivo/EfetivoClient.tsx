@@ -1,5 +1,7 @@
 "use client"
+
 import { useState, useEffect } from "react"
+import { Users } from "lucide-react"
 import EfetivoChecklist from "@/components/escalas/EfetivoChecklist"
 import { Policial, PolicialEquipe } from "@/components/escalas/types"
 
@@ -168,11 +170,24 @@ export default function EfetivoClient(props: EfetivoClientProps) {
 
   return (
     <div className="space-y-6">
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-800 text-white shadow-md font-mono">
-        <h1 className="text-2xl font-black tracking-widest uppercase">Controle de Contingente e Efetivo</h1>
-        <p className="text-white/80 text-xs font-sans font-medium mt-1">
-          Carregue o arquivo CSV ou adicione manualmente os policiais penais de plantão. Esse contingente servirá de base e contexto para preenchimento de todas as escalas (Diurna, Revezamento e Noturno).
-        </p>
+      <div className="bg-white border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] relative overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500" />
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-blue-50 text-blue-700 border border-blue-200/80 tracking-wide uppercase">
+                <Users size={12} className="text-blue-600" />
+                Contingente • UPI-4
+              </span>
+            </div>
+            <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+              Controle de Contingente e Efetivo
+            </h1>
+            <p className="text-xs md:text-sm text-slate-500 max-w-2xl font-medium leading-relaxed">
+              Carregue a relação por CSV ou gerencie manualmente os servidores presentes. O contingente ativo é sincronizado automaticamente entre todas as escalas (Diurna, Revezamento e Noturna).
+            </p>
+          </div>
+        </div>
       </div>
 
       <EfetivoChecklist

@@ -77,10 +77,10 @@ export default function EscalasConfigPanel({
   if (!showConfig) return null;
 
   return (
-    <div className="relative bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm space-y-6">
-      <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+    <div className="relative bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-7 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] space-y-6">
+      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
         <h2 className="text-base font-extrabold text-slate-800 flex items-center gap-2">
-          <Settings size={18} className="text-slate-600" />
+          <Settings size={18} className="text-blue-600" />
           Configurações da Escala ({tipo.toUpperCase()})
         </h2>
         <button
@@ -93,7 +93,7 @@ export default function EscalasConfigPanel({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Posts limits config */}
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
+        <div className="bg-slate-50/60 border border-slate-200/80 rounded-2xl p-5 shadow-2xs space-y-4">
           <h3 className="text-sm font-bold text-slate-800">
             1. Limite de Servidores por Posto
           </h3>
@@ -107,7 +107,7 @@ export default function EscalasConfigPanel({
                 placeholder="EX: GUARIFA 2"
                 value={newPostName}
                 onChange={(e) => setNewPostName(e.target.value)}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700"
+                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg outline-none font-semibold text-slate-700 bg-white"
               />
             </div>
             <div className="w-24 space-y-1">
@@ -120,12 +120,12 @@ export default function EscalasConfigPanel({
                 max={10}
                 value={newPostLimit}
                 onChange={(e) => setNewPostLimit(Number(e.target.value))}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg outline-none font-semibold text-slate-700"
+                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg outline-none font-semibold text-slate-700 bg-white"
               />
             </div>
             <button
               onClick={handleAddPost}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-lg transition"
+              className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition cursor-pointer shadow-sm"
             >
               <Plus size={16} />
             </button>
@@ -350,7 +350,7 @@ export default function EscalasConfigPanel({
         <button
           onClick={handleSaveScaleSettings}
           disabled={isSavingConfig}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-sm transition cursor-pointer disabled:bg-slate-350 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md shadow-blue-600/20 transition cursor-pointer disabled:bg-slate-300 disabled:cursor-not-allowed"
         >
           Salvar como Padrão da Escala
         </button>

@@ -28,18 +28,30 @@ export function ConfigGeraisPanel({ configBasicas }: { configBasicas: ConfigBasi
     cafePaoesPorInterno, setCafePaoesPorInterno,
     cafeLitrosPorGarrafa, setCafeLitrosPorGarrafa,
     biscoitoPorInterno, setBiscoitoPorInterno,
-    biscoitoCapacidadePacote, setBiscoitoCapacidadePacote
+    biscoitoCapacidadePacote, setBiscoitoCapacidadePacote,
   } = configBasicas
 
   return (
     <>
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm space-y-4">
-        <h2 className="text-sm font-bold text-slate-800 flex items-center gap-1.5 border-b border-slate-100 pb-2">
-          <Landmark size={18} className="text-violet-600" /> Identificação e Localidade
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* 1. Identificação e Localidade */}
+      <div className="bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-7 shadow-[0_10px_35px_-5px_rgba(20,50,110,0.05)] space-y-5">
+        <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+          <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+            <Landmark size={17} />
+          </div>
+          <div>
+            <h2 className="text-sm sm:text-base font-extrabold text-slate-800 tracking-tight">
+              Identificação Institucional da Unidade
+            </h2>
+            <p className="text-[11px] text-slate-400 font-medium">
+              Dados impressos nos cabeçalhos, rodapés e relatórios operacionais
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide">
+            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide">
               Nome da Unidade Prisional
             </label>
             <input
@@ -47,35 +59,47 @@ export function ConfigGeraisPanel({ configBasicas }: { configBasicas: ConfigBasi
               required
               value={nomeUnidade}
               onChange={(e) => setNomeUnidade(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3.5 py-2.5 border border-slate-200/90 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl outline-none font-semibold text-slate-800 text-xs bg-slate-50/50 focus:bg-white transition"
             />
-            <p className="text-[10px] text-slate-400">EX: UPI-4, IPPOO II, etc. Exibido no cabeçalho das páginas e PDF.</p>
+            <p className="text-[10px] text-slate-400 font-medium">Ex: UPI-4, IPPOO II. Utilizado no topo de tabelas e impressões.</p>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide">
-              Localidade / Cidade
+            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide">
+              Localidade / Município
             </label>
             <input
               type="text"
               required
               value={localidade}
               onChange={(e) => setLocalidade(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3.5 py-2.5 border border-slate-200/90 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl outline-none font-semibold text-slate-800 text-xs bg-slate-50/50 focus:bg-white transition"
             />
-            <p className="text-[10px] text-slate-400">Cidade onde se localiza o estabelecimento. Exibido no rodapé impresso.</p>
+            <p className="text-[10px] text-slate-400 font-medium">Cidade onde se localiza o estabelecimento penal.</p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm space-y-4">
-        <h2 className="text-sm font-bold text-slate-800 flex items-center gap-1.5 border-b border-slate-100 pb-2">
-          <Utensils size={18} className="text-emerald-600" /> Parâmetros de Alimentação (Almoço/Jantar)
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 2. Parâmetros de Alimentação */}
+      <div className="bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-7 shadow-[0_10px_35px_-5px_rgba(20,50,110,0.05)] space-y-5">
+        <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+          <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+            <Utensils size={17} />
+          </div>
+          <div>
+            <h2 className="text-sm sm:text-base font-extrabold text-slate-800 tracking-tight">
+              Acondicionamento de Refeições (Almoço / Jantar)
+            </h2>
+            <p className="text-[11px] text-slate-400 font-medium">
+              Regras para o cálculo automático de caixas térmicas
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide">
-              Quentinhas por Caixa
+            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide">
+              Quentinhas por Caixa Térmica
             </label>
             <input
               type="number"
@@ -83,20 +107,32 @@ export function ConfigGeraisPanel({ configBasicas }: { configBasicas: ConfigBasi
               required
               value={alimentacaoCaixaCapacidade}
               onChange={(e) => setAlimentacaoCaixaCapacidade(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3.5 py-2.5 border border-slate-200/90 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl outline-none font-semibold text-slate-800 text-xs bg-slate-50/50 focus:bg-white transition font-mono"
             />
-            <p className="text-[10px] text-slate-400">Quantidade padrão de quentinhas normais acondicionadas em cada caixa de transporte.</p>
+            <p className="text-[10px] text-slate-400 font-medium">Capacidade padrão de quentinhas por caixa (padrão: 42).</p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm space-y-4">
-        <h2 className="text-sm font-bold text-slate-800 flex items-center gap-1.5 border-b border-slate-100 pb-2">
-          <Coffee size={18} className="text-amber-700" /> Parâmetros de Café da Manhã
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 3. Parâmetros de Café da Manhã */}
+      <div className="bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-7 shadow-[0_10px_35px_-5px_rgba(20,50,110,0.05)] space-y-5">
+        <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+          <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+            <Coffee size={17} />
+          </div>
+          <div>
+            <h2 className="text-sm sm:text-base font-extrabold text-slate-800 tracking-tight">
+              Parâmetros de Café da Manhã & Pães
+            </h2>
+            <p className="text-[11px] text-slate-400 font-medium">
+              Cálculo de pacotes de pães e garrafas térmicas
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide">
+            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide">
               Pães por Interno
             </label>
             <input
@@ -105,14 +141,14 @@ export function ConfigGeraisPanel({ configBasicas }: { configBasicas: ConfigBasi
               required
               value={cafePaoesPorInterno}
               onChange={(e) => setCafePaoesPorInterno(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3.5 py-2.5 border border-slate-200/90 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl outline-none font-semibold text-slate-800 text-xs bg-slate-50/50 focus:bg-white transition font-mono"
             />
-            <p className="text-[10px] text-slate-400">Média de pães consumidos por cada interno custodiado.</p>
+            <p className="text-[10px] text-slate-400 font-medium">Média de pães por custodiado no desjejum.</p>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide">
-              Pães por Pacote
+            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide">
+              Pães por Pacote / Fardo
             </label>
             <input
               type="number"
@@ -120,13 +156,13 @@ export function ConfigGeraisPanel({ configBasicas }: { configBasicas: ConfigBasi
               required
               value={cafeCapacitePacote}
               onChange={(e) => setCafeCapacitePacote(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3.5 py-2.5 border border-slate-200/90 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl outline-none font-semibold text-slate-800 text-xs bg-slate-50/50 focus:bg-white transition font-mono"
             />
-            <p className="text-[10px] text-slate-400">Quantidade de pães contida em cada pacote fardo entregue pela panificadora.</p>
+            <p className="text-[10px] text-slate-400 font-medium">Quantidade de pães contida em cada pacote fardo entregue.</p>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide">
+            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide">
               Capacidade Garrafa Térmica (Litros)
             </label>
             <input
@@ -135,20 +171,32 @@ export function ConfigGeraisPanel({ configBasicas }: { configBasicas: ConfigBasi
               required
               value={cafeLitrosPorGarrafa}
               onChange={(e) => setCafeLitrosPorGarrafa(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3.5 py-2.5 border border-slate-200/90 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl outline-none font-semibold text-slate-800 text-xs bg-slate-50/50 focus:bg-white transition font-mono"
             />
-            <p className="text-[10px] text-slate-400">Relação de internos por garrafa térmica de café de grande porte (40 Litros).</p>
+            <p className="text-[10px] text-slate-400 font-medium">Capacidade volumétrica da garrafa térmica (padrão: 40 L).</p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-sm space-y-4">
-        <h2 className="text-sm font-bold text-slate-800 flex items-center gap-1.5 border-b border-slate-100 pb-2">
-          <Cookie size={18} className="text-yellow-600" /> Parâmetros de Biscoitos (Lanche)
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* 4. Parâmetros de Biscoitos */}
+      <div className="bg-white border border-slate-200/80 rounded-3xl p-6 sm:p-7 shadow-[0_10px_35px_-5px_rgba(20,50,110,0.05)] space-y-5">
+        <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+          <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+            <Cookie size={17} />
+          </div>
+          <div>
+            <h2 className="text-sm sm:text-base font-extrabold text-slate-800 tracking-tight">
+              Parâmetros de Biscoitos e Ceia
+            </h2>
+            <p className="text-[11px] text-slate-400 font-medium">
+              Cálculo de pacotes de biscoito e lanches noturnos
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide">
+            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide">
               Biscoitos por Interno
             </label>
             <input
@@ -157,13 +205,13 @@ export function ConfigGeraisPanel({ configBasicas }: { configBasicas: ConfigBasi
               required
               value={biscoitoPorInterno}
               onChange={(e) => setBiscoitoPorInterno(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3.5 py-2.5 border border-slate-200/90 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl outline-none font-semibold text-slate-800 text-xs bg-slate-50/50 focus:bg-white transition font-mono"
             />
-            <p className="text-[10px] text-slate-400">Quantidade de biscoitos unitários recomendada no cardápio diário por interno.</p>
+            <p className="text-[10px] text-slate-400 font-medium">Quantidade unitária de biscoitos por interno.</p>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-400 uppercase tracking-wide">
+            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wide">
               Biscoitos por Pacote
             </label>
             <input
@@ -172,9 +220,9 @@ export function ConfigGeraisPanel({ configBasicas }: { configBasicas: ConfigBasi
               required
               value={biscoitoCapacidadePacote}
               onChange={(e) => setBiscoitoCapacidadePacote(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3.5 py-2.5 border border-slate-200/90 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl outline-none font-semibold text-slate-800 text-xs bg-slate-50/50 focus:bg-white transition font-mono"
             />
-            <p className="text-[10px] text-slate-400">Capacidade de biscoitos individuais em cada fardo ou embalagem do fabricante.</p>
+            <p className="text-[10px] text-slate-400 font-medium">Capacidade por embalagem/fardo (padrão: 68).</p>
           </div>
         </div>
       </div>

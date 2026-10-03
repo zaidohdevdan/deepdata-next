@@ -181,36 +181,47 @@ export default function VisitasPage() {
 
   return (
     <>
-      <div className="space-y-4 print:hidden">
-      {/* Header Banner */}
-      <div className="p-6 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-800 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="text-3xl">👥</span>
-            <h1 className="text-2xl font-black tracking-widest uppercase">Sistema de Visitas</h1>
+      <div className="space-y-5 print:hidden">
+      {/* Header Banner estilo Enterprise Hero */}
+      <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/80 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1.5">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200/80">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
+            <span>SISTEMA ADMINISTRATIVO • UPI-4</span>
           </div>
-          <p className="text-white/80 text-xs font-sans font-medium">
-            Importe o relatório de visitas (.xlsx ou .pdf) para consultar, filtrar e exportar os dados completos.
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-800 tracking-tight">
+              Controle de Visitas Comuns
+            </h1>
+          </div>
+          <p className="text-slate-400 text-xs font-medium max-w-xl leading-relaxed">
+            Importe o relatório de visitas (.xlsx ou .pdf) para consultar, filtrar por ala/cela e exportar os dados completos da unidade.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2 font-sans">
+
+        <div className="flex flex-wrap items-center gap-2">
           {data.length > 0 && (
             <>
               <button
+                type="button"
                 onClick={() => handleExportExcel(allDisplayRows, viewMode)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-white text-emerald-800 hover:bg-slate-100 rounded-xl shadow-sm transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-extrabold bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md shadow-blue-600/20 transition cursor-pointer"
                 title="Exportar todos os registros filtrados para Excel"
               >
-                <Download size={14} /> Exportar Planilha ({allDisplayRows.length})
+                <Download size={14} />
+                <span>Exportar Planilha ({allDisplayRows.length})</span>
               </button>
               <button
+                type="button"
                 onClick={() => handleGeneratePDF(allDisplayRows, viewMode)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-emerald-950/60 hover:bg-emerald-950/80 text-white rounded-xl border border-emerald-400/40 shadow-sm transition cursor-pointer"
-                title="Imprimir ou gerar PDF de todos os registros filtrados (todas as páginas)"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold bg-white hover:bg-slate-50 text-slate-700 rounded-full border border-slate-200/80 shadow-2xs transition cursor-pointer"
+                title="Imprimir ou gerar PDF de todos os registros filtrados"
               >
-                <Printer size={14} /> Imprimir / PDF ({allDisplayRows.length})
+                <Printer size={14} />
+                <span>Imprimir / PDF</span>
               </button>
               <button
+                type="button"
                 onClick={async () => {
                   const loadId = toast.loading("Limpando dados no banco...")
                   try {
@@ -228,9 +239,10 @@ export default function VisitasPage() {
                     toast.error("Erro de conexão ao limpar visitas.")
                   }
                 }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-emerald-900/60 hover:bg-emerald-900/80 text-white rounded-xl border border-emerald-400/30 shadow-sm transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-full border border-rose-200/80 shadow-2xs transition cursor-pointer"
               >
-                <RefreshCw size={14} /> Importar Outro
+                <RefreshCw size={13} />
+                <span>Limpar / Outro</span>
               </button>
             </>
           )}
@@ -241,170 +253,221 @@ export default function VisitasPage() {
       {data.length === 0 ? (
         <UploadArea onFileChange={(e) => handleFileChange(e, fileInputRef)} fileInputRef={fileInputRef} />
       ) : (
-        <div className="space-y-4">
-
-          {/* ── Barra de Ferramentas Horizontal (padrão Escalas) ── */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm grid grid-cols-1 md:grid-cols-4 lg:grid-cols-10 gap-4">
-
-            {/* Busca interno */}
-            <div className="space-y-1 lg:col-span-2 md:col-span-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Buscar Interno</label>
-              <div className="relative">
-                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  type="text"
-                  value={searchInterno}
-                  onChange={(e) => setSearchInterno(e.target.value)}
-                  placeholder="Nome do custodiado ou prontuário..."
-                  className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700"
-                />
-              </div>
-            </div>
-
-            {/* Busca visitante */}
-            <div className="space-y-1 lg:col-span-2 md:col-span-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Buscar Visitante</label>
-              <div className="relative">
-                <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  type="text"
-                  value={searchVisitante}
-                  onChange={(e) => setSearchVisitante(e.target.value)}
-                  placeholder="Nome do visitante ou CPF..."
-                  className="w-full pl-8 pr-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700"
-                />
-              </div>
-            </div>
-
-            {/* Filtro Ala */}
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Ala</label>
-              <select
-                value={selectedAla}
-                onChange={(e) => { setSelectedAla(e.target.value); setSelectedCela("Todas") }}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-              >
-                <option value="Todos">Todas as Alas</option>
-                {ALAS_VALIDAS_UPI4.map((ala) => (
-                  <option key={ala} value={ala}>{ala}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Filtro Cela */}
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Cela</label>
-              <select
-                value={selectedCela}
-                onChange={(e) => setSelectedCela(e.target.value)}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-              >
-                <option value="Todas">Todas as Celas</option>
-                {celasDisponiveis.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Filtro Celas Par/Ímpar */}
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Celas (Par/Ímpar)</label>
-              <select
-                value={selectedParidadeCela}
-                onChange={(e) => setSelectedParidadeCela(e.target.value)}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-              >
-                <option value="Todas">Todas</option>
-                <option value="pares">Pares</option>
-                <option value="impares">Ímpares</option>
-              </select>
-            </div>
-
-            {/* Filtro Prioridade */}
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Prioridade</label>
-              <select
-                value={selectedPrioridade}
-                onChange={(e) => setSelectedPrioridade(e.target.value)}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-              >
-                <option value="Todas">Todas</option>
-                <option value="sim">Prioritárias</option>
-                <option value="não">Normais</option>
-              </select>
-            </div>
-
-            {/* Ordenar */}
-            <div className="space-y-1">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Ordenar por</label>
-              <select
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value as "senha" | "custodiado" | "localizacao")}
-                className="w-full px-3 py-1.5 text-xs border border-slate-200 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg outline-none font-semibold text-slate-700 bg-white"
-              >
-                <option value="senha">Senha</option>
-                <option value="custodiado">Nome do Interno</option>
-                <option value="localizacao">Localização</option>
-              </select>
-            </div>
-
-            {/* Totais (Seletores de Visualização) */}
-            <div className="space-y-1 md:col-span-2 lg:col-span-1">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">Exibição / Totais</label>
-              <div className="flex gap-2">
+        <div className="space-y-5">
+          {/* ── Barra de Ferramentas estilo Enterprise Hero (Customers / Contacts) ── */}
+          <div className="bg-white border border-slate-200/80 rounded-3xl p-5 sm:p-6 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] space-y-4">
+            {/* Linha Superior: Abas no estilo exato do screenshot (Customers / Contacts) */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setViewMode("visitas")}
-                  className={`flex-1 rounded-lg px-2 py-1.5 text-center transition border shadow-sm outline-none cursor-pointer duration-200 select-none ${viewMode === "visitas"
-                      ? "bg-emerald-600 border-emerald-700 text-slate-950 shadow-md ring-2 ring-emerald-300 scale-[1.03]"
-                      : "bg-emerald-50 border-emerald-100 text-emerald-800 hover:bg-emerald-100/50 opacity-60 hover:opacity-100 hover:scale-[1.01]"
-                    }`}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+                    viewMode === "visitas"
+                      ? "bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs"
+                      : "bg-slate-50 text-slate-500 hover:text-slate-800 border border-slate-200/60"
+                  }`}
                 >
-                  <span className={`block text-[9px] font-bold uppercase ${viewMode === "visitas" ? "text-emerald-800" : "text-emerald-600"}`}>Visitas</span>
-                  <span className="block text-sm font-black">{totalVisits}</span>
+                  <span className="text-sm">👥</span>
+                  <span>Visitantes</span>
+                  <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-white border border-slate-200/80 text-slate-700 font-bold">
+                    {totalVisits}
+                  </span>
                 </button>
+
                 <button
                   type="button"
                   onClick={() => setViewMode("internos")}
-                  className={`flex-1 rounded-lg px-2 py-1.5 text-center transition border shadow-sm outline-none cursor-pointer duration-200 select-none ${viewMode === "internos"
-                      ? "bg-teal-600 border-teal-700 text-slate-950 shadow-md ring-2 ring-teal-300 scale-[1.03]"
-                      : "bg-teal-50 border-teal-100 text-teal-800 hover:bg-teal-100/50 opacity-60 hover:opacity-100 hover:scale-[1.01]"
-                    }`}
+                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer ${
+                    viewMode === "internos"
+                      ? "bg-blue-50 text-blue-700 border border-blue-200/80 shadow-2xs"
+                      : "bg-slate-50 text-slate-500 hover:text-slate-800 border border-slate-200/60"
+                  }`}
                 >
-                  <span className={`block text-[9px] font-bold uppercase ${viewMode === "internos" ? "text-teal-800" : "text-teal-600"}`}>Internos</span>
-                  <span className="block text-sm font-black">{uniqueInternos}</span>
+                  <span className="text-sm">📇</span>
+                  <span>Custodiados</span>
+                  <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-white border border-slate-200/80 text-slate-700 font-bold">
+                    {uniqueInternos}
+                  </span>
                 </button>
               </div>
+
+              {/* Botão para alternar Estatísticas & Relatório */}
+              <button
+                type="button"
+                onClick={() => setShowStats(!showStats)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/80 transition cursor-pointer self-start sm:self-auto"
+              >
+                <span>📊</span>
+                <span>{showStats ? "Ocultar Estatísticas" : "Ver Estatísticas por Ala"}</span>
+              </button>
+            </div>
+
+            {/* Linha Inferior: Filtros estilo Enterprise Hero com pílulas */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 pt-1">
+              {/* Busca interno */}
+              <div className="space-y-1 lg:col-span-2">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                  Buscar Custodiado
+                </label>
+                <div className="relative">
+                  <Search size={13} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={searchInterno}
+                    onChange={(e) => setSearchInterno(e.target.value)}
+                    placeholder="Nome ou prontuário..."
+                    className="w-full pl-9 pr-3 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-700 bg-white transition"
+                  />
+                </div>
+              </div>
+
+              {/* Busca visitante */}
+              <div className="space-y-1 lg:col-span-2">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                  Buscar Visitante
+                </label>
+                <div className="relative">
+                  <Search size={13} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={searchVisitante}
+                    onChange={(e) => setSearchVisitante(e.target.value)}
+                    placeholder="Nome do visitante ou CPF..."
+                    className="w-full pl-9 pr-3 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-700 bg-white transition"
+                  />
+                </div>
+              </div>
+
+              {/* Filtro Ala */}
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                  Ala
+                </label>
+                <select
+                  value={selectedAla}
+                  onChange={(e) => {
+                    setSelectedAla(e.target.value)
+                    setSelectedCela("Todas")
+                  }}
+                  className="w-full px-3 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-700 bg-white transition"
+                >
+                  <option value="Todos">Todas as Alas</option>
+                  {ALAS_VALIDAS_UPI4.map((ala) => (
+                    <option key={ala} value={ala}>
+                      {ala}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Filtro Cela */}
+              <div className="space-y-1">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wide">
+                  Cela
+                </label>
+                <select
+                  value={selectedCela}
+                  onChange={(e) => setSelectedCela(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-slate-200/90 focus:border-blue-500 focus:ring-3 focus:ring-blue-100 rounded-full outline-none font-semibold text-slate-700 bg-white transition"
+                >
+                  <option value="Todas">Todas as Celas</option>
+                  {celasDisponiveis.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Sub-filtros extras */}
+            <div className="flex flex-wrap items-center gap-3 pt-1 border-t border-slate-100 text-xs">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Celas:</span>
+                <select
+                  value={selectedParidadeCela}
+                  onChange={(e) => setSelectedParidadeCela(e.target.value)}
+                  className="px-2.5 py-1 text-xs border border-slate-200/80 rounded-full bg-slate-50 text-slate-700 font-semibold outline-none"
+                >
+                  <option value="Todas">Pares & Ímpares</option>
+                  <option value="pares">Apenas Pares</option>
+                  <option value="impares">Apenas Ímpares</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Prioridade:</span>
+                <select
+                  value={selectedPrioridade}
+                  onChange={(e) => setSelectedPrioridade(e.target.value)}
+                  className="px-2.5 py-1 text-xs border border-slate-200/80 rounded-full bg-slate-50 text-slate-700 font-semibold outline-none"
+                >
+                  <option value="Todas">Todas</option>
+                  <option value="sim">Prioritárias</option>
+                  <option value="não">Normais</option>
+                </select>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Ordenar:</span>
+                <select
+                  value={sortOption}
+                  onChange={(e) => setSortOption(e.target.value as "senha" | "custodiado" | "localizacao")}
+                  className="px-2.5 py-1 text-xs border border-slate-200/80 rounded-full bg-slate-50 text-slate-700 font-semibold outline-none"
+                >
+                  <option value="senha">Por Senha</option>
+                  <option value="custodiado">Por Nome do Interno</option>
+                  <option value="localizacao">Por Ala / Cela</option>
+                </select>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchInterno("")
+                  setSearchVisitante("")
+                  setSelectedAla("Todos")
+                  setSelectedCela("Todas")
+                  setSelectedParidadeCela("Todas")
+                  setSelectedPrioridade("Todas")
+                  setSortOption("senha")
+                }}
+                className="ml-auto text-[11px] font-bold text-blue-600 hover:text-blue-800 transition cursor-pointer"
+              >
+                Limpar Todos os Filtros
+              </button>
             </div>
           </div>
 
           {/* Estatísticas e Relatório por Ala (Card Colapsável) */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
-            <button
-              type="button"
-              onClick={() => setShowStats(!showStats)}
-              className="w-full flex items-center justify-between font-extrabold text-slate-800 text-sm focus:outline-none select-none cursor-pointer"
-            >
-              <span className="flex items-center gap-2">
-                📊 Estatísticas e Relatório por Ala {showStats ? "(Clique para recolher)" : "(Clique para expandir)"}
-              </span>
-              <span className="text-lg transition-transform duration-200">
-                {showStats ? "▲" : "▼"}
-              </span>
-            </button>
+          {showStats && (
+            <div className="bg-white border border-slate-200/80 rounded-3xl p-5 sm:p-6 shadow-[0_15px_40px_-10px_rgba(20,50,110,0.06)] space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-base">📊</span>
+                  <h3 className="font-extrabold text-slate-800 text-sm">
+                    Estatísticas Consolidadas da Visita por Ala
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowStats(false)}
+                  className="text-xs font-bold text-slate-400 hover:text-slate-600"
+                >
+                  Fechar
+                </button>
+              </div>
 
-            {showStats && (
-              <div className="pt-4 border-t border-slate-100 grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Painel visual de estatísticas */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
                 <div className="lg:col-span-2">
                   <VisitasSidebar data={data} totalVisits={totalVisits} />
                 </div>
 
-                {/* Relatório de controle textual */}
-                <div className="space-y-3 bg-slate-50 border border-slate-200/60 rounded-xl p-4 flex flex-col">
-                  <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                <div className="space-y-3 bg-slate-50/70 border border-slate-200/60 rounded-2xl p-4 flex flex-col">
+                  <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
                     <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">
-                      📄 Relatório de Controle {selectedAla !== "Todos" ? `• Ala ${selectedAla}` : "• Geral"}
+                      📄 Relatório {selectedAla !== "Todos" ? `• Ala ${selectedAla}` : "• Geral"}
                     </span>
                     <button
                       type="button"
@@ -413,20 +476,20 @@ export default function VisitasPage() {
                         navigator.clipboard.writeText(report)
                         toast.success("Relatório copiado para a área de transferência!")
                       }}
-                      className="px-2.5 py-1 text-[10px] font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-lg transition cursor-pointer flex items-center gap-1"
+                      className="px-3 py-1 text-[10px] font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-full transition cursor-pointer flex items-center gap-1 shadow-2xs"
                     >
                       Copiar Relatório
                     </button>
                   </div>
                   <textarea
                     readOnly
-                    className="flex-1 w-full min-h-[300px] bg-slate-100/50 border border-slate-200 rounded-lg p-2.5 text-[10.5px] font-mono text-slate-750 outline-none"
+                    className="flex-1 w-full min-h-[280px] bg-white border border-slate-200/80 rounded-xl p-3 text-[11px] font-mono text-slate-700 outline-none resize-none leading-relaxed"
                     value={generateReport()}
                   />
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Tabela — largura total */}
           <VisitasTable
