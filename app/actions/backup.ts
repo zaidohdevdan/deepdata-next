@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma"
 import { auth } from "@/lib/auth"
 import { createAuditLogAction } from "./audit"
 import { revalidatePath } from "next/cache"
+import bcrypt from "bcryptjs"
 
 async function ensureAdmin() {
   const session = await auth()
@@ -31,7 +32,6 @@ export async function exportDatabaseBackupAction() {
           name: true,
           role: true,
           active: true,
-          passwordHash: true,
         },
       }),
     ])
@@ -113,7 +113,7 @@ export async function importDatabaseBackupAction(jsonString: string) {
                 name: u.name,
                 role: u.role,
                 active: u.active ?? true,
-                passwordHash: u.passwordHash || "",
+                passwordHash: u.passwordHash || (await bcrypt.hash(process.env.INITIAL_USER_PASSWORD || "Usuario@Padrao123!", 10)),
               },
             })
           }
