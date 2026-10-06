@@ -179,13 +179,24 @@ export async function updateOcorrenciaAction(id: string, formData: unknown) {
 }
 
 export async function deleteOcorrenciaAction(id: string) {
-  await ensureAuthenticated()
+  const session = await ensureAuthenticated()
 
   try {
     const oldOcorrencia = await prisma.ocorrencia.findUnique({
       where: { id },
       include: { categoria: true }
     })
+
+    if (!oldOcorrencia) {
+      return { success: false, error: "Ocorrência não encontrada." }
+    }
+
+    const isAdmin = session.user.role === "ADMIN"
+    const isOwner = oldOcorrencia.criadoPorId === session.user.id
+
+    if (!isAdmin && !isOwner) {
+      return { success: false, error: "Apenas o autor da ocorrência ou um administrador pode excluí-la." }
+    }
 
     await prisma.ocorrencia.delete({
       where: { id },
@@ -197,8 +208,8 @@ export async function deleteOcorrenciaAction(id: string) {
       modulo: "OCORRENCIAS",
       detalhes: {
         ocorrenciaId: id,
-        titulo: oldOcorrencia?.titulo,
-        categoria: oldOcorrencia?.categoria.nome
+        titulo: oldOcorrencia.titulo,
+        categoria: oldOcorrencia.categoria.nome
       }
     })
 

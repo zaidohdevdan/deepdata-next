@@ -11,6 +11,13 @@ async function ensureAuthenticated() {
   }
 }
 
+async function ensureAdmin() {
+  const session = await auth()
+  if (!session || session.user?.role !== "ADMIN") {
+    throw new Error("Não autorizado. Apenas administradores podem alterar os chefes de equipe.")
+  }
+}
+
 export interface ChefeEquipe {
   id: string
   nome: string
@@ -33,7 +40,7 @@ export async function getChefesAction() {
 }
 
 export async function saveChefesAction(chefes: ChefeEquipe[]) {
-  await ensureAuthenticated()
+  await ensureAdmin()
   try {
     await prisma.configuracaoGlobal.upsert({
       where: { chave: "chefesEquipe" },

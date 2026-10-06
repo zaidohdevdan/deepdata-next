@@ -4,6 +4,15 @@ import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 import { Modulo } from "@/types/prisma-enums"
 import { createAuditLogAction } from "./audit"
+import { auth } from "@/lib/auth"
+
+async function ensureAuthenticated() {
+  const session = await auth()
+  if (!session) {
+    throw new Error("Não autorizado. Você precisa estar autenticado.")
+  }
+  return session
+}
 
 export interface AlaDistribData {
   id: string // alaId
@@ -14,6 +23,7 @@ export interface AlaDistribData {
 
 // Fetch all active Alas and their corresponding DistribAla for a modulo
 export async function getAlimentacaoData(modulo: Modulo): Promise<AlaDistribData[]> {
+  await ensureAuthenticated()
   try {
     const alas = await prisma.ala.findMany({
       where: { ativa: true },
@@ -45,6 +55,7 @@ export async function saveAlimentacaoData(
   modulo: Modulo,
   data: { id: string; internos: number; dietas: number }[]
 ) {
+  await ensureAuthenticated()
   try {
     const operations = data.map((item) => {
       return prisma.distribAla.upsert({
@@ -89,6 +100,7 @@ export async function saveAlimentacaoData(
 
 // Reset all distribution entries for a modulo to 0
 export async function clearAlimentacaoData(modulo: Modulo) {
+  await ensureAuthenticated()
   try {
     await prisma.distribAla.updateMany({
       where: { modulo },
@@ -115,6 +127,7 @@ export async function clearAlimentacaoData(modulo: Modulo) {
 
 // Add a new Ala and seed empty distribution for all modulos
 export async function addAlaAction(nome: string) {
+  await ensureAuthenticated()
   try {
     const existing = await prisma.ala.findUnique({
       where: { nome: nome.trim().toUpperCase() },
@@ -176,6 +189,7 @@ export async function addAlaAction(nome: string) {
 
 // Soft delete / deactivate an Ala
 export async function deleteAlaAction(alaId: string) {
+  await ensureAuthenticated()
   try {
     await prisma.ala.update({
       where: { id: alaId },

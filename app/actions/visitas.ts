@@ -27,6 +27,14 @@ async function ensureAuthenticated() {
   return session
 }
 
+async function ensureAdmin() {
+  const session = await auth()
+  if (!session || session.user?.role !== "ADMIN") {
+    throw new Error("Não autorizado. Apenas administradores podem limpar o histórico de visitas.")
+  }
+  return session
+}
+
 export async function getVisitasAction() {
   await ensureAuthenticated()
   try {
@@ -84,7 +92,7 @@ export async function saveVisitasAction(visitas: VisitaInput[]) {
 }
 
 export async function clearVisitasAction() {
-  await ensureAuthenticated()
+  await ensureAdmin()
   try {
     await prisma.visita.deleteMany()
 
