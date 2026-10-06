@@ -63,8 +63,8 @@ async function main() {
   console.log("Global configurations seeded.")
 
   // 2. Create default users (senhas parametrizáveis via variáveis de ambiente)
-  const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || "Admin@Padrao123!"
-  const userPassword = process.env.INITIAL_USER_PASSWORD || "Usuario@Padrao123!"
+  const adminPassword = process.env.INITIAL_ADMIN_PASSWORD
+  const userPassword = process.env.INITIAL_USER_PASSWORD
 
   const users = [
     {
