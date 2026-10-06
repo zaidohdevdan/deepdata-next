@@ -113,7 +113,7 @@ export async function importDatabaseBackupAction(jsonString: string) {
                 name: u.name,
                 role: u.role,
                 active: u.active ?? true,
-                passwordHash: u.passwordHash || (await bcrypt.hash(process.env.INITIAL_USER_PASSWORD || "Usuario@Padrao123!", 10)),
+                passwordHash: u.passwordHash || bcrypt.hashSync(process.env.INITIAL_USER_PASSWORD || "Usuario@Padrao123!", 10),
               },
             })
           }

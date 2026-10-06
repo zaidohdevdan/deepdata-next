@@ -62,6 +62,11 @@ async function main() {
   }
   console.log("Global configurations seeded.")
 
+  if (!process.env.INITIAL_ADMIN_PASSWORD || !process.env.INITIAL_USER_PASSWORD) {
+    console.error("Variáveis de ambiente INITIAL_ADMIN_PASSWORD e INITIAL_USER_PASSWORD não definidas.")
+    process.exit(1)
+  }
+
   // 2. Create default users (senhas parametrizáveis via variáveis de ambiente)
   const adminPassword = process.env.INITIAL_ADMIN_PASSWORD
   const userPassword = process.env.INITIAL_USER_PASSWORD

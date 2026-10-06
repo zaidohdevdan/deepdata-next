@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma db push --accept-data-loss && node prisma/seed.js && next build",
+    "build": "next build",
+    "db:push": "prisma db push",
+    "db:seed": "node prisma/seed.js",
     "start": "next start",
     "lint": "eslint",
     "check": "tsc --noEmit && eslint",
