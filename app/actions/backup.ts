@@ -74,6 +74,12 @@ export async function importDatabaseBackupAction(jsonString: string) {
   const session = await ensureAdmin()
 
   try {
+    // Limite de tamanho: rejeita JSONs maiores que 10MB para evitar DoS por payload gigante
+    const MAX_BACKUP_SIZE_BYTES = 10 * 1024 * 1024
+    if (Buffer.byteLength(jsonString, "utf8") > MAX_BACKUP_SIZE_BYTES) {
+      return { success: false, error: "Arquivo de backup muito grande (máximo 10MB)." }
+    }
+
     const parsed = JSON.parse(jsonString)
     if (!parsed.data || !parsed.version) {
       return { success: false, error: "Arquivo de backup inválido ou em formato incompatível." }
@@ -113,7 +119,7 @@ export async function importDatabaseBackupAction(jsonString: string) {
                 name: u.name,
                 role: u.role,
                 active: u.active ?? true,
-                passwordHash: u.passwordHash || bcrypt.hashSync(process.env.INITIAL_USER_PASSWORD || "Usuario@Padrao123!", 10),
+                passwordHash: u.passwordHash || (await bcrypt.hash(process.env.INITIAL_USER_PASSWORD || "Usuario@Padrao123!", 10)),
               },
             })
           }
