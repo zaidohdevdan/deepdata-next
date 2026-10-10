@@ -182,7 +182,7 @@ export function BlocoNotasTab() {
               placeholder="Buscar nas anotações..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs bg-white border border-slate-200 rounded-xl outline-none focus:border-blue-500 font-medium"
+              className="w-full pl-8 pr-3 py-1.5 text-xs bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl outline-none focus:border-blue-500 font-medium"
             />
           </div>
 

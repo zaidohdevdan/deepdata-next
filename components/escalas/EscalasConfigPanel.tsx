@@ -205,7 +205,7 @@ export default function EscalasConfigPanel({
                         </>
                       ) : (
                         <>
-                          <td className="p-2 pl-4 font-bold text-slate-750 flex items-center gap-2">
+                          <td className="p-2 pl-4 font-bold text-slate-700 flex items-center gap-2">
                             <GripVertical size={14} className="text-slate-300 shrink-0" />
                             {posto}
                           </td>

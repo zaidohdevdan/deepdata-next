@@ -67,7 +67,7 @@ function IndependentPostsGrid({
                     className={`p-2.5 border rounded-lg bg-white transition flex flex-col justify-between min-h-[100px] ${
                       allocatedTokens.length === 0
                         ? "border-dashed border-slate-200"
-                        : "border-slate-250 shadow-xs"
+                        : "border-slate-200 shadow-xs"
                     }`}
                   >
                     <div className="space-y-1 mb-2">
@@ -85,7 +85,7 @@ function IndependentPostsGrid({
                           })
                         }}
                         placeholder="Horário"
-                        className="w-full bg-slate-50 border border-slate-200/60 rounded px-1.5 py-0.5 text-[10px] font-semibold text-slate-750 font-mono outline-none focus:border-slate-350"
+                        className="w-full bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200/60 rounded px-1.5 py-0.5 text-[10px] font-semibold font-mono outline-none focus:border-slate-400"
                       />
                     </div>
 
@@ -111,7 +111,7 @@ function IndependentPostsGrid({
                                 ? isUnlocked
                                   ? "bg-blue-500 hover:bg-blue-600 text-white border border-blue-400 cursor-grab active:cursor-grabbing transition-all shadow-sm"
                                   : "bg-blue-600 text-white border border-blue-700 cursor-not-allowed"
-                                : "bg-slate-900 text-white cursor-grab active:cursor-grabbing hover:bg-slate-850"
+                                : "bg-slate-900 text-white cursor-grab active:cursor-grabbing hover:bg-slate-800"
                             }`}
                             title={isFixed ? (isUnlocked ? "Policial fixado (Desafixado temporariamente) - Arraste para mover" : "Policial fixado - Clique no cadeado para desafixar") : "Arraste para mover"}
                           >
@@ -136,7 +136,7 @@ function IndependentPostsGrid({
                                   </button>
                                 )}
                               </div>
-                              <div className="text-[8px] text-slate-350 font-mono leading-tight">{pp.matricula}</div>
+                              <div className="text-[8px] text-slate-400 font-mono leading-tight">{pp.matricula}</div>
                             </div>
 
                             <div className="flex items-center gap-1 shrink-0">

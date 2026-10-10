@@ -70,7 +70,7 @@ export function ConfigForm({ initialConfig }: ConfigFormProps) {
               required
               value={nomeUnidade}
               onChange={(e) => setNomeUnidade(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-800"
             />
             <p className="text-[10px] text-slate-400">EX: UPI-4, IPPOO II, etc. Exibido no cabeçalho das páginas e PDF.</p>
           </div>
@@ -84,7 +84,7 @@ export function ConfigForm({ initialConfig }: ConfigFormProps) {
               required
               value={localidade}
               onChange={(e) => setLocalidade(e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-800"
             />
             <p className="text-[10px] text-slate-400">Cidade onde se localiza o estabelecimento. Exibido no rodapé impresso.</p>
           </div>
@@ -107,7 +107,7 @@ export function ConfigForm({ initialConfig }: ConfigFormProps) {
               required
               value={alimentacaoCaixaCapacidade}
               onChange={(e) => setAlimentacaoCaixaCapacidade(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-800"
             />
             <p className="text-[10px] text-slate-400">Quantidade padrão de quentinhas normais acondicionadas em cada caixa de transporte.</p>
           </div>
@@ -130,7 +130,7 @@ export function ConfigForm({ initialConfig }: ConfigFormProps) {
               required
               value={cafePaoesPorInterno}
               onChange={(e) => setCafePaoesPorInterno(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-800"
             />
             <p className="text-[10px] text-slate-400">Média de pães consumidos por cada interno custodiado.</p>
           </div>
@@ -145,7 +145,7 @@ export function ConfigForm({ initialConfig }: ConfigFormProps) {
               required
               value={cafeCapacitePacote}
               onChange={(e) => setCafeCapacitePacote(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-800"
             />
             <p className="text-[10px] text-slate-400">Quantidade de pães contida em cada pacote fardo entregue pela panificadora.</p>
           </div>
@@ -160,7 +160,7 @@ export function ConfigForm({ initialConfig }: ConfigFormProps) {
               required
               value={cafeLitrosPorGarrafa}
               onChange={(e) => setCafeLitrosPorGarrafa(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-800"
             />
             <p className="text-[10px] text-slate-400">Relação de internos por garrafa térmica de café de grande porte (40 Litros).</p>
           </div>
@@ -183,7 +183,7 @@ export function ConfigForm({ initialConfig }: ConfigFormProps) {
               required
               value={biscoitoPorInterno}
               onChange={(e) => setBiscoitoPorInterno(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-800"
             />
             <p className="text-[10px] text-slate-400">Quantidade de biscoitos unitários recomendada no cardápio diário por interno.</p>
           </div>
@@ -198,7 +198,7 @@ export function ConfigForm({ initialConfig }: ConfigFormProps) {
               required
               value={biscoitoCapacidadePacote}
               onChange={(e) => setBiscoitoCapacidadePacote(parseInt(e.target.value, 10) || 0)}
-              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-850"
+              className="w-full px-3 py-2 border border-slate-200 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 rounded-xl outline-none font-semibold text-slate-800"
             />
             <p className="text-[10px] text-slate-400">Capacidade de biscoitos individuais em cada fardo ou embalagem do fabricante.</p>
           </div>
