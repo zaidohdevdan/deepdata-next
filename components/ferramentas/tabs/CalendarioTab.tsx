@@ -389,7 +389,7 @@ export function CalendarioTab() {
                     placeholder="Ex: Revista Geral Ala B, Escolta..."
                     value={newEventTitle}
                     onChange={(e) => setNewEventTitle(e.target.value)}
-                    className="w-full text-xs font-medium px-3 py-2 bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl outline-none focus:border-blue-500"
+                    className="w-full text-xs font-medium px-3 py-2 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl outline-none focus:border-blue-500"
                   />
                 </div>
                 <button

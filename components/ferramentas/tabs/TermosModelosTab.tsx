@@ -1101,7 +1101,7 @@ export function TermosModelosTab() {
                   type="text"
                   value={nomeUnidade}
                   onChange={(e) => setNomeUnidade(e.target.value)}
-                  className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
               </div>
               <div>
@@ -1112,7 +1112,7 @@ export function TermosModelosTab() {
                   type="text"
                   value={siglaUnidade}
                   onChange={(e) => setSiglaUnidade(e.target.value)}
-                  className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
               </div>
               <div>
@@ -1123,7 +1123,7 @@ export function TermosModelosTab() {
                   type="text"
                   value={estadoUnidade}
                   onChange={(e) => setEstadoUnidade(e.target.value)}
-                  className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
               </div>
               <div>
@@ -1134,7 +1134,7 @@ export function TermosModelosTab() {
                   type="text"
                   value={orgaoSuperior}
                   onChange={(e) => setOrgaoSuperior(e.target.value)}
-                  className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
               </div>
               <div>
@@ -1145,7 +1145,7 @@ export function TermosModelosTab() {
                   type="text"
                   value={localOitiva}
                   onChange={(e) => setLocalOitiva(e.target.value)}
-                  className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
               </div>
               <div>
@@ -1156,7 +1156,7 @@ export function TermosModelosTab() {
                   type="text"
                   value={enderecoUnidade}
                   onChange={(e) => setEnderecoUnidade(e.target.value)}
-                  className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-blue-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
               </div>
             </div>
@@ -1200,7 +1200,7 @@ export function TermosModelosTab() {
                   placeholder="Ex: 2026/001423"
                   value={numeroDoc}
                   onChange={(e) => setNumeroDoc(e.target.value)}
-                  className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl pl-7 pr-3 py-2 outline-none focus:border-blue-500"
+                  className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl pl-7 pr-3 py-2 outline-none focus:border-blue-500"
                 />
               </div>
             </div>
@@ -1213,7 +1213,7 @@ export function TermosModelosTab() {
                 type="text"
                 value={nomePolicial}
                 onChange={(e) => setNomePolicial(e.target.value)}
-                className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
+                className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
               />
             </div>
             <div>
@@ -1224,7 +1224,7 @@ export function TermosModelosTab() {
                 type="text"
                 value={matriculaPolicial}
                 onChange={(e) => setMatriculaPolicial(e.target.value)}
-                className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
+                className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
               />
             </div>
             <div>
@@ -1235,7 +1235,7 @@ export function TermosModelosTab() {
                 type="date"
                 value={dataTermo}
                 onChange={(e) => setDataTermo(e.target.value)}
-                className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
+                className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
               />
             </div>
             <div>
@@ -1247,7 +1247,7 @@ export function TermosModelosTab() {
                 placeholder="Ex: FULANO DE TAL"
                 value={nomeInterno}
                 onChange={(e) => setNomeInterno(e.target.value)}
-                className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
+                className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
               />
             </div>
             <div>
@@ -1259,7 +1259,7 @@ export function TermosModelosTab() {
                 placeholder="Ex: 10452"
                 value={prontuario}
                 onChange={(e) => setProntuario(e.target.value)}
-                className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
+                className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
               />
             </div>
             <div>
@@ -1270,7 +1270,7 @@ export function TermosModelosTab() {
                 type="text"
                 value={alaCela}
                 onChange={(e) => setAlaCela(e.target.value)}
-                className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
+                className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
               />
             </div>
 
@@ -1284,7 +1284,7 @@ export function TermosModelosTab() {
                     rows={3}
                     value={itensApreendidos}
                     onChange={(e) => setItensApreendidos(e.target.value)}
-                    className="w-full text-xs font-medium bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl p-2.5 outline-none focus:border-blue-500"
+                    className="w-full text-xs font-medium bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl p-2.5 outline-none focus:border-blue-500"
                   />
                 </div>
                 <div>
@@ -1295,7 +1295,7 @@ export function TermosModelosTab() {
                     type="text"
                     value={numeroLacre}
                     onChange={(e) => setNumeroLacre(e.target.value)}
-                    className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
+                    className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
                   />
                 </div>
 
@@ -1315,14 +1315,14 @@ export function TermosModelosTab() {
                         placeholder="Nome do Policial / Servidor"
                         value={testemunha1Nome}
                         onChange={(e) => setTestemunha1Nome(e.target.value)}
-                        className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
+                        className="w-full text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
                       />
                       <input
                         type="text"
                         placeholder="Matrícula / Cargo"
                         value={testemunha1Matricula}
                         onChange={(e) => setTestemunha1Matricula(e.target.value)}
-                        className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
+                        className="w-full text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
                       />
                     </div>
                     <div className="space-y-1.5">
@@ -1332,14 +1332,14 @@ export function TermosModelosTab() {
                         placeholder="Nome do Policial / Servidor"
                         value={testemunha2Nome}
                         onChange={(e) => setTestemunha2Nome(e.target.value)}
-                        className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
+                        className="w-full text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
                       />
                       <input
                         type="text"
                         placeholder="Matrícula / Cargo"
                         value={testemunha2Matricula}
                         onChange={(e) => setTestemunha2Matricula(e.target.value)}
-                        className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
+                        className="w-full text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
                       />
                     </div>
                   </div>
@@ -1356,7 +1356,7 @@ export function TermosModelosTab() {
                   type="text"
                   value={destinoEscolta}
                   onChange={(e) => setDestinoEscolta(e.target.value)}
-                  className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
+                  className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-blue-500"
                 />
               </div>
             )}
@@ -1369,7 +1369,7 @@ export function TermosModelosTab() {
                 rows={3}
                 value={relatoFatos}
                 onChange={(e) => setRelatoFatos(e.target.value)}
-                className="w-full text-xs font-medium bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl p-2.5 outline-none focus:border-blue-500"
+                className="w-full text-xs font-medium bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl p-2.5 outline-none focus:border-blue-500"
               />
             </div>
           </div>
@@ -1410,27 +1410,27 @@ export function TermosModelosTab() {
                   type="text"
                   value={carimboUnidade}
                   onChange={(e) => setCarimboUnidade(e.target.value)}
-                  className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2"
+                  className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Nome / Cargo</label>
-                  <input type="text" value={carimboServidor} onChange={(e) => setCarimboServidor(e.target.value)} className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2" />
+                  <input type="text" value={carimboServidor} onChange={(e) => setCarimboServidor(e.target.value)} className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2" />
                 </div>
                 <div>
                   <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Matrícula</label>
-                  <input type="text" value={carimboMatricula} onChange={(e) => setCarimboMatricula(e.target.value)} className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2" />
+                  <input type="text" value={carimboMatricula} onChange={(e) => setCarimboMatricula(e.target.value)} className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Função no Plantão</label>
-                  <input type="text" value={carimboCargo} onChange={(e) => setCarimboCargo(e.target.value)} className="w-full text-xs font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2" />
+                  <input type="text" value={carimboCargo} onChange={(e) => setCarimboCargo(e.target.value)} className="w-full text-xs font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2" />
                 </div>
                 <div>
                   <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1">Código de Autenticidade</label>
-                  <input type="text" value={codigoAutenticidade} onChange={(e) => setCodigoAutenticidade(e.target.value)} className="w-full text-xs font-mono font-bold bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2" />
+                  <input type="text" value={codigoAutenticidade} onChange={(e) => setCodigoAutenticidade(e.target.value)} className="w-full text-xs font-mono font-bold bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-3 py-2" />
                 </div>
               </div>
             </div>

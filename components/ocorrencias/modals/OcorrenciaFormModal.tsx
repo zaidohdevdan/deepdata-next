@@ -68,7 +68,7 @@ export default function OcorrenciaFormModal({
                 value={formIcone}
                 onChange={(e) => setFormIcone(e.target.value.slice(0, 4))}
                 placeholder="Digite ou cole"
-                className="w-28 text-center text-2xl border border-slate-200 rounded-xl py-2 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none bg-white text-slate-900 dark:text-slate-100"
+                className="w-28 text-center text-2xl border border-slate-200 rounded-xl py-2 focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400 outline-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100"
               />
               <p className="text-[10px] text-slate-400 leading-tight">
                 Digite, cole ou<br />selecione abaixo

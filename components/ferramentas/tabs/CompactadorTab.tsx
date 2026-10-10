@@ -668,7 +668,7 @@ export function CompactadorTab() {
                     type="text"
                     value={zipFileName}
                     onChange={(e) => setZipFileName(e.target.value)}
-                    className="w-full max-w-md px-3 py-1.5 text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl outline-none focus:border-blue-500"
+                    className="w-full max-w-md px-3 py-1.5 text-xs font-bold bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl outline-none focus:border-blue-500"
                   />
                 </div>
 

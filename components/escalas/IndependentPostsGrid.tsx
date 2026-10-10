@@ -85,7 +85,7 @@ function IndependentPostsGrid({
                           })
                         }}
                         placeholder="Horário"
-                        className="w-full bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200/60 rounded px-1.5 py-0.5 text-[10px] font-semibold font-mono outline-none focus:border-slate-400"
+                        className="w-full bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200/60 rounded px-1.5 py-0.5 text-[10px] font-semibold font-mono outline-none focus:border-slate-400"
                       />
                     </div>
 

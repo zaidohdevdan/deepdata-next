@@ -927,7 +927,7 @@ export function ConversorTab() {
                 value={textContent}
                 onChange={(e) => setTextContent(e.target.value)}
                 placeholder="Cole ou digite seu texto aqui..."
-                className="w-full text-xs font-mono p-3 bg-slate-50 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-2xl outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none"
+                className="w-full text-xs font-mono p-3 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 border border-slate-200 rounded-2xl outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none"
               />
               <button
                 type="button"
