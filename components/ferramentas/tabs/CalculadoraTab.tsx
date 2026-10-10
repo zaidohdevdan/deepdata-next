@@ -700,7 +700,7 @@ export function CalculadoraTab() {
                       type="date"
                       value={dataDe}
                       onChange={(e) => setDataDe(e.target.value)}
-                      className="w-full text-xs font-bold bg-white border border-slate-200 rounded-xl px-2.5 py-1.5"
+                      className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-2.5 py-1.5"
                     />
                   </div>
                   <div>
@@ -711,7 +711,7 @@ export function CalculadoraTab() {
                       type="date"
                       value={dataAte}
                       onChange={(e) => setDataAte(e.target.value)}
-                      className="w-full text-xs font-bold bg-white border border-slate-200 rounded-xl px-2.5 py-1.5"
+                      className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-2.5 py-1.5"
                     />
                   </div>
                 </div>
@@ -737,7 +737,7 @@ export function CalculadoraTab() {
                       type="date"
                       value={dataBaseSoma}
                       onChange={(e) => setDataBaseSoma(e.target.value)}
-                      className="w-full text-xs font-bold bg-white border border-slate-200 rounded-xl px-2.5 py-1.5"
+                      className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-2.5 py-1.5"
                     />
                   </div>
                   <div>
@@ -748,7 +748,7 @@ export function CalculadoraTab() {
                       type="number"
                       value={diasAdicionar}
                       onChange={(e) => setDiasAdicionar(parseInt(e.target.value) || 0)}
-                      className="w-full text-xs font-bold bg-white border border-slate-200 rounded-xl px-2.5 py-1.5"
+                      className="w-full text-xs font-bold bg-white text-slate-900 dark:text-slate-100 border border-slate-200 rounded-xl px-2.5 py-1.5"
                     />
                   </div>
                 </div>

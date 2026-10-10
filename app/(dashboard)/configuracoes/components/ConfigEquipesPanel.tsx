@@ -87,7 +87,7 @@ export function ConfigEquipesPanel({ configEquipes }: { configEquipes: ConfigEqu
             className={`px-4 py-1.5 text-xs font-bold rounded-lg border transition ${
               selectedEquipeToEdit === eq
                 ? "bg-slate-900 border-slate-900 text-white"
-                : "bg-white border-slate-200 text-slate-600 hover:bg-slate-55"
+                : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
             }`}
           >
             Equipe {eq} ({
@@ -137,7 +137,7 @@ export function ConfigEquipesPanel({ configEquipes }: { configEquipes: ConfigEqu
         <button
           type="button"
           onClick={handleAddEquipePolicial}
-          className="w-full inline-flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 hover:bg-blue-750 text-white rounded-lg text-xs font-semibold shadow-sm transition h-[34px] cursor-pointer"
+          className="w-full inline-flex items-center justify-center gap-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-sm transition h-[34px] cursor-pointer"
         >
           <Plus size={14} /> Vincular Servidor
         </button>
@@ -146,7 +146,7 @@ export function ConfigEquipesPanel({ configEquipes }: { configEquipes: ConfigEqu
       <div className="border border-slate-200 rounded-xl overflow-hidden mt-3">
         <table className="w-full border-collapse text-left text-xs">
           <thead>
-            <tr className="bg-slate-55 border-b border-slate-200 font-bold text-slate-450 uppercase tracking-wider">
+            <tr className="bg-slate-50 border-b border-slate-200 font-bold text-slate-500 uppercase tracking-wider">
               <th className="p-3">Policial Penal (Nome Completo)</th>
               <th className="p-3">QRA (Nome de Guerra)</th>
               <th className="p-3">Matrícula</th>

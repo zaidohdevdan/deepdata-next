@@ -216,7 +216,7 @@ function PostosGrid({
                   >
                     <div className="flex items-center justify-between">
                       <div className="truncate pr-2">
-                        <div className="font-extrabold text-slate-850 truncate">{pp.qra || pp.nome}</div>
+                        <div className="font-extrabold text-slate-800 truncate">{pp.qra || pp.nome}</div>
                         <div className="text-[9px] text-slate-400 font-mono mt-0.5">{pp.matricula}</div>
                       </div>
                       <span className={`w-2 h-2 rounded-full ${isAllocated ? "bg-blue-500" : "bg-emerald-500"}`} title={isAllocated ? "Alocado" : "Livre"} />
@@ -309,7 +309,7 @@ function PostosGrid({
                                       ? isUnlocked
                                         ? "bg-blue-500 hover:bg-blue-600 text-white border border-blue-400 cursor-grab active:cursor-grabbing transition-all shadow-sm"
                                         : "bg-blue-600 text-white border border-blue-700 cursor-not-allowed"
-                                      : "bg-slate-900 text-white cursor-grab active:cursor-grabbing hover:bg-slate-850 transition-colors"
+                                      : "bg-slate-900 text-white cursor-grab active:cursor-grabbing hover:bg-slate-800 transition-colors"
                                   }`}
                                   title={isFixed ? (isUnlocked ? "Policial fixado (Desafixado temporariamente) - Arraste para mover" : "Policial fixado via configurações - Clique no cadeado para desafixar") : "Arraste para mover"}
                                 >
@@ -335,7 +335,7 @@ function PostosGrid({
                                           </button>
                                         )}
                                       </div>
-                                      <div className="text-[9px] text-slate-350 font-mono leading-none">{pp.matricula}</div>
+                                      <div className="text-[9px] text-slate-400 font-mono leading-none">{pp.matricula}</div>
                                     </div>
                                     <div className="flex items-center gap-1 shrink-0 ml-2">
                                       <button
